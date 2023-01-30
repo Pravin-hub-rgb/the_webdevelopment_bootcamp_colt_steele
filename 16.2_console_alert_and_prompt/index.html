@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>console, alert & prompt</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <div class="botbut">
+            <a href="../17_arrays/index.html">Next Topic &rarr;</a>
+            <a href="../16_javascript_decision_making/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>console, alert & prompt</h1>
+        <div class="wh">
+            <h2>console.log()</h2>
+            <p>prints arguments to the console <br>When we are working from a file then this is useful</p>
+            <div class='code'>
+               <div class='dotc'></div>
+               <pre>
+                   <code>
+                   
+                    // we can also do
+                    console.warn(" warning ");
+                    console.error("error message");
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>alert()</h2>
+            <p>Gives pop-up alert</p>
+            <div class='code'>
+               <div class='dotc'></div>
+               <pre>
+                   <code>
+                   
+                    alert("hi");
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>prompt()</h2>
+            <p>Asks user to enter a value and we use this to save the value.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        prompt("Please enter a number")
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        let userInput = prompt("Enter a number and we will add 10 to it ");
+                        console.log(`By adding 10 we get = ${parseInt(userInput) + 10}`); 
+                    </code>
+                </pre>
+            </div>
+            <p>parseInt() tries to extract a number from a string</p>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

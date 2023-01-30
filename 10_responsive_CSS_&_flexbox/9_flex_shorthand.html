@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Shorthand</title>
+    <style>
+        body{
+            padding: 30px;
+            background-color: rgb(112, 180, 240);
+        }
+        main {
+            display: flex;
+            border: 2px solid black;
+        }
+        
+        section {
+            border: 3px solid black;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Flex</h1>
+    <p>The <b>flex</b> CSS property set how a flex item will grow or shrink to fit the space available in its flex container. It is a shorthand for <b>flex-grow, flex-shrink and flex-basis.</b></p>
+    <h2>Three values order. flex: flex-grow | flex-shrink | flex-basis</h2>
+</body>
+<style>
+    .sidebar {
+        flex: 1 7 300px;
+    }
+    
+    .maincontent {
+        flex: 7 1 500px
+    }
+</style>
+<main>
+    <section class="sidebar"></section>
+    <section class="maincontent"></section>
+    <section class="sidebar"></section>
+</main>
+
+</html>

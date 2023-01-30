@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Web Development </title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">The internet</a>
+        <a href="#t2" class="link">The Web</a>
+        <a href="#t3" class="link">The Request/Response Cycle</a>
+        <a href="#t4" class="link">Front end and Back end</a>
+        <a href="#t5" class="link">HTML, CSS and Javascript</a>
+        <div class="botbut">
+            <a href="../3_HTML/index.html">Next Topic &rarr;</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Introduction to Web Development</h1>
+        <div id="t1" class="wh">
+            <h2>The internet</h2>
+            <ul>
+                <li>What is it? &rarr; "A global network of networks." (It's just a bunch of connected computers.)</li>
+                <li>A router is a device that connects a computer system to many other computers.</li>
+                <li>The Internet is, in reality a network of networks.</li>
+                <li>The internet is the infrastructure that carries things like: 
+                    <ol>
+                        <li>Email </li>
+                        <li>The Web</li>
+                        <li>File Sharing</li>
+                        <li>Online Gaming</li>
+                        <li>Streaming Services.</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <div id="t2" class="wh">
+            <h3>The Web</h3>
+            <ul>
+                <li>The World Wide Web is an information system where documents and other resources are available over the Internet.</li>
+                <li>And those documents are identified using URLs</li>
+                <li>Documents are transferred via HTTP.</li>
+                <li>HTTP is a protocol that defines how forms of communication should work.</li>
+                <li>A web server is a computer that can satisfy requests on the web.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>The Request/Response Cycle</h2>
+            <ul>
+                <li>Let's talk about what happens when that server response with something.</li>
+                <li>Once a browser makes a request and it reaches the server, the server does not respond with a complete web page; instead, it responds with instructions that the browser can understand and then display.</li>
+                <li>So the job of the browser is to display or render content for humans.</li>
+                <li>The server response code consists of HTML, CSS, and Javascript.</li>
+            </ul>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Front end and Back end</h2>
+            <ul>
+                <li>To give a response, there is code that has to run on the server itself to figure out what to respond with, and this is where the terms "front end" and "back end" come from.</li>
+                <li>The construction of responses, like figuring out what to say, who is asking, which websites are showing the results, what kind of ads to show, etc., is happening before sending the response, and that is happening on the back end.</li>
+                <li>And then the client-side code is sent to display the response on the front end.</li>
+            </ul>
+        </div>
+        <div id="t5" class="wh">
+            <h2>What do HTML, CSS, and JavaScript do?</h2>
+            <p>
+                These are the three technologies that our browser understands and can utilize, and each of them has different responsibilities.
+                <ul>
+                    <li><b>HTML</b>  is the underlying structure of a webpage.</li>
+                    <li><b>CSS</b> describes the structure and how it should look.</li>
+                    <li><b>JS</b> builds the logic for a webpage.</li>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

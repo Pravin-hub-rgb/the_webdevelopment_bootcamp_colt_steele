@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive CSS and Flexbox</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Flexbox</a>
+        <a href="#t2" class="link">Flex direction</a>
+        <a href="#t3" class="link">justify-content</a>
+        <a href="#t4" class="link">flex-wrap</a>
+        <a href="#t5" class="link">align-item</a>
+        <a href="#t6" class="link">align-content</a>
+        <a href="#t7" class="link">align-self</a>
+        <a href="#t8" class="link">flex-basis grown and shrink</a>
+        <a href="#t9" class="link">flex shorthands</a>
+        <a href="#t9" class="link">flex shorthand s</a>
+        <a href="#t10" class="link">Responsive Design</a>
+        <a href="#t11" class="link">Media queries demo</a>
+        <div class="botbut">
+            <a href="../11_Pricing_Panel_Project/PriceTableStarter/index.html">Next Topic &rarr;</a>
+            <a href="../9_Other_Assorted_Useful_CSS_Properties/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Responsive CSS and Flexbox</h1>
+        <div id="t1" class="wh">
+            <h1>Flexbox : The basics</h1>
+            <div class="in">
+                <h2>What is it?</h2>
+                <p>Flexbox is a one-dimensional layout method for laying out items in rows or columns.</p>
+            </div>
+            <div class="in">
+                <h2>It's New(ish)</h2>
+                <p>Flexbox is a recent addition to CSS, included to address common layout frustrations.</p>
+            </div>
+            <div class="in">
+                <h2>Why 'flex'?</h2>
+                <p>Flexbox allows us to distribute space dynamically across elements of an unknown size, hence the term
+                    'flex'.</p>
+                <h3>To use flex properties we have to put display as 'flex' on the parent container</h3>
+                <p>In the flex model there are two axis 1- Main axis (goes from left to right by default) 2- Cross
+                    axis(top to bottom)</p>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h1>Flex direction <a href="./3_flex-drection.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t3" class="wh">
+            <h1>justify-content <a href="./4_justify_content.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t4" class="wh">
+            <h1>flex-wrap <a href="./5_flex_wrap.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t5" class="wh">
+            <h1>align-item <a href="./6_align_item.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t6" class="wh">
+            <h1>align-content <a href="./7_align_content.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t7" class="wh">
+            <h1>align-self <a href="./7.1_align_self.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t8" class="wh">
+            <h1>flex-basis grow and shrink<a href="./8_Flex-basis_grow_&_shrink.html" target="_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t9" class="wh">
+            <h1>flex shorthands<a href="./9_flex_shorthand.html target=_blank">demo &neArr;</a></h1>
+        </div>
+        <div id="t10" class="wh">
+            <h1>Responsive Design</h1>
+            
+            <h2>The Problem</h2>
+            <p>As mobile devices and tablets became widely available, developers had a problem...how do we create
+                websites that look good on all screen sizes?</p>
+            
+            <h2>One Approach</h2>
+            <p>Early on, it was common to create separate stylesheets for different devices, or even completely
+                different websites for each size.</p>
+            
+            <h2>Enter Responsive</h2>
+            <p>These days, we typically create ONE website and stylesheet that is able to respond to different device
+                sizes and features.</p>
+            <h3>We make websites responsive using media queries</h3>
+            <p>Media queries allow us to modiy our styles depending on particular parameters like screen width or device
+                type.</p>
+            
+
+            <h3>demo</h3>
+            <p>reference from MDN <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries"
+                    target="_blank">here</a></p>
+            <h2>features</h2>
+            <h2>1- width</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        /* Exact width */
+                        @media (width: 360px) {
+                            div {
+                                color: red;
+                            }
+                        }
+                        
+                        /* Minimum width */
+                        @media (min-width: 500px) { \\ these properties will work min
+                            div {
+                                background: yellow;
+                            }
+                        }
+                        
+                        /* Maximum width */
+                        @media (max-width: 800px) { \\ these property will work max up to 800 px
+                            div {
+                                border: 2px solid blue;
+                            }
+                        } 
+                    </code>
+                </pre>
+            </div>
+            <h3>we can combine features using 'and'</h3>
+            <p>@media (min-width:500px) and (max-width:800px){...</p>
+        </div>
+        <div id="t11" class="wh">
+            <h1>Media queries <a href="./10.1_media_queries.html" target="_blank">responsive demo &neArr;</a></h1>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

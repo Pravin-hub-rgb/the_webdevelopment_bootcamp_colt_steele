@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mongodb intro</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">About Database</a>
+        <a href="#t2" class="link">About Mongo</a>
+        <a href="#t3" class="link">The Mongo Shell</a>
+        <a href="#t9" class="link">What is BSON?</a>
+        <a href="#t4" class="link">Inserting Data</a>
+        <a href="#t5" class="link">Finding Data</a>
+        <a href="#t6" class="link">Updating Data</a>
+        <a href="#t7" class="link">Deleting Data</a>
+        <a href="#t8" class="link">Additional Mongo Operators</a>
+        <div class="botbut">
+            <a href="../37_Connecting_to_mongo_with_mongoose/index.html">Next Topic &rarr;</a>
+            <a href="../35_defining_RESTful_routes/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+
+
+
+    <div id="numbers" class="content-box">
+        <h1 id="t1">DATABASE</h1>
+
+        <h2>Why use a database?</h2>
+        <p>Instead of just saving to a file?</p>
+        <ul>
+            <li>Databases can handle large amounts of data efficiently and store it compactly</li>
+            <li>They provide tools for easy insertion, querying and updating of data</li>
+            <li>They generally offer security features and control over access to data</li>
+        </ul>
+        <div class="wh">
+            <p>In databases there are two broad categories</p>
+            <div class="part2">
+                <div>
+                    <div class="first">
+                        <h3>SQL DATABASES</h3>
+                        <p>
+                            Structured Query Language databases are relational databases. We pre-define a schema of
+                            tables
+                            before we insert anything.
+                        </p>
+                    </div>
+                    <div>
+                        <h3>NO-SQL DATABASES</h3>
+                        <p>
+                            NoSQL databases do not use SQL. There are many types of no-sql databases, including
+                            document,
+                            key-value, and graph stores.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <p>Popular databases</p>
+            <div class="part2">
+                <div>
+                    <div>
+                        <h3>SQL Databases</h3>
+                        <p>
+                            &rarr; MySQL
+                            <br>&rarr; Postgres
+                            <br>&rarr; SQLite
+                            <br>&rarr; Oracle
+                            <br>&rarr; Microsoft SQL Server
+                        </p>
+                    </div>
+                    <div>
+                        <h3>NO-SQL DATABASES</h3>
+                        <p>
+                            &rarr; MongoDB
+                            <br>&rarr; Couch DB
+                            <br>&rarr; Neo4j
+                            <br>&rarr; Cassandra
+                            <br>&rarr; Redis
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <div class="in">
+                <h2>Why are we learning Mongo?</h2>
+                <p>
+                    &rarr; Mongo is very common used with Node and Express (MEAN & MERN stacks)
+                    <br>&rarr; It's easy to get started with (though it can be tricky to truly master)
+                    <br>&rarr;It plays particularly well with JavaScript
+                    <br>&rarr; Its popularity also means there is a strong community of developers using Mongo.
+                </p>
+            </div>
+            <div class="in">
+                <h2>Mongo</h2>
+                <h3>Our Fisrt Database!</h3>
+                <p>
+                    According to Mongo's homepage, it is 'the most popular database for modern applications.' <br>It is
+                    commonly used in combination with Node.
+                    <br><br>Mongo is a document database, which we can use to store and retrieve complex data from.
+                </p>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>The Mongo Shell</h2>
+            <p>It is a place where we create new databases, to edit whats on that databases <br> To use mongo make sure
+                that mongod is running in the background</p>
+            <div class="in">
+                <h3>Basic mongo syntax</h3>
+                <div class="wh">
+                    <div class="code">
+                        <pre>
+                        <code>
+
+                            db
+                        </code>
+                    </pre>
+                    </div>
+                    <p>What we are currently using</p>
+                </div>
+                <div class="wh">
+                    <div class="code">
+                        <pre>
+                            <code>
+    
+                                show dbs
+                            </code>
+                        </pre>
+                    </div>
+                    <p>this shows all the databases</p>
+                </div>
+                <div class="wh">
+                    <div class="code">
+                        <pre>
+                            <code>
+    
+                                use database_name
+                            </code>
+                        </pre>
+                    </div>
+                    <p>To make database to store data for an applications</p>
+                </div>
+            </div>
+        </div>
+        <div id="t9" class="wh">
+            <h2>BSON</h2>
+            <p><a href="https://www.mongodb.com/json-and-bson" target="_blank">Docs here &nearr;</a></p>
+            <ul>
+                <li>Mongodb uses something very similar to JSON.</li>
+                <li>Problem with JSON is that it is slow, it is a text based format and parsing text can be slow. JSON is not very space efficient.</li>
+                <li>JSON does not support many datatypes it only supports only the basic ones.</li>
+                <li>BSON is basically a compact version of JSON. Mongo can store it as binary.</li>
+                <li>BSON is binary JSON and its allows mongo to give JSON format but save it as more compact than JSON.</li>
+            </ul>
+        </div>
+        <div class="wh">
+            <h2>Putting stuff inside databases</h2>
+            <div id="t4" class="in">
+                <h3>Inserting data</h3>
+                <p>Docs <a href="https://docs.mongodb.com/manual/crud/">here!</a></p>
+                <p>When we insert data in mongo we insert it into a collection(its just a grouping of the data). Instead
+                    of data floating around we put different pieces of data into collection</p>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            //mongo shell
+                            use animalShelter
+                            db
+                            animalShelter
+                            db.dogs.insertOne( {name: "Charlie", age: 3, breed: "corgi", catFriendly: true} )
+                            //inserting an object inside a collection called 'dogs'
+                            {
+                                "acknowledged" : true,
+                                "insertedId" : ObjectId("6086d96da58ed271adb29820")
+                            }
+                            show collections
+                            //shows all collections
+                            //To see data inside a collection use
+                            db.dogs.find() 
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    The object contains all data but it also have a property name '_id' also know as primary key which
+                    is created by mongo, it is used to be unique for every single element in that collections
+                    <br>docs <a href="https://docs.mongodb.com/manual/reference/bson-types/#objectid">here!</a>
+                    <br> We also have insertMany() which expects an array to be passed in
+                    <br>and also db.collection.insert() docs <a
+                        href="https://docs.mongodb.com/manual/reference/method/db.collection.insert/">here</a>
+                </p>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.insert([{name: "Wyatt", breed: "Golden", age: 14, catFriendly: false}, {name: "Tonya", breed: "Chihuahua", age: 17, catFriendly: true}])
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div id="t5" class="in">
+                <h3>Finding data</h3>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.find()
+                            //shows all data inside that collections
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    If we want to find data based upon some criteria
+                </p>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.find({breed: "crogi"})
+                            //this is case-sensitive
+                            
+                            To find only one element we use db.dogs.findOne()
+                            db.dogs.findOne({catFriendly: true}) 
+                        </code>
+                    </pre>
+                </div>
+                <p>db.collection.find() gives a cursor(reference of all the element, as loading all elements is
+                    difficult so it only use there reference) while db.collection.findOne() gives the original element
+                </p>
+            </div>
+            <div id="t6" class="in">
+                <h3>Updating data</h3>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.updateOne({name: 'charlie'}, {$set:{ age: 4, breed: 'Labra'}})
+                            //we use an operator to update stuff, all operator have '$' in front of it.
+                            
+                            //setting something which is not in the current matched document.
+                            db.dogs.updateOne({name: 'Charlie', {$set:{color: 'chocolate'}})
+                            //this make a new key-value pair
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.updateMany({catFriendly: true}, {$set:{isAvailable: false}})
+                        </code>
+                    </pre>
+                </div>
+                <p>We have many more operator like $currentDate docs <a
+                        href="https://docs.mongodb.com/manual/reference/operator/update/currentDate/#mongodb-update-up.-currentDate">here</a>
+                </p>
+            </div>
+            <div id="t7" class="in">
+                <h3>Deleting data</h3>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.cats.deleteOne({name: "Blue Steele"})
+                            //deleting many
+                            db.dogs.deleteMany({isAvailable: false})
+                            
+                            //to delete an entire collection use this
+                            db.dogs.deleteMany({}) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t8" class="wh">
+            <h2>Additional Mongo Operators</h2>
+            <p>Docs <a href="https://docs.mongodb.com/manual/reference/operator/query/">here!</a></p>
+            <div class="in">
+                <h3>Comparision Operators</h3>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.find({age: {$gt: 8}})
+                            //dogs with age greater than 8
+                            //we have $gte - greater then and equal to. All is same with less than
+                        </code>
+                    </pre>
+                </div>
+                <p>$in - Matches any of the values specified in an array. </p>
+                <div class="code">
+                    <pre>
+                        <code>
+
+                            db.dogs.find({breed: {$in : ['Mutt', 'Corgi']}})
+                            //Finds all data having breed set to Mutt or Corgi
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

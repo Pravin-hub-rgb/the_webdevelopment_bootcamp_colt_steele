@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox- flex-direction</title>
+    <style>
+        body{
+            padding: 30px;
+            background-color: rgb(112, 180, 240);
+        }
+        section {
+            background-color: #003049;
+            width: 90%;
+            height: 500px;
+            margin: 0 auto;
+            border: 5px solid #003049;
+        }
+        
+        #container {
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        section div {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Flexbox Properties</h1>
+    <h2>Justify Content</h2>
+    <p>Shows that how the content is distributed across the <b> main axis</b>.</p>
+    <h2>Default is justify-content: flex-start;</h2>
+    <section id="container">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <!--<div style="background-color: rgb(86, 255, 64);"></div>
+        <div style="background-color: rgb(53, 129, 243);"></div> -->
+    </section>
+    <hr>
+    <h2>justify-content:flex-end;</h2>
+    <style>
+        #container3 {
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+    <section id="container3">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+    </section>
+    <hr>
+    <h2>justify-content:center;</h2>
+    <style>
+        #container2 {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <section id="container2">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+    </section>
+    <hr>
+    <h2>justify-content:space-between;</h2>
+    <style>
+        #container4 {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <section id="container4">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>justify-content:space-around;</h2>
+    <style>
+        #container5 {
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
+    <section id="container5">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>justify-content:space-evenly;</h2>
+    <style>
+        #container6 {
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+    <section id="container6">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+</body>
+
+</html>

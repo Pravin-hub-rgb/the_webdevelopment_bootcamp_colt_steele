@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The position property</title>
+    <!-- <link rel="stylesheet" href="../styleLesson.css"> -->
+    <style>
+        body {
+            /* color: white; */
+            padding: 20px;
+            background-color: rgb(120, 188, 248);
+        }
+
+        p {
+            font-weight: bold;
+            font-size: 18px;
+            display: inline-block;
+        }
+
+        section {
+            display: flex;
+        }
+
+        div {
+            background-color: rgb(47, 179, 184);
+            border: 4px solid black;
+
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>The <b>position</b> CSS property sets how an element is positioned in a document, The top, right, botton and left
+        properties determine the final location of positioned elements.</p>
+    <hr>
+    <h3>position:static</h3>
+    <p>
+        The element is positioned according to the normal flow of the document. The top, right, bottom, left and z-index
+        properties have <i>no</i> effect. <b>This is the default value.</b>
+    </p>
+    <section>
+        <div></div>
+        <div>
+            <p>test</p>
+        </div>
+        <div></div>
+    </section>
+    <hr>
+    <h3>position:relative</h3>
+    <p>The element is positioned according to the normal flow of the document, and then offset relative to itself based
+        on the values of top, right, botton, and left. The offset does not affect the position of any other elements;
+        thus, the space given for
+        the element in the page layout is the same as if position were static. <br> Element is moving relative to the
+        position where it would be normally.
+    </p>
+    <section>
+        <div></div>
+        <div style="position:relative; top: 50px; left:30px;">
+            <p>test</p>
+        </div>
+        <div></div>
+    </section>
+    <hr> <br>
+    <hr> <br>
+    <hr> <br>
+    <hr> <br>
+    <h3>position:absolute;</h3>
+    <p>The element is removed from the normal document flow, and no space is created for the element in the page layout.
+        It is positioned relative to its closest positioned ancestor, if any; otherwise, it is placed relative to the
+        initial containing block.
+        It's final position is determined by values of top, right, bottom and left.</p>
+    <section style="position: relative;">
+        <div></div>
+        <div style="position:absolute; top: 50px; left:30px;">
+            <p>test</p>
+        </div>
+        <div></div>
+    </section>
+    <hr> <br>
+    <hr> <br>
+    <hr> <br>
+    <hr> <br>
+    <h3>position:fixed;</h3>
+    <p>The element is removed from the normal document flow, and no space is created for the element in the page layout.
+        It is positioned relative to the initial containing block established by the viewport, except when one of its
+        ancestors has a trnasform,
+        perspective, or filter property set to something other than none, in which case that ancestor behaves as the
+        containing block. Its final position is determined by the values of top, right, bottom, and left.</p>
+    <section>
+        <div></div>
+        <div style="position:fixed; top: 50px; left:800px; opacity: 0.3;">
+            <p>test <br> position:fixed;</p>
+        </div>
+        <div></div>
+    </section>
+    <hr>
+    <h3>position:sticky;</h3>
+    <p>something begins not fixed at the top but when we scroll then it get fixed.</p>
+    <p>The element is positioned according to the normal flow of the document, and then offset relative to its nearest
+        scrolling ancestor and containing block (nearest block-level ancestor), including table-related elements, based
+        on the values of top, right,
+        bottom, and left. The offset does not affect the position of any other elements.</p>
+
+</body>
+
+</html>

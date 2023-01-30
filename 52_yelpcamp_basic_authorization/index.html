@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Basic Authorization</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">adding an author to campground</a>
+        <a href="#t2" class="link">toggling edit/delete</a>
+        <a href="#t3" class="link">campground permissions</a>
+        <a href="#t4" class="link">authorization middleware</a>
+        <a href="#t5" class="link">review permission</a>
+        <div class="botbut">
+            <a href="../53_yelpcamp_controllers_and_star_ratings/index.html">Next Topic &rarr;</a>
+            <a href="../51_yelpcamp_adding_in_authentication/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Basic Authorization</h1>
+        <div id="t1" class="wh">
+            <h2>Adding an author to campground</h2>
+            <ul>
+                <li>Now we are going to connect the user model in some way with particular campground and particular reviews.</li>
+                <li>So that I can create a review and it will be associated with my account and I am the only one who can edit it or delete it.</li>
+                <li>In campground model we will add a field that is just a user ID so that when we create a new campground it will store the req.user and save that on the campground then we can look for user for each campground. </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // models/campground.js 
+
+                        author: {
+                            type: Schema.Types.ObjectId,
+                            ref: 'User'
+                        }
+                        // add this field to the model
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Currently the seed file doesnot have the author field that we just added.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // seeds/index.js 
+
+                        // author: '63a7d721c87e2b3572286c27'
+                        // add this field 
+                        // this id is associate to already existed user which is copied
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>For displaying name of the author in show page of campground we have populate it</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // routes/campgrounds.js 
+
+                        // SHOW 
+                        router.get('/:id', catchAsync(async (req, res) => {
+                            const { id } = req.params;
+                            const campground = await Campground.findById(id).populate('reviews').populate('author')
+                            if (!campground) {
+                                req.flash('error', 'Cannot find that campground')
+                                return res.redirect('/campgrounds')
+                            }
+                            res.render('campgrounds/show', { campground })
+                        }))
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // views/campgrounds/show.ejs 
+
+                        // displaying username 
+
+                        &lt;li class="list-group-item">
+                            Submitted by <%=campground.author.username%>
+                        &lt;/li>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Adding author to newly created campground </li>
+                <li>For that the user should be logged in and when user will create a campground by using the current logged user id we will save it to author field.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/campgrounds.js 
+
+                        router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
+                            const campground = new Campground(req.body.campground)
+                            campground.author = req.user._id // current logged in user is stored in req.user and we want its id.
+                            await campground.save()
+                            req.flash('success', 'Successfully made a new campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }))
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now the next thing to do is to prevent somebody else from deleting other users campground.</li>
+            </ul>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Showing and hiding Edit/Delete</h2>
+            <ul>
+                <li>Now any user can delete any campground</li>
+                <li>So this is where authorizaion comes in.</li>
+                <li>Only show edit and delete button to the author of the campground</li>
+                <li>campground.author and req.user._id should match to know that the particular campground are related</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- views/campgrounds/show.ejs -->
+
+                        <% if(currentUser && campground.author.equals(currentUser._id)){ %>
+                            &lt;div class="card-body">
+                                &lt;a href="/campgrounds/<%=campground._id%>/edit" class="card-link btn btn-info">Edit&lt;/a>
+                                &lt;form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="post">
+                                    &lt;button class="btn btn-danger">Delete&lt;/button>
+                                &lt;/form>
+                            &lt;/div>
+                        <% } %>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So we have only secured the front end but some one can easily send a patch or put request, so next we will write a middleware to protect those routes.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Campground Permissions</h2>
+            <ul>
+                <li>Any one can send a req of put and patch from Postman.</li>
+                <li>So what we will do in update route, before we update anything we wanna check to see does this campground has the same author Id as the currently logged in user.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const { id } = req.params
+                        const campground = await Campground.findById(id)
+                        if (!campground.author.equals(req.user._id)) {
+                            req.flash('error', 'You do not have the permission to do that!')
+                            return res.redirect(`/campgrounds/${id}`)
+                        }
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So we can add this logic in different routes.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/campgrounds.js 
+
+                        // EDIT 
+                        router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+                            const campground = await Campground.findById(req.params.id)
+                            if (!campground) {
+                                req.flash('error', 'Cannot find that campground!')
+                                return res.redirect('/campgrounds')
+                            }
+                            if (!campground.author.equals(req.user._id)) { // ***** permission logic start *******
+                                req.flash('error', 'You do not have the permission to do that!')
+                                return res.redirect(`/campgrounds/${req.params.id}`)
+                            } // ***** permission logic end *******
+                            res.render('campgrounds/edit', { campground })
+                        }))
+                        router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
+                            const { id } = req.params // ***** permission logic start *******
+                            const campground = await Campground.findById(id)
+                            if (!campground.author.equals(req.user._id)) {
+                                req.flash('error', 'You do not have the permission to do that!')
+                                return res.redirect(`/campgrounds/${id}`)
+                            } // ***** permission logic end *******
+                            await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                            req.flash('success', 'Successfully updated campground!')
+                            res.redirect(`/campgrounds/${req.params.id}`)
+                        }))
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So instead of repeating the bulky code put it in a middleware </li>
+            </ul>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Authorization middleware</h2>
+            <ul>
+                <li>Putting authorizaion logic in a middleware</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // routes/campgrounds.js 
+
+                        const isAuthor = async (req, res, next) => { //**** middleware *****
+                            const { id } = req.params
+                            const campground = await Campground.findById(id)
+                            if (!campground.author.equals(req.user._id)) {
+                                req.flash('error', 'You do not have the permission to do that!')
+                                return res.redirect(`/campgrounds/${id}`)
+                            }
+                            next()
+                        }
+
+                        // EDIT 
+                        router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
+                            const campground = await Campground.findById(req.params.id)
+                            if (!campground) {
+                                req.flash('error', 'Cannot find that campground!')
+                                return res.redirect('/campgrounds')
+                            }
+                            res.render('campgrounds/edit', { campground })
+                        }))
+                        router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async (req, res) => {
+                        
+                            const campground = await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                            req.flash('success', 'Successfully updated campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }))
+                        
+                        // DELETE 
+                        router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
+                            await Campground.findByIdAndDelete(req.params.id)
+                            req.flash('success', 'Successfully deleted campground')
+                            res.redirect('/campgrounds')
+                        }))
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>For shortening the code we are going to put all the middleware in separate file.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            // middleware.js
+
+                            const ExpressError = require('./utils/ExpressError')
+                            const { campgroundSchema, reviewSchema } = require('./schemas.js')
+                            const Campground = require('./models/campground')
+                            
+                            module.exports.isLoggedIn = (req, res, next) => {
+                                if (!req.isAuthenticated()) {
+                                    req.session.returnTo = req.originalUrl
+                                    console.log(req.path, req.originalUrl);
+                                    req.flash('error', 'You must be signed in')
+                                    return res.redirect('/login')
+                                }
+                                next()
+                            }
+                            
+                            module.exports.validateCampground = (req, res, next) => {
+                                const { error } = campgroundSchema.validate(req.body)
+                                if (error) {
+                                    const msg = error.details.map(el => el.message).join(',')
+                                    throw new ExpressError(msg, 400)
+                                } else {
+                                    next()
+                                }
+                            }
+                            
+                            module.exports.isAuthor = async (req, res, next) => {
+                                const { id } = req.params
+                                const campground = await Campground.findById(id)
+                                if (!campground.author.equals(req.user._id)) {
+                                    req.flash('error', 'You do not have the permission to do that!')
+                                    return res.redirect(`/campgrounds/${id}`)
+                                }
+                                next()
+                            }
+                            
+                            module.exports.validateReview = (req, res, next) => {
+                                const { error } = reviewSchema.validate(req.body)
+                                if (error) {
+                                    const msg = error.details.map(el => el.message).join(',')
+                                    throw new ExpressError(msg, 400)
+                                } else {
+                                    next()
+                                }
+                            }
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <ul>
+                <li>Next we are going to associate a user with a review.</li>
+            </ul>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Review Permission</h2>
+            <ul>
+                <li>Updating review schema</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /models/review.js 
+
+                        const mongoose = require('mongoose');
+                        const Schema = mongoose.Schema;
+                        
+                        const reviewSchema = new Schema({
+                            body: String,
+                            rating: Number,
+                            author: { // ** added **
+                                type: Schema.Types.ObjectId,
+                                ref: 'User'
+                            }
+                        })
+                        
+                        module.exports = mongoose.model('Review', reviewSchema)
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>If user is not logged in then hiding the review form on campground show page.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- views/campgrounds/show.ejs -->
+
+                        <% if(currentUser){ %>
+                            &lt;!-- form -->
+                        <% } %>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Just hiding the form is not enough we want to make user that user can't create a review by sending a request manually.</li>
+                <li>So we want to make sure that this review post route is protected, we want to make sure that the user is defintely logged in.</li>
+                <li>We already have 'isLoggedIn' middleware setuped. So we are going to requrie and add it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // route/reviews.js 
+
+                        const { validateReview, isLoggedIn } = require('../middleware')
+
+                        // Review
+                        router.post('/', isLoggedIn, validateReview, async (req, res) => {
+                            const campground = await Campground.findById(req.params.id)
+                            const review = new Review(req.body.review)
+                            review.author = req.user._id // after successfully checking the user is logged in we are going to add current user ID to newly created review
+                            campground.reviews.push(review)
+                            await review.save()
+                            await campground.save()
+                            req.flash('success', 'Created new review')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Showing the username who made the review in next bit.</li>
+            </ul>
+        </div>
+        <div class="wh">
+            <h2>More Review Authorization</h2>
+            <ul>
+                <li>Now we are going to display the username using populate</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const campground = await Campground.findById(id).populate('reviews').populate('author')
+                        // above both reviews and author are two fields that are both on campground model so the populating is easy here.
+                        // so what we want to do is for each reviews that we are populating we want to populate its author field
+                        // so we have to a nested populate 
+
+                        const campground = await Campground.findById(id).populate({
+                            path: 'reviews',
+                            populate: {
+                                path: 'author'
+                            }
+                        }).populate('author')
+                        // we are saying populate all the reviews from the reviews array on the one campground that we are finding 
+                        // populate the reviews and then on each reviews populate their author
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>If we want to make things bit more efficient we might just store the username on each review as we don't really need other stuff about a user.
+                    <ul>
+                        <li>So you should ask your self that how you are going to use the data</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- /views/campgrounds/show.ejs -->
+
+                        &lt;h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %>&lt;/h6>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Next we want to show the delete button only for author of that review.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- /views/campgrounds/show.ejs -->
+                        <% if(currentUser && review.author.equals(currentUser._id)){ %>
+                            &lt;form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                method="post">&lt;button class=" btn btn-sm btn-danger">Delete&lt;/button>&lt;/form>
+                        <% } %>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now we need to protect delete route of review by using middleware</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /middleware
+
+                        module.exports.isReviewAuthor = async (req, res, next) => {
+                            const { id, reviewId } = req.params
+                            const review = await Review.findById(reviewId)
+                            if (!review.author.equals(req.user._id)) {
+                                req.flash('error', 'You do not have the permission to do that!')
+                                return res.redirect(`/campgrounds/${id}`)
+                            }
+                            next()
+                        }
+
+                        // require it in review route and add it to delete route
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

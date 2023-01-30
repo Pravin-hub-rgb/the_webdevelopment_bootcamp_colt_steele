@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting To Mongo With Mongoose</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">ODM</a>
+        <a href="#t2" class="link">Connecting Mongoose to Mongo</a>
+        <a href="#t3" class="link">Our first mongoose model</a>
+        <a href="#t4" class="link sm">Inserting Data</a>
+        <a href="#t5" class="link sm">Finding Data</a>
+        <a href="#t6" class="link sm">Updating Data</a>
+        <a href="#t7" class="link sm">Deleting Data</a>
+        <a href="#t8" class="link">Mongoose Schema Validations</a>
+        <a href="#t9" class="link">Validating Mongoose Updates</a>
+        <a href="#t10" class="link">Mongoose Validation Errors</a>
+        <a href="#t11" class="link">Model Instance Methods</a>
+        <a href="#t12" class="link">Adding Model Static Methods</a>
+        <a href="#t13" class="link">Mongoose Virtuals</a>
+        <a href="#t14" class="link">Defining Mongoose Middleware</a>
+        <div class="botbut">
+            <a href="../38_Mongoose_with_Express/index.html">Next Topic &rarr;</a>
+            <a href="../36_Database_mongoDB/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div id="numbers" class="content-box">
+        <p>
+            So, right now we are only using mongo shell to interact with databases.
+            <br>We need a way to connect express, node app with mongo
+            <br>for that we are going to use Mongoose
+            <br>Mongoose is an ODM
+        </p>
+        <div id="t1" class="wh">
+            <h2>ODM</h2>
+            <p>
+                Object Data Mapper
+                <br>Object Document Mapper
+                <br>(It is sort of general concept not just for mongo but other databases will have their own flavour or
+                tools called ODMs)
+                <br>Mongoose is for mongo and node.js. It connects the two
+                <br>But its more than a basic driver that connects node to a mongo database it provides alot of
+                functionality that is useful on JS side
+                <br><br>Mongoose provides ways for us to model out our application data and define a schema. It offers
+                easy to validate data and build complex queries form the comfort of JS.
+                <br><br>For SQL databases it is ORM (object Relational Mapper)
+            </p>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Connecting Mongoose to Mongo</h2>
+            <p>Docs important for tuning Mongoose <a href="https://mongoosejs.com/docs/connections.html">here!</a></p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            //index.js
+                            const mongoose = require('mongoose');
+                            mongoose.connect('mongodb://localhost:27017/movieApp', {useNewUrlParser: true, useUnifiedTopology: true})
+                            //In this uri we are not only specifing to find mongodb locally but also which database to use if it doesn't exist it makes it
+                            .then(() => {
+                              console.log('Connection Open!!!')
+                            })
+                            .catch(err => {
+                               console.log('Oh No Error!!!!')
+                            })
+                            //this method returns promise
+                            
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Our first mongoose model</h2>
+            <p>Remember the goal to use mongoose is to have an easier way to interact with database from JS</p>
+            <p>
+                The central thing that you need to understand is model. So, model are just JS classes that we make with
+                the assistance of mongoose that represents information in mongo database
+                <br><br>
+                <a href="https://mongoosejs.com/docs/api/model.html">Docs for model</a> which contains different methods
+                that every model have access to.
+                <br>This help us interact and send new information to the database or help us to delete things or update
+                them.
+                <br><br>So, for every different collections that we working with on mongo database if we plan on
+                accessing it or working with that data in JS file with using mongoose we will need to define a model for
+                each one.
+                <br>So, before defining these model we have to define a schema.
+            </p>
+            <div class="in">
+                <h3>Defining your schema</h3>
+                <p>
+                    Docs <a href="https://mongoosejs.com/docs/guide.html">here</a>
+                    <br> Everything in Mongoose starts with Schema. Each schema maps to a MongoDB collection and defines
+                    the shape of the documents within that collection.
+                </p>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                            <code>
+
+                                 const movieSchema = new mongoose.Schema({
+                                    title: String,
+                                    year: Number,
+                                    score: Number,
+                                    rating: String
+                                 });
+                                 const Movie = mongoose.model('Movie', movieSchema)
+                                 //The first argument is string with name of our model(singular form with first letter as capital) and the second argument is schema
+                                 //This will make a collection named 'movies'
+                                 //when we save it to a variable it makes a model class
+                                 
+                                 //now we will create a new movie
+                                 const Amadeus = new Movie({title: 'Amadeus', year: 1886, score: 9.5, rating: 'R'});
+                                 //after that we have to save it.
+                                 Amadeus.save();
+                            </code>
+                        </pre>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Insert many</h2>
+            <p>
+                <a href="https://mongoosejs.com/docs/api/model.html#model_Model.insertMany">Docs</a>
+                <br>This method returns promise.
+                <br>So, we don't need to call save() when we use insertMany()
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            Movie.insertMany([
+                            { title: 'Amelie', year: 2001, score: 8.3, rating: 'R' },
+                            { title: 'Alien', year: 1979, score: 7.5, rating: 'PG' },
+                            { title: 'The Iron Giant', year: 1999, score: 8.6, rating: 'R'},
+                            { title: 'Stand By Me', year: 1989, score: 8.6, rating: 'R'},
+                            { title: 'Moonrise Kingdom', year: 2012, score: 7.3, rating: 'PG-13'}
+                            ])
+                            .then(data => {
+                                console.log('It Worked!')
+                                console.log(data)
+                            }) 
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Finding with Mongoose</h2>
+            <p>
+                So there are multiple methods that we can use.
+                <br>&rarr;Model.find()
+                <br>&rarr;Model.findById()
+                <br>&rarr;Model.findOne()
+            </p>
+            <div class="in">
+                <h3>Model.find()</h3>
+                <p>Returns data in an array</p>
+                <p>
+                    <a href="https://mongoosejs.com/docs/api/model.html#model_Model.find">Docs here!</a>
+                    <br>Finding something takes time so we have couple of option for how we wait like callbacks but we
+                    can also treat the results that we get back from find like a promise
+                    <br>The result of find is not actually a promise docs <a
+                        href="https://mongoosejs.com/docs/promises.html#built-in-promises">here!</a>. They do have a
+                    .then() function
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                Movie.find({}).then(data => console.log(data))
+                                Movie.find({year: {$gte: 2010}}).then(data => console.log(data)) 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Model.findOne()</h3>
+                <p>Doesn't not return data in an array.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                Movie.findOne({}).then(m => console.log(m)) 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Model.findById()</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                Movie.findById('3498509uj3h49n9n98n').then(m =&gt; console.log(m))
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Updating with Mongoose</h2>
+            <p>
+                There are couple of option to do this
+                <br>&rarr; <a href="https://mongoosejs.com/docs/api/model.html#model_Model.update">Model.update()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.updateMany">Model.updateMany()</a>
+                <br>&rarr; <a href="Model.updateOne()">Model.updateOne()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.findOneAndUpdate">Model.findOneAndUpdate()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndUpdate">Model.findByIdAndUpdate()</a>
+            </p>
+            <p>
+                When we use findOneAndUpdate or findByIdAndUpdate it returns the original document rather than updated
+                one. So, to fix this we use option called 'new'
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            Product.findOneAndUpdate({ name: 'Mountain Bike'}, { price: 20.99}, {new: true}).then(m => console.log(m))
+                            //Now new is true so it is going to return the modified document rather than the original one
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Deleting with Mongoose</h2>
+            <p>
+                <br>&rarr; <a href="https://mongoosejs.com/docs/api/model.html#model_Model.remove">Model.remove()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.deleteMany">Model.deleteMany()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.deleteOne">Model.deleteOne()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndDelete">Model.findByIdAndDelete()</a>
+                <br>&rarr; <a
+                    href="https://mongoosejs.com/docs/api/model.html#model_Model.findOneAndDelete">Model.findOneAndDelete()</a>
+                <br><br>findByIdAnd, findOneAnd methods actually give back documents.
+            </p>
+        </div>
+        <div id="t8" class="wh">
+            <h2>Mongoose Schema Validations</h2>
+            <p><a href="https://mongoosejs.com/docs/connections.html#buffering" target="_blank">Operation Buffering</a>
+                &rarr; How we can make model if we don't know if we are connected or not, as the connection takes
+                times.
+                <br> The way mongoose is setuped is that it does something called operation buffering which allow us to
+                start using the model we define immediately without having to wait for mongoose to be connected, so we
+                don't have to nest our code in .then
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const productSchema = new mongoose.Schema({
+                                    //name: String // short method
+                                    name: {
+                                        type: String,
+                                        required: true
+                                //By this syntax we can add additional information including things the built-in validation that come with mongoose one of those is required validation
+                                    },
+                                    price: {
+                                        type: Number
+                                    }
+                                })
+                                
+                                const Product = mongoose.model('Product', productSchema);
+                                
+                                const bike = new Product({Price: 599})
+                                bike.save()
+                                .then(data =>{
+                                    console.log('It worked!')
+                                    console.log(data);
+                                })
+                                .catch(err => {
+                                   console.log("Oh no error!")
+                                    console.log(err);
+                                })
+                                //right now we have not provided 'name' which is required so it throws an error.
+                                
+                                // if we will put data pair which is not listed in schema it will simply get ignored.
+                            </code>
+                        </pre>
+                </div>
+                <div class="wh">
+                    <h3>Additional Schema Constraints</h3>
+                    <p>
+                        <a href="https://mongoosejs.com/docs/schematypes.html">Docs here!</a>
+                    </p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                                <code>
+
+                                    const productSchema = new mongoose.Schema({
+                                        name: {
+                                            type: String,
+                                            required: true
+                                    //By this syntax we can add additional information including things the built-in validation that come with mongoose one of those is required validation
+                                        },
+                                        price: {
+                                            type: Number
+                                        },
+                                    onSale: {
+                                            type: Boolean,
+                                            default: false
+                                       }
+                                    }) //If we don't pass 'onSale' it will be set to 'false' by default.
+                                </code>
+                            </pre>
+                    </div>
+                    <div class="in">
+                        <h3>String</h3>
+                        <p>
+                            lowercase&zigrarr; boolean, whether to always call .toLowerCase() on the value
+                            <br>uppercase&zigrarr; boolean, whether to always call .toUpperCase() on the value
+                            <br>trim&zigrarr; boolean, whether to always call .trim() on the value
+                            <br>match&zigrarr; RegExp, creates a validator that checks if the value matches the given
+                            regular expression
+                            <br>enum&zigrarr; Array, creates a validator that checks if the value is in the given array.
+                            <br>minLength&zigrarr; Number, creates a validator that checks if the value length is not
+                            less than the given number
+                            <br>maxLength&zigrarr; Number, creates a validator that checks if the value length is not
+                            greater than the given number
+                            <br>populate&zigrarr; Object, sets default populate options
+                        </p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                    <code>
+
+                                        const productSchema = new mongoose.Schema({
+                                            name: {
+                                               type: String,
+                                               required: true,
+                                               maxLength:30
+                                            }
+                                        }) 
+                                    </code>
+                                </pre>
+                        </div>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                    <code>
+
+                                        const productSchema = new mongoose.Schema({
+                                            size: {
+                                               type: String,
+                                               enum: ['S', 'X', 'XL']
+                                        //If the value is not in this array it will throw an error
+                                               }
+                                        }) 
+                                    </code>
+                                </pre>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <h3> Number</h3>
+                        <p>
+                            <br>min: Number, creates a validator that checks if the value is greater than or equal to
+                            the given minimum.
+                            <br>max: Number, creates a validator that checks if the value is less than or equal to the
+                            given maximum.
+                            <br>enum: Array, creates a validator that checks if the value is strictly equal to one of
+                            the values in the given array.
+                            <br>populate: Object, sets default populate options
+                        </p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                    <code>
+
+                                        const productSchema = new mongoose.Schema({
+                                            price: {
+                                               type: Number,
+                                               required: true,
+                                               min: 0
+                                            }
+                                        //If we will violate these rule it will throw an error
+                                        }) 
+                                    </code>
+                                </pre>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <p>
+                            If we want a property which can stores an array of strings
+                        </p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                    <code>
+
+                                        const productSchema = new mongoose.Schema({
+                                            categories: [String]
+                                        }) 
+                                    </code>
+                                </pre>
+                        </div>
+                        <p>We can also set default here</p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                    <code>
+
+                                        const productSchema = new mongoose.Schema({
+                                            categories: {
+                                               type: [String]
+                                               default: ['cycling']
+                                            }
+                                        })
+                                    </code>
+                                </pre>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <p>
+                            Setuping up an object.
+                        </p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                    <code>
+
+                                        const productSchema = new mongoose.Schema({
+                                            qty: {
+                                               online: {
+                                                  type: Number,
+                                                  default: 0
+                                               },
+                                               inStore: {
+                                                  type: Number,
+                                                  default: 0
+                                               }
+                                            }
+                                        }) 
+                                    </code>
+                                </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="t9" class="wh">
+            <h2>Validating Mongoose Updates</h2>
+            <p>
+                Validation work only when we are creating data not while we are updating.
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            productSchema = new mongoose.Schema({
+                                name: {
+                                    type: String,
+                                    required: true,
+                                    maxLength: 30
+                                },
+                                price: {
+                                    type: Number,
+                                    required: true,
+                                    min: 0
+                                },
+                                categories: {
+                                    type: [String],
+                                    default: ['cycling']
+                                }, qty: {
+                                    online: {
+                                        type: Number,
+                                        default: 0
+                                    },
+                                    inStore: {
+                                        type: Number,
+                                        default: 0
+                            
+                                    }
+                                }
+                            })
+                            //price min is setuped to 0
+                            const Product = mongoose.model('Product', productSchema);
+                            const bike = new Product({ name: 'Tire Pump', price: 19.50, categories: ['cycling'] });
+                            bike.save()
+                                .then(data => {
+                                    console.log('It Worked!');
+                                    console.log(data)
+                                })
+                                .catch(err => {
+                                    console.log('Oh no Error');
+                                    console.log(err)
+                                })
+                            // Above we are creating so the validation will work here.
+                                Product.findOneAndUpdate({ name: 'Tire Pump' }, { price: -19.99 }, { new: true })
+                                .then(data => {
+                                    console.log('It Worked!');
+                                    console.log(data)
+                                })
+                                .catch(err => {
+                                    console.log('Oh no Error');
+                                    console.log(err)
+                                })
+                            //Here the price is negative while we are updating but still it does not give an error
+                        </code>
+                    </pre>
+            </div>
+            <p>
+                Validation is applied automatically when something is being created but when something is being updated
+                we have to tell Mongoose that we still want to apply validation
+                <br>For that we have to use an option which is runValidators
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            Product.findOneAndUpdate({name: 'Tire Pump'}, {price: -19.99}, {new: true , runValidators: true})
+                            .then(data => {
+                                console.log('It Worked!');
+                                console.log(data)
+                            })
+                            .catch(err => {
+                                console.log('Oh no Error');
+                                console.log(err)
+                            }) 
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="t10" class="wh">
+            <h2>Mongoose Validation Errors</h2>
+            <p>
+                We can setup custom validator error from mongoose when we are using the built-in validator
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                                const productSchema = new mongoose.Schema({
+                                price: {
+                                    type: Number,
+                                    min: [0, 'Price must be positive']
+                                    //Inside the array the first value is the min value and the second value as a string can be our error message
+                                    }
+                                }) 
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="t11" class="wh">
+            <h2>Model Instance Methods</h2>
+            <p>
+                Now we will talk about adding our own custom method to our Schema. This is really really common.
+                <br><a href="https://mongoosejs.com/docs/guide.html#methods">Docs here</a>
+                <br><br>instance methods are those methods which are available for every single instance
+                <br>Let's start with silly example
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //product.js
+                            //Avoid using arrow function.
+                            productSchema.methods.greet = function () {
+                                console.log('HELLO!!! HI!! HOWDY!!!')
+                            } 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>
+                So, we also have access to 'greet' method when we find a particular product.
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+                            
+                            //product.js
+                            const findProduct = async () => {
+                                const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+                                foundProduct.greet();
+                            }
+                            
+                            findProduct();
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+                            
+                            //node terminal
+                            HELLO!!! HI!! HOWDY!!!!
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>
+                Changing the functionality of 'greet' method
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //product.js
+                            productSchema.methods.greet = function () {
+                                console.log('HELLO!!! HI!! HOWDY!!!')
+                                console.log(`- from ${this.name}`)
+                                //here 'this' represents that particular instance (foundProduct)
+                            }
+                            
+                            const findProduct = async () => {
+                                const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+                                foundProduct.greet();
+                            }
+                            
+                            findProduct(); 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //node termial
+                            HELLO!!! HI!! HOWDY!!!
+                            - from Bike Helmet 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t12" class="wh">
+            <h2>Adding Model Static Methods</h2>
+            <p>
+                Static methods are added to the model but not to the particular instances. So, usually these methods
+                won't act upon individual instances, the keyword 'this' refers to the model class.
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        productSchema.statics.fireSale = function () {
+                            return this.updateMany({}, {onSale: true, price: 0});
+                        }
+                        Product.fireSale().then(res => console.log(res)) 
+                        // this will set 'onSale and price' to all the elements of a collection
+                        // usually this is used to add properties, remove or update
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t13" class="wh">
+            <h2>Mongoose Virtuals</h2>
+            <p>
+                <a href="https://mongoosejs.com/docs/guide.html#virtuals">Docs here!</a>
+                <br> These give us ability to add property to Schema. They don't exist in databases itself.
+            </p>
+        </div>
+        <div class="wh">
+            <h2>Defining Mongoose Middleware</h2>
+            <p>
+                <a href="https://mongoosejs.com/docs/middleware.html">Docs here!</a>
+                <br> Mongoose give up ability to run code before or after certain things are executed or certain
+                Mongoose methods are called. So, I can run some code right before something is removed or something is
+                saved or any time we call updateMany.
+            </p>
+            <div class="in">
+                <h3>Pre</h3>
+                <p>
+                    Pre middleare functions are executed one after another, when each middleware calls next.
+                </p>
+                <h3>Post</h3>
+                <p>
+                    post middleware are executed after the hooked method and all of its pre middleware have completed.
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const personSchema = new mongoose.Schema({
+                                first: String,
+                                last: String
+                            })
+                            personSchema.pre('save', async function () {
+                                console.log('About to save!!!')
+                            })
+                            personSchema.post('save', async function () {
+                                console.log('Just saved!!!')
+                            }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../main.js"></script>
+</body>

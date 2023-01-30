@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Model</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        
+
+        .box1 {
+            box-sizing: content-box;
+        }
+
+        .box2 {
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Box model</a>
+        <a href="#t2" class="link">Display property</a>
+        <a href="#t3" class="link">Units</a>
+        <div class="botbut">
+            <a href="../9_Other_Assorted_Useful_CSS_Properties/index.html">Next Topic &rarr;</a>
+            <a href="../7_The_world_of_CSS_Selector/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <div class="wh">
+            <h1 id="t1">The Box Model</h1>
+            <img src="images/1.png">
+            <h2>Width & Height</h2>
+            <img src="images/2.png">
+            <h2>Border</h2>
+            <img src="images/3.png" alt="">
+            <img src="images/4.png" alt="">
+            <div class="box1">border: 10px solid black; <br>box-sizing: content-box;</div>
+            <div class="box2">border: 10px solid black; <br> box-sizing: border-box;</div>
+            <p>Both boxes have given the width of 400px, but the box1 width becomes 420px because the width of the border is also added to it, while in box2, the width remains 400px because we have set box-sizing: border-box;</p>
+            <div style="border-left-color:red;">
+                <p>border-left-color:red;</p>
+            </div>
+            <div style="border-left-width:2px;">
+                <p>border-left-width:2px;</p>
+            </div>
+            <div class="in">
+                <h2>Border-radius</h2>
+                <div class="apply" style="border-radius: 20px;">
+                    <p>border-radius:20px</p>
+                </div>
+                <div class="apply" style="border-radius: 100%;">
+                    <p style="color:red;">border-radius:100%</p>
+                </div>
+                <div class="apply"
+                    style="border-radius: 100% 20% 50% 10%; border-left-style:dotted; border-left-color:red;">
+                    <p style="color:red;">border-radius:100% 20% 50% 10%; <br> border-left-style:dotted;</p>
+                </div>
+            </div>
+            <div class="in">
+                <h2>Padding</h2>
+                <p>The space between the content box and the border.</p>
+                <p><b>Individual Properties - </b> padding-left, padding-right, padding-bottom, padding-top</p>
+                <p><b>Shorthand Property - </b> Set all four sides at once! padding:10px</p>
+            </div>
+            <div class="in">
+                <h2>Margin</h2>
+                <p>So, margin is the space outside of border.</p>
+                <p><b>Individual Properties - </b> margin-left, margin-right, margin-bottom, margin-top</p>
+                <p><b>Shorthand Property - </b> Set all four sides at once! padding:10px</p>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h1>Display Property</h1>
+            <section class="part3">
+                <div>
+                    <div>
+                        <h2>Inline</h2>
+                        <p>Width & height are ignored. Margin & padding push elements away horizontally but not
+                            vertically.</p>
+                    </div>
+                    <div>
+                        <h2>Block</h2>
+                        <p>Block elements break the flow of a document. Width & height, margin, and padding are
+                            respected.</p>
+                    </div>
+                    <div>
+                        <h2>Inline-block</h2>
+                        <p>Behaves like an inline element, except width, height, margin, and padding are respected.</p>
+                    </div>
+                </div>
+            </section>
+            <p>We can hide an element by setting display to none. display:none;</p>
+        </div>
+        <div id="t3" class="wh">
+            <h1>CSS Units Revisited</h1>
+            <div class="in">
+                <h2>Relative</h2>
+                <ul>
+                    <li>EM</li>
+                    <li>REM</li>
+                    <li>VH</li>
+                    <li>VW</li>
+                    <li>%</li>
+                </ul>
+            </div>
+            <div class="in">
+                <H2>Absolute</H2>
+                <ul>
+                    <li>PX</li>
+                    <li>PT</li>
+                    <li>CM</li>
+                    <li>IN</li>
+                    <li>MM</li>
+                </ul>
+            </div>
+            <div class="in">
+                <h2>Percentages</h2>
+                <h3>Percentages are always relative to some other value.</h3>
+                <p>Sometimes it's a value from the parent, and other times it's a value from the element itself.</p>
+                <h3>width: 50%; - half the width of the parent</h3>
+                <h3>line-height: 50%; - half the font-size of the element itself.</h3>
+            </div>
+            <div class="in">
+                <h2>em</h2>
+                <h3>EMs are relative units.</h3>
+                <p>With font-size, 1em equals the font-size of the parent. 2em's is twice the font-size of the parent,
+                    etc. <br> With other properties (margin or padding), 1 em is equal to the computed font-size of the element itself.</p>
+                <p>If the parent element's font size is 30px, then 2em's font size will be 60px.p>
+            </div>
+            <div class="in">
+                <h2>rem</h2>
+                <h3>Root ems</h3>
+                <p>Relative to the <b>root html element's</b> font-size. Often easier to work with.</p>
+                <p>If the root font-size is 20 px, 1 rem is always 20 px, 2 rem is always 40 px, etc.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../main.js"></script>
+</body>
+
+</html>

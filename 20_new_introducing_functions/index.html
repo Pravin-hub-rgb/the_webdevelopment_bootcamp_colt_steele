@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro to Function</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        /* extra */
+
+        .outer-box {
+            text-align: center;
+            background-color: #f2ffa8e3;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+
+        .outer-box h2 {
+            padding: 26px 0;
+            font-size: 3rem;
+        }
+
+        .outer-box h3 {
+            font-size: 2.3rem;
+        }
+
+        .inner-box {
+            display: flex;
+        }
+
+        .inner-box div {
+            width: 33%;
+        }
+
+        .inner-box div img {
+            height: 160px;
+        }
+
+        footer.content-box {
+            margin-bottom: 0px;
+        }
+
+        /* ball */
+
+        .outer-ball {
+            text-align: center;
+            background-color: #f2ffa8d7;
+        }
+
+        .outer-ball img {
+            height: 160px;
+        }
+
+        .inner-ball {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .ball {
+            width: 33%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .ball2 {
+            text-align: center;
+        }
+
+        .ball3 {
+            align-items: flex-start;
+        }
+
+        .ball div {
+            display: flex;
+        }
+
+        .ball p {
+            padding: 0 10px;
+        }
+
+        .ball img {
+            height: 60px;
+        }
+
+        @media only screen and (max-width:800px) {
+            .outer-box {
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+            }
+
+            .outer-box h2 {
+                padding: 10px 0;
+                font-size: 1rem;
+            }
+
+            .outer-box h3 {
+                font-size: 1rem;
+            }
+
+            .inner-box div img {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#functions">Function</a>
+        <a href="#arguments" class="sm link">argument</a>
+        <a href="#multiplearg" class="sm link">multiple arguments</a>
+        <a href="#return" class="link">the return keyword</a>
+        <a href="#scope" class="link">Scope</a>
+        <a href="#funcscope" class="sm link">function scope</a>
+        <a href="#blockscope" class="sm link">block scope</a>
+        <a href="#lexicalscope" class="sm link">lexical scope</a>
+        <a href="#funcexp" class="link">function expression</a></li>
+        <a href="#highfunc" class="link">higher order function</a>
+        <a href="#funcarg" class="sm link">func. as argument</a>
+        <a href="#funcret" class="sm link">returing a function</a>
+        <a href="#funcmethods" class="link">defining methods</a>
+        <a href="#thiskey" class="sm link">'this' keyword</a>
+        <a href="#trycatch" class="link">try catch</a>
+        <div class="botbut">
+            <a href="../22_callbacks_&_array_methods/index.html">Next Topic &rarr;</a>
+            <a href="../19_repeating_stuff_with_loops/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box" id="functions">
+        <h1>Javascript Functions</h1>
+        <h2>Reusable procedures</h2>
+        <ul>
+            <li>Functions allow us to write reusable, modular code</li>
+            <li>We define a 'chunk' of code that we can then execute at later point</li>
+            <li>We use them <b>All the time</b> to reduce duplication of code</li>
+        </ul>
+        <div class="outer-box">
+            <h2>2 STEP PROCESS</h2>
+            <div class="inner-box">
+                <div class="box1">
+                    <h3>DEFINE</h3>
+                    <img src="images/learning.svg" alt="learning from undraw">
+                </div>
+                <div class="box2">
+                    <h3>THEN</h3>
+                    <img src="images/back-arrow.svg" alt="">
+                </div>
+                <div class="box3">
+                    <h3>RUN</h3>
+                    <img src="images/youtube.svg" alt=" ">
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+
+            <h2>Define</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function funcName(){
+                            //do something
+                          } 
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function grumpus(){
+                            console.log('ugh...you again...');
+                            console.log('for the last time...');
+                            console.log('LEAVE ME ALONE!!!');
+                          } 
+                    </code>
+                </pre>
+            </div>
+
+            <h2>Run</h2>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    funcName(); // run once
+                    funcName(); // run again!
+                   </code>
+               </pre>
+            </div>
+
+        </div>
+        <div id="arguments" class="wh">
+            <h2>Arguments</h2>
+            <h4>FANCY WAY OF SAYING INPUT OF A FUNCTION</h4>
+            <p>We can also write functions that accept inputs, called arguments</p>
+
+            <div class="outer-ball">
+                <h2>Without Arguments</h2>
+                <div class="inner-ball">
+                    <div class="ball ball1">
+                        <div>
+                            <p class="ls">greet()</p>
+                            <img src="images/right-arrow.svg" alt="">
+                        </div>
+                        <div>
+                            <p class="ls">greet()</p>
+                            <img src="images/right-arrow.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="ball2">
+                        <img src="images/conveyor.svg" alt="">
+                    </div>
+                    <div class="ball ball3">
+                        <div>
+                            <img src="images/right-arrow.svg" alt="">
+                            <p>"Hi"</p>
+                        </div>
+                        <div>
+                            <img src="images/right-arrow.svg" alt="">
+                            <p>"Hi"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="outer-ball">
+                <h2>With Arguments</h2>
+                <div class="inner-ball">
+                    <div class="ball ball1">
+                        <div>
+                            <p class="ls">greet('Tim')</p>
+                            <img src="images/right-arrow.svg" alt="">
+                        </div>
+                        <div>
+                            <p class="ls">greet('Anya')</p>
+                            <img src="images/right-arrow.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="ball2">
+                        <img src="images/conveyor.svg" alt="">
+                    </div>
+                    <div class="ball ball3">
+                        <div>
+                            <img src="images/right-arrow.svg" alt="">
+                            <p>"Hi Tim!"</p>
+                        </div>
+                        <div>
+                            <img src="images/right-arrow.svg" alt="">
+                            <p>"Hi Anya!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="outer-ball">
+                <h2>ONE MORE</h2>
+                <div class="inner-ball">
+                    <div class="ball ball1">
+                        <div>
+                            <p class="ls">avg(20,25)</p>
+                            <img src="images/right-arrow.svg" alt="">
+                        </div>
+                        <div>
+                            <p class="ls">avg(3,2,5,6)</p>
+                            <img src="images/right-arrow.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="ball2">
+                        <img src="images/conveyor.svg" alt="">
+                    </div>
+                    <div class="ball ball3">
+                        <div>
+                            <img src="images/right-arrow.svg" alt="">
+                            <p>22.5</p>
+                        </div>
+                        <div>
+                            <img src="images/right-arrow.svg" alt="">
+                            <p>4</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Defining function with parameter</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            function greet(person){
+                                console.log(`Hi, ${person!}`);
+                              } 
+                        </code>
+                    </pre>
+                </div>
+                <div class='code'>
+                    <pre>
+                       <code>
+                       
+                        greet('Elvis');
+                        "Hi, Elvis"
+                       </code>
+                   </pre>
+                </div>
+                <p>So, <i>person</i> is just going to hold the value of the argument which is passed to the function
+                </p>
+                <p><i>person</i> is parameter (value in the function definition that we use) and <i>Elvis</i> is
+                    argument (value passed while calling a function) </p>
+            </div>
+
+            <div class="in" id="multiplearg">
+                <h2>Multiple Arguments</h2>
+                <p>Order of parameter and arguments should match</p>
+                <div class="wh">
+                    <h3>2 Arguments</h3>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                function findLargest(x, y) {
+                                    if (x > y) {
+                                      console.log(`${x} is larger!`);
+                                    } else if (x &lt; y) {
+                                      console.log(`${y} is greater`);
+                                    } else {
+                                      console.log(`${x} and ${y} are equal!`)
+                                    }
+                                  } 
+                            </code>
+                        </pre>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                function repeat(msg,rep){
+                                    let repStr="";
+                                    for(let i=0;i&lt;rep;i++){
+                                      repStr += msg;
+                                    }
+                                    console.log(repStr)
+                                  }
+                                  repeat('hi',3); 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="return" class="wh">
+            <h2>The Return Keyword</h2>
+            <p>The return statement ends function execution AND specifies the value to be returned by that function
+            </p>
+            <div class="in">
+                <h3>Return</h3>
+                <p>Built-in methods <b>return</b> values when we call them. We can store those values:</p>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        const idx = ['a','b','c'].indexOf('b');
+                        idx; //1 
+                       </code>
+                   </pre>
+                </div>
+                <p>When we use <i>return</i> keyword in function we can capture a return value in a variable</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            function add(x,y){
+                                return x+y; // Return!
+                              }
+                              
+                              const sum = add(10,16);
+                              sum; //26
+                              const answer = add(100,200);
+                              answer; //300
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="scope" class="wh">
+            <h2>Scope</h2>
+            <h3>Variable "visibility"</h3>
+            <p>The location where a variable is defined dictates where we have access to that variable</p>
+            <div id="funcscope" class="in">
+                <h2>Function Scope</h2>
+                <p>Variable that are defined inside a function are scoped only inside that function and are not
+                    accessible out of that function.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                function helpMe(){
+                                    let msg = "I'm on fire!";
+                                    msg; // "I'm on fire"
+                                  }
+                                  msg; // Not Defined!
+                            </code>
+                        </pre>
+                </div>
+                <p><i>msg</i> is scoped to the <i>helpMe</i> function</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let bird = 'mandarin duck';
+                                function birdWatch(){
+                                  let bird = 'golden pheasant';
+                                  bird; //'golden pheasant'
+                                }
+                                bird; //'mandarin duck'
+                            </code>
+                        </pre>
+                </div>
+                <p><i>bird</i> is scoped to birdWatch function</p>
+            </div>
+            <div id="blockscope" class="in">
+                <h2>Block Scope</h2>
+                <p>'{}' are block scope (if else statements and loops) except functions. </p>
+                <p>Variable defined inside a block are only accessible inside that block.</p>
+                <p>But, if we declare our variable using <b>var</b> keyword, our variable are scoped to function but
+                    not for block</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                if(true){
+                                    let msg = 'hi';
+                                  }
+                                  msg; //not defined
+                            </code>
+                        </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                if(true){
+                                    var msg='hi';
+                                  }
+                                  msg; "hi"
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div id="lexicalscope" class="in">
+                <h2>Lexical Scope</h2>
+                <p>The variables which defined in parent (outer) function are accessible to child (inner) function
+                    but the variable which are defined in child function are not accessible to the parent scope.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                function outer(){
+                                    let hero = 'Black Panther';
+                                  
+                                    function inner(){
+                                      let cryForHelp = `${hero}, please save me!`;
+                                      console.log(cryForHelp);
+                                    }
+                                    inner();
+                                  } 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+        <div id="funcexp" class="wh">
+            <h1>Function Expression</h1>
+            <p>Conceptually different way of defining a function.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const square = function (num) {
+                            return num * num;
+                          }
+                          square(7); //49
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="highfunc" class="wh">
+            <h1>Higher Order Functions</h1>
+            <p>Functions that operate on/with other functions.</p>
+            <p>They can:</p>
+            <ul>
+                <li>Accept other functions as arguments</li>
+                <li>Return a function</li>
+            </ul>
+            <div id="funcarg" class="in">
+                <h2>Functions as Arguments</h2>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            function callTwice(func){
+                                func();
+                                func();
+                            }
+                            
+                            function laugh(){
+                                console.log('HAHAHA');
+                            }
+                            calltwice(laugh); //pass a function as an arg!
+                            "HAHAHA"
+                            "HAHAHA"
+                        </code>
+                    </pre>
+                </div>
+
+            </div>
+            <div id="funcret" class="in">
+                <h2>Returning a Function</h2>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            function makeMysteryFunc(){
+                                const rand = Math.random();
+                                if(rand>0.5){
+                                  return function(){
+                                    console.log("Congrats, I'm a good function!");
+                                    console.log("You win a Million Dollars!!");
+                                  }
+                                } else {
+                                  return function(){
+                                    alert("You have been infected by a virus");
+                                    alert("Stop trying to close this window.")
+                                    alert("Stop trying to close this window.")
+                                    alert("Stop trying to close this window.")
+                                  }
+                                }
+                              }
+                              
+                              
+                              makeMysteryFunc();
+                              f (){
+                                console.log("Congrats, I'm a good function!");
+                                console.log("You win a Million Dollars!!");
+                              }
+                              // We are not calling the function, it's just a return value.
+                              
+                              //capturing function value
+                              const mystery = makeMysteryFunc();
+                              mystery()
+                              //Congrats, I'm a good function!
+                              //You win a Million Dollars!!
+                        </code>
+                    </pre>
+                </div>
+                <h4>Function that renegrates a function based upon some input</h4>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //funciton that tell if a value is between two numbers
+                            function makeBetweenFunction(min,max) {
+                              return function(num){
+                                return num>=min && num<=max;
+                              }  
+                            }
+                            const isChild = makeBetweenFunction(10,18);
+                            console.log(isChild(3));
+                            // true
+                            const isAdult = makeBetweenFunction(18,90);
+                            console.log(isAdult(3));
+                            // false                        
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="funcmethods" class="wh">
+            <h1>Methods</h1>
+            <p>Functions and objects & how they intersect to form methods</p>
+            <p>We can add functions as properties on objects.</p>
+            <p>We call them <b>methods!</b></p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const myMath = {
+                            multiply : function(x,y){
+                              return x*y;
+                            },
+                            divide : function(x,y){
+                              return x/y;
+                            },
+                            square : function(x){
+                              return x*x;
+                            }
+                          }
+                          myMath.multiply(2,3); //6
+                          myMath["square"](3) //9
+                    </code>
+                </pre>
+            </div>
+            <h3>Shorthand</h3>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const myMath ={
+                            blah: 'hi',
+                            add(x,y) {
+                              return x + y;
+                            },
+                            multiply(x,y){
+                              return x * y;
+                            }
+                          }
+                          myMath.add(50,60) //110
+                    </code>
+                </pre>
+            </div>
+            <div id="thiskey" class="in">
+                <h2>'this' in Methods</h2>
+                <p>Use the keyword <b>this</b> to access other properties on the same object</p>
+                <p>We commonly use <b>this</b> inside of an object in a method and then we can access the value
+                    associated to key inside the object in a method</p>
+                <p><b>this</b> refers to object inside which we use it.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const person = {
+                                    first: 'Robert',
+                                    last: 'Herjavec',
+                                    fullName() {
+                                      return '${this.first} ${this.last}'
+                                    }
+                                  }
+                                  person.fullName(); //"Robert Herjavec"
+                                  person.last = "plant";
+                                  person.fullName(); //"Robert Plant"
+                            </code>
+                        </pre>
+                </div>
+                <p>The value of <b>this</b> depends on the invocation context (the way we call the function) of the
+                    function it is used in.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const cat={
+                                    catName:"Snow bell",
+                                    meow(){
+                                      console.log(`${this.catName} said MEOW`)
+                                      console.log(`${this}`)
+                                    }
+                                  }
+                                  cat.meow() // 'this' refers to 'cat' object here
+                                  //Snow bell said MEOW
+                                  //[object Object]
+                                  
+                                  const func=cat.meow
+                                  func() //here 'this' refers to 'Window' object
+                                  //undefined said MEOW
+                                  //[object Window]
+                            </code>
+                        </pre>
+                </div>
+                <p>Window object is the top level object inside which all other object resides.</p>
+                <p>And defined function becames its methods</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                function ran(){
+                                    console.log("yo! wassup wassup")
+                                  }
+                                  //ran function becomes method of Window object
+                                  Window.ran() //yo! wassup wassup
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+        <div id="trycatch" class="wh">
+            <h2>Using TryCatch</h2>
+            <p>Usually when there is error in our code, we get error message in console and the code which was after
+                the error doesn't run. This can be solved using try catch</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            try{
+                                hello.toUpperCase();
+                              } catch {
+                                console.log("ERROR!!!!!!!");
+                              } console.log("after")
+                              //ERROR!!!!!!!
+                              //after
+                        </code>
+                    </pre>
+            </div>
+            <p>We can also catch error</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            function yell(msg){
+                                try{
+                                  console.log(msg.toUpperCase().repeat(3));
+                                } catch (e){
+                                  console.log("Please pass a string next time!");
+                                }
+                              }
+                              yell("hi"); //HIHIHI
+                              yell(234); //Please pass a string next time!
+                        </code>
+                    </pre>
+            </div>
+        </div>
+    </div>
+    <footer class="wh">
+        <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a
+                href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    </footer>
+    <script src="../main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Image Upload</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">intro</a>
+        <a href="#t2" class="link">multer middleware</a>
+        <a href="#t3" class="link">cloudinary registration</a>
+        <a href="#t4" class="link">environment variable with dotenv</a>
+        <a href="#t5" class="link">uploading to cloudinary</a>
+        <a href="#t6" class="link">storing links in Mongodb</a>
+        <a href="#t7" class="link">displaying image</a>
+        <a href="#t8" class="link">fixing seeds</a>
+        <a href="#t9" class="link">adding upload to edit page</a>
+        <a href="#t10" class="link">customizing file input</a>
+        <a href="#t11" class="link">deleting images form</a>
+        <a href="#t12" class="link">deleting images backend</a>
+        <a href="#t13" class="link">adding a thumbnail</a>
+        <div class="botbut">
+            <a href="../55_yelpcamp_adding_maps/index.html">Next Topic &rarr;</a>
+            <a href="../53_yelpcamp_controllers_and_star_ratings/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Image Upload</h1>
+        <div id="t1" class="wh">
+            <h2>Intro to image upload process</h2>
+            <ul>
+                <li>New feature to add is campground image upload</li>
+                <li>So this is a multi step process there are two thing that you should know upfront
+                    <ol>
+                        <li>Regular HTML form cannot send files to our server, so we have to change our form in order to
+                            do that.</li>
+                        <li>We need to store the images some where, and typically we don't store images in mongo because
+                            images are very large and there is bson document size limit of 16 mb. So we are going to use
+                            a tool called <a href="https://cloudinary.com/">cloudinary</a>. It will store images on
+                            their databases and we can retrieve relatively easily </li>
+                    </ol>
+                </li>
+                <li>So the way this is going to work is that we are going to set up our form so that we can accept files
+                    then will submit that form and it will hit our server and then we are going to take the files and we
+                    are going to store that in cloudinary.</li>
+                <li>And then cloudinary is going to send us back some url of the images and then we store the url in
+                    mongo database.</li>
+            </ul>
+        </div>
+        <div id="t2" class="wh">
+            <h2>The Multer middleware</h2>
+            <ul>
+                <li>With generic forms we can put file input in them but the file information will not be sent properly
+                    that is because <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype">
+                        encoding type attribute</a> on a form</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
+                            &lt;input type="file" name="image" id="" multiple> <!-- multiple - multiple file at once -->
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>In order to parse multipart forms we need to use a middleware called <a
+                        href="https://expressjs.com/en/resources/middleware/multer.html" target="_blank"> 'multer' </a>
+                    &rarr; Multer is a node.js middleware for handling multipart/form-data, which is primarly used for
+                    uploading files. </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/campgrounds.js 
+
+                        const multer = require('multer')
+                        const upload = multer({ dest: 'uploads/' })
+                        
+                        router.route('/')
+                            .get(catchAsync(campgrounds.index)) // show all campgrounds
+                            // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+                            .post(upload.single('image'), (req, res) => { // in upload.single() middleware we have to pass name of the variable in which the files value is stored.
+                                res.send(req.body, req.file);
+                            })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>In form we have to add 'multiple' attribute so that many files can be uploaded at once.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>cloudinary Registeration</h2>
+            <ul>
+                <li>After registeration we are going to use API key, API Secret but we won't store them directly in our
+                    files because somebody could easily use your cloudinary account.</li>
+            </ul>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Environment variable with dotenv</h2>
+            <ul>
+                <li>We don't to embed API credential or secrets directly to our app so what we do instead is store them
+                    in a secret file that we don't include when we submit to online servers.</li>
+                <li><a href="https://www.npmjs.com/package/dotenv" &neArr;>dot env</a></li>
+                <li>We make a '.env' file and store data like the this &rarr; SECRET=somevalue</li>
+                <li>And we can access the values inside '.env' file in our code using a package called 'dotenv', install
+                    it.</li>
+            </ul>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        // .env file
+
+                        SECRET=lololol
+                    </code>
+                </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        // app.js 
+
+                        // we have to add this code 
+
+                        if(process.env.NODE_ENV !== "production") {
+                            require('dotenv').config()
+                        }
+                    </code>
+                </pre>
+                </div>
+                <ul>
+                    <li>process.env.NODE_ENV is an environment variable which is just development or production </li>
+                    <li>we are in development mode but when we will deploy our app we will be running our code in
+                        production
+                    </li>
+                    <li>so if we are in development require the 'dotenv' package which is going to take the variable
+                        defined
+                        in '.env' file and add them into process.env in our node app so that we can access them in our
+                        files.</li>
+                    <li> but in production we do not do this, there is an another way of setuping environment variable
+                        and
+                        we don't store them in a file.</li>
+                </ul>
+            </div>
+            <ul>
+                <li>Access environment variable</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        console.log(process.env.SECRET) // SECRET matches the name of our environment variable
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now lets store cloudinary stuff in our '.env' file</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        CLOUDINARY_CLOUD_NAME=u------1 
+                        CLOUDINARY_KEY=6----------------3
+                        CLOUDINARY_SECRET=K-----------------------e
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So now we can have access to process.env.CLOUDINARY_CLOUD_NAME, process.env.CLOUDINARY_KEY and
+                    process.env.SECRET</li>
+            </ul>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Uploading to cloudinary basics</h2>
+            <ul>
+                <li>Next step is to take the files that multer is able to parse from the form data and upload them to
+                    cloudinary.</li>
+                <li>For that there is a tool <a href="https://github.com/affanshahid/multer-storage-cloudinary"
+                        target="_blank"> Multer Storage Cloudinary &neArr; </a> that works with multer and cloudinary to
+                    make uploading easy.</li>
+                <li>And it also works so that once we get our urls back from the cloudinary, multer adds those in so
+                    that we access to them in our route handling callbacks</li>
+                <li>We have to install 2 packages 1- 'cloudinary' and 2- 'multer-storage-cloudinary'</li>
+                <li>And put them in new file (index.js) in cloudinary directory.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                <code>
+
+                    const cloudinary = require('cloudinary').v2;
+                    const { CloudinaryStorage } = require('multer-storage-cloudinary')
+                    
+                    // associating our cloudinary account 
+                    cloudinary.config({
+                        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+                        api_key: process.env.CLOUDINARY_KEY,
+                        api_secret: process.env.CLOUDINARY_SECRET
+                    })
+                    
+                    const storage = new CloudinaryStorage({
+                        cloudinary,
+                        params:{
+                        folder: 'YelpCamp',// folder name in cloudinary where are going to store things
+                        allowedFormats: ['jpeg', 'png', 'jpg']
+                        }
+                    })
+                    module.exports = {
+                        cloudinary,
+                        storage
+                    }
+                </code>
+            </pre>
+            </div>
+            <ul>
+                <li>Till now we are storing in local file, now we have specify where we need to store it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                <code>
+
+                    // /routes/campgrounds.js 
+
+                    const multer = require('multer')
+                    const { storage } = require('../cloudinary') // requiring the storage variable that is connected to cloudinary 
+                    const upload = multer({ storage }) 
+                    // So instead of storing data locally use 'storage'
+                </code>
+            </pre>
+            </div>
+            <ul>
+                <li>Now these images get uploaded to cloudinary with unique names.</li>
+                <li>Now req.files contains files that now have 'path' that has a url of the image we just uploaded</li>
+                <li>Next we are going to display the images.</li>
+            </ul>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Storing Uploaded image links in Mongodb</h2>
+            <ul>
+                <li>We are going to store 'path' and 'filename' so that we can view and delete when necessary.</li>
+                <li>For that we need to update our campground model</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /models/campgrounds.js 
+
+                        const campgroundSchema = new Schema({
+                            title: String,
+                            images: [ // making it array so that we can store multiple images
+                                {
+                                    url:String,
+                                    filename:String
+                                }
+                            ],
+                            price: Number,
+                            description: String,
+                            location: String,
+                            author: {
+                                type: Schema.Types.ObjectId,
+                                ref: 'User'
+                            },
+                            reviews: [
+                                {
+                                    type: Schema.Types.ObjectId,
+                                    ref: "Review"
+                                }
+                            ]
+                        })                        
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Editing post route</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/campgrounds.js 
+
+                        router.route('/')
+                        .get(catchAsync(campgrounds.index))
+                        .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))
+                        // adding as a middleware on our post route
+                        // and using 'upload.array' because we can add multiple images.
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>When the data will be parsed then it will be pass to next function or middleware that is
+                    'createCampground' and there we can access it under 'req.files'</li>
+                <li>We are going to loop over those files and for each one of them we want to store 'path' and
+                    'filename' and add them to the campground.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /controllers/campgrounds.js 
+
+                        module.exports.createCampground = async (req, res, next) => {
+                            const campground = new Campground(req.body.campground)
+                            campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
+                            campground.author = req.user._id
+                            await campground.save()
+                            console.log(campground);
+                            req.flash('success', 'Successfully made a new campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>There will be validation error. We will not validate the images for that.</li>
+                <li>Normally displaying images</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /views/campgrounds/show.ejs 
+                        
+                        <% for(let img of campground.images){ %>
+                            &lt;img src="<%=img.url%>" class="card-img-top" alt="...">
+                        <% } %>
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Displayig images in Carousel</h2>
+            <ul>
+                <li>Using <a href="https://getbootstrap.com/docs/5.2/components/carousel/">bootstrap carousel</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
+                            &lt;div class="carousel-inner">
+                                <% campground.images.forEach((img,i)=>{ %>
+                                    &lt;div class="carousel-item <%= i === 0 ? 'active' : ' '%>">
+                                        &lt;img src="<%=img.url%>" class="d-block w-100" alt="...">
+                                      &lt;/div>
+                                <% }) %>                  
+                            &lt;/div>
+                            <% if(campground.images.length > 1){ %>
+                                &lt;button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="prev">
+                                &lt;span class="carousel-control-prev-icon" aria-hidden="true">&lt;/span>
+                                &lt;span class="visually-hidden">Previous&lt;/span>
+                                &lt;/button>
+                                &lt;button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="next">
+                                &lt;span class="carousel-control-next-icon" aria-hidden="true">&lt;/span>
+                                &lt;span class="visually-hidden">Next&lt;/span>
+                                &lt;/button>
+                            <% } %>
+                        &lt;/div>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Using cloudinary we can compress images, make thumbnails, render a smaller size images <div
+                        class=""></div>
+                </li>
+            </ul>
+        </div>
+        <div id="t8" class="wh">
+            <h2>Fixing seeds file</h2>
+            <ul>
+                <li>Get cloudinary urls</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /seeds/index.js 
+
+                        seedDB = async () => {
+                            await Campground.deleteMany({})
+                            for (let i = 0; i < 50; i++) {
+                                rand1000 = Math.floor(Math.random() * 1000) // as there are 1000 cities
+                                price = Math.floor(Math.random() * 40)
+                                camp = new Campground({
+                                    author: '63a7d721c87e2b3572286c27',
+                                    location: `${cities[rand1000].city}, ${cities[rand1000].state}`,
+                                    title: `${sample(descriptors)} ${sample(places)}`,
+                                    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur maiores dolor tempore. Possimus eligendi facere eos vel aliquid dignissimos perferendis praesentium repudiandae labore error soluta quibusdam cum non fugiat quis sint sed veniam rerum, voluptatum ipsum. Molestiae ducimus aliquid dicta!',
+                                    price,
+                                    images : [{
+                                        url: 'https://res.cloudinary.com/dg9ycwwm1/image/upload/v1672227691/YelpCamp/okon5srxgg44w3oohdug.jpg',
+                                        filename: 'YelpCamp/okon5srxgg44w3oohdug'
+                                      },
+                                      {
+                                        url: 'https://res.cloudinary.com/dg9ycwwm1/image/upload/v1672227692/YelpCamp/ihhgyjyy4biux2xxsmmo.jpg',
+                                        filename: 'YelpCamp/ihhgyjyy4biux2xxsmmo'
+                                      },
+                                      {
+                                        url: 'https://res.cloudinary.com/dg9ycwwm1/image/upload/v1672227698/YelpCamp/bvthcsnrxbvbieiebfvp.jpg',
+                                        filename: 'YelpCamp/bvthcsnrxbvbieiebfvp'
+                                      }
+                                    ]        
+                                })
+                                await camp.save()
+                            }
+                        }
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now we have to fix our index page</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /views/campgrounds/index.ejs 
+
+                        &lt;img src="<%=campground.images[0].url%>" alt="" class="img-fluid">
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t9" class="wh">
+            <h2>Adding upload to edit page</h2>
+            <ul>
+                <li>Giving users the ability to add more photos when they are adding particular campground.</li>
+                <li>We have to make the edit form a multipart form and upload images to cloudinary and push it to our
+                    model.</li>
+                <li>Then add "upload.array('image')" in put route campgrounds.</li>
+                <li>Now in updateCampground controller we should have req.files available and we have to push the new
+                    images not over write them.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /controllers/campgrounds.js 
+
+                        const campground = await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                        const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+                        campground.images.push(...imgs)
+                        await campground.save()
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t10" class="wh">
+            <h2>Customizing file input</h2>
+            <ul>
+                <li><a href="https://getbootstrap.com/docs/5.2/forms/form-control/#file-input">file input docs</a></li>
+            </ul>
+        </div>
+        <div class="wh">
+            <h2>A word of Warning!</h2>
+            <ul>
+                <li>Highlighting some problems
+                    <ul>
+                        <li>We are not limiting how much sime buby can upload for a single campground. For that we have
+                            to limit the image file upload.</li>
+                        <li>How large image could be uploaded.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="t11" class="wh">
+            <h2>Deleting images form</h2>
+            <ul>
+                <li>Now we are going to update our edit form so that user can actually view the currently uploaded
+                    images and delete some of them.</li>
+                <li>For that we will have check boxes next to each images and user can select them and delete them.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;div class="mb-3">
+                        <% campground.images.forEach(function(img,i){ %>
+                            &lt;img src="<%=img.url%>" class="img-thumbnail" alt="">
+                            &lt;div class="form-check-inline">
+                                &lt;input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%=img.filename%>">
+                            &lt;/div>
+                            &lt;label for="image-<%=i%>">Delete?&lt;/label>
+                        <% }) %>
+                    &lt;/div>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>for deleting we have to update or schema file also as there is not 'deleteSchema' included in there
+                    for validation.
+                </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // schema.js
+                        
+                        const Joi = require('joi')
+
+                        module.exports.campgroundSchema = Joi.object({
+                            campground: Joi.object({ // everything is nested under campground
+                                title: Joi.string().required(),
+                                price: Joi.number().required().min(0),
+                                // image: Joi.string().required(),
+                                location: Joi.string().required(),
+                                description: Joi.string().required()
+                            }).required(),
+                            deleteImages: Joi.array() // ***********
+                        })
+                        
+                        module.exports.reviewSchema = Joi.object({
+                            review: Joi.object({
+                                rating: Joi.number().required().min(1).max(5),
+                                body: Joi.string().required()
+                            }).required()
+                        })
+                        
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now in our updateCampground controller function we have access to deleteImages array which contains
+                    filename of images and now we can delete it from cloudinary and remove its name from mongodb.</li>
+            </ul>
+        </div>
+        <div id="t12" class="wh">
+            <h2>Deleting images backend</h2>
+            <ul>
+                <li>We want to remove particular images from deleteImages array in our campground.</li>
+                <li>As we have access to deleteImages array in updateCampground controllers we can delete them</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /controllers/campgrounds.js 
+
+                        module.exports.updateCampground = async (req, res) => {
+                            console.log(req.body);
+                            const campground = await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                            const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+                            campground.images.push(...imgs)
+                            if (req.body.deleteImages) {
+                                await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+                            } // ****
+                            await campground.save()
+                            req.flash('success', 'Successfully updated campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So we are only removing it from mongodb but we also want to remove it from hosting as well.</li>
+                <li>So for that we have to use a method that comes with cloudinary client that we have setuped, so for
+                    that we have to require it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /controllers/campgrounds.js 
+
+                        const { cloudinary } = require('../cloudinary')
+
+                        module.exports.updateCampground = async (req, res) => {
+                            console.log(req.body);
+                            const campground = await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                            const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+                            campground.images.push(...imgs)
+                            if (req.body.deleteImages) {
+                                for(let filename of req.body.deleteImages){
+                                    await cloudinary.uploader.destroy(filename) // this deletes file *********
+                                }
+                                await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+                            }
+                            await campground.save()
+                            req.flash('success', 'Successfully updated campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now the selected images can be deleted from cloudinary also.</li>
+            </ul>
+        </div>
+        <div id="t13" class="wh">
+            <h2>Adding a thumbnail virtual property</h2>
+            <ul>
+                <li>There is a feature of cloudinary which help us display thumbnail images on the edit page.</li>
+                <li>If some images are very large then it doesn't make sense to require entire image just to display
+                    200px of it and also it takes time to request these resources.</li>
+                <li>So what we can do instead is use <a
+                        href="https://cloudinary.com/documentation/image_transformations"> cloudinary transformation
+                        API</a> to request modified version. For that we have to modify the url</li>
+                <li>In our model schema we are going to setup virtual property.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /models/campgrounds.js 
+
+                        const mongoose = require('mongoose')
+                        const Review = require('./review')
+                        const Schema = mongoose.Schema
+                        
+                        const ImageSchema = new Schema({
+                            url: String,
+                            filename: String
+                        })
+                        // now we set virtual property on every image
+                        ImageSchema.virtual('thumbnail').get(function () {
+                            // this refers to to particular image instance that is being created
+                            return this.url.replace('/upload', '/upload/w_200')
+                        })
+                        const campgroundSchema = new Schema({
+                            title: String,
+                            images: [ImageSchema],
+                            price: Number,
+                            description: String,
+                            location: String,
+                            author: {
+                                type: Schema.Types.ObjectId,
+                                ref: 'User'
+                            },
+                            reviews: [
+                                {
+                                    type: Schema.Types.ObjectId,
+                                    ref: "Review"
+                                }
+                            ]
+                        })                        
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So the reason we use a virtual is that we don't need to store in the database </li>
+                <li> because it is being derive from the information that we are already storing</li>
+                <li>so we have to make request to get the thumbnail url</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

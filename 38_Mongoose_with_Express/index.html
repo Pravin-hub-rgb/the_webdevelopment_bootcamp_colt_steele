@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mongoose with Express</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">creating model</a>
+        <a href="#t2" class="link">displaying all products</a>
+        <a href="#t3" class="link">creating products</a>
+        <a href="#t4" class="link">updating products</a>
+        <a href="#t5" class="link">tangent on category selector</a>
+        <a href="#t6" class="link">deleting products</a>
+        <a href="#t7" class="link">filtering by category</a>
+        <div class="botbut">
+            <a href="../39_YelpCamp Campgrounds CRUD/index.html">Next Topic &rarr;</a>
+            <a href="../37_Connecting_to_mongo_with_mongoose/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+
+    <div id="numbers" class="content-box">
+        <h1>Putting it all together Mongoose with Express</h1>
+        <p>
+            So, now we have learned healthy amount of Mongoose on it's own. Let's take that and interact that with our
+            friend Express.
+            <br>So, we are going to make simple web app where we can apply CRUD with Express.
+        </p>
+        <div class="wh">
+            <h2>Express + Mongoose Basic Setup</h2>
+            <p>We have to install ejs, mongoose, express and require them in our index.js file and set the routes and
+                also connect to mongo</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js code</button>
+                <div class="panel">
+                    <pre>
+                            <code>
+
+                                const express = require('express');
+                                const app = express();
+                                const path = require('path');
+                                const mongoose = require('mongoose');
+                                
+                                mongoose.connect('mongodb://localhost:27017/', {useNewUrlParser: true, useUnifiedTopology: true })
+                                .then(()=>{
+                                    console.log('Mongo Connection open!');
+                                })
+                                .catch(err => {
+                                    console.log('Oh no mongo connection Error!');
+                                    console.log(err)
+                                })
+                                
+                                app.set('views', path.join(__dirname, 'views'));
+                                app.set('view engine', 'ejs');
+                                app.get('/dogs',(req,res)=>{
+                                    res.send('woof!')
+                                })
+                                
+                                app.listen(3000, () => {
+                                    console.log('App is listening on Port 3000') 
+                                })
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t1" class="wh">
+            <h2>Creating Our Model</h2>
+            <p>
+                We are going to make a separate directory for all models because if we have many models, so it becomes
+                pain to write all of them in single file
+                <br>So, we are going to make a directory called 'models' and inside that we gonna make a file called
+                'product.js'
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">product.js code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const mongoose = require('mongoose');
+                            //we don't have to connect to the database right here because we are going to require this Mongoose product in index.js where the connection is established.
+                            
+                            const productSchema = new mongoose.Schema({
+                              name: {
+                               type: String,
+                               required: true
+                              },
+                              price: {
+                               type: Number,
+                               requried: true,
+                               min: 0
+                              },
+                              category: {
+                               type: String,
+                               lowercase: true,
+                               enum: ['fruit', 'vegetable', 'dairy']
+                              }
+                            })
+                            
+                            const Product = mongoose.model('Product', productSchema);
+                            
+                            module.exports = Product; 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>
+                To begin with we will create a seeds file to give an initial value to our database.
+                <br>So we are going to make a file called 'seeds.js' in same directory as index.js
+                <br>This is the file that I will run on its own any time I want to get some new data in my database. And
+                this is pretty common to do actually.
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">seed.js code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const mongoose = require('mongoose');
+
+                            const Product = require('./models/product')
+                            
+                            mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true })
+                            .then(()=>{
+                              console.log('Mongo Connection open!');
+                            })
+                            .catch(err => {
+                              console.log('Oh no mongo connection Error!');
+                              console.log(err)
+                            })
+                            
+                            const seedProducts = [
+                              {
+                               name: 'Fairy Eggplant',
+                               price: 1.00,
+                               category: 'vegetable'
+                              },
+                              {
+                               name: 'Organic Goddess Melon',
+                               price: 4.99,
+                               category: 'fruit'
+                              },
+                              {
+                               name: 'Organic Mini Seedless Watermelon',
+                               price: 3.99,
+                               category: 'fruit'
+                              },
+                              {
+                               name: 'Organic Celery',
+                               price: 1.50,
+                               category: 'vegetable'
+                              },
+                              {
+                               name: 'Chocolate whole Milk',
+                               price: 2.69,
+                               category: 'dairy'
+                              }
+                            ]
+                            
+                            Product.insertMany(seedProducts)
+                            .then(res =>{
+                              console.log(res);
+                            })
+                            .catch( e =>{
+                              console.log(e);
+                            }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Displaying all Products</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">views/product/index.ejs code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            &lt;head>
+                            &lt;meta charset="UTF-8">
+                            &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                            &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            &lt;title>All Products</title>
+                            &lt;/head>
+                            
+                            &lt;body>
+                            &lt;h1>All Products</h1>
+                            &lt;ul>
+                              &lt;% for(let product of products) { %>
+                              &lt;li>
+                                &lt;%= product.name %>
+                              &lt;/li>
+                              &lt;% } %>
+                              &lt;/ul>
+                            &lt;/body>
+                            
+                            &lt;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            app.get('/products',async (req,res)=>{
+                                const products = await Product.find({})
+                                console.log(products);
+                                res.render('products/index', {products})
+                              }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Creating Products</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">show.ejs code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html&gt;
+                            &lt;html lang="en"&gt;
+        
+                            &lt;head&gt;
+                             &lt;meta charset="UTF-8"&gt;
+                             &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+                             &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+                             &lt;title&gt;New Product&lt;/title&gt;
+                            &lt;/head&gt;
+                            
+                            &lt;body&gt;
+                                &lt;h1&gt;New Product&lt;/h1&gt;
+                                &lt;form action="/products" method="POST"&gt;
+                                    &lt;label for="name">Product Name:&lt;/label>
+                                    &lt;input type="text" name="name" id="name" placeholder="product name">
+                                    &lt;label for="price">Product Price:&lt;/label>
+                                    &lt;input type="number" name="price" id="price" placeholder="product price">
+                                    &lt;label for="category">Category&lt;/label>
+                                    &lt;select name="category" id="category">
+                                            &lt;option value="fruit">fruit</option>
+                                            &lt;option value="vegetable">vegetable</option>
+                                            &lt;option value="dairy">dairy</option>
+                                    &lt;/select>
+                                    &lt;button>Submit&lt;/button>
+                                &lt;/form&gt;
+                            &lt;/body&gt;                            
+                            &lt;/html&gt;
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            app.get('/products/new', (req,res)=>{
+                                res.render('products/new')
+                             })
+                             
+                             app.post('/products',async (req,res) => {
+                               const newProduct = new Product(req.body);
+                               await newProduct.save();
+                               res.redirect('/products')
+                             }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Updating Products</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">edit.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;body>
+                                 &lt;h1>Edit Product&lt;/h1>
+                                 &lt;form action="/products/ &lt;%= product._id%>?_method=PUT" method="POST">
+                                    &lt;label for="name">Product Name:&lt;/label>
+                                    &lt;input type="text" name="name" id="name" placeholder="product name" value="&lt;%= product.name %>">
+                                    &lt;label for="price">Product Price:&lt;/label>
+                                    &lt;input type="number" name="price" id="price" placeholder="product price" value="&lt;%= product.price%>">
+                                    &lt;label for="category">Category&lt;/label>
+                                    &lt;select name="category" id="category">
+                                        &lt;option value="fruit">fruit&lt;/option>
+                                        &lt;option value="vegetable">vegetable&lt;/option>
+                                        &lt;option value="dairy">dairy&lt;/option>
+                                    &lt;/select>
+                                    &lt;button>Submit&lt;/button>
+                                 &lt;/form>
+                            &lt;/body>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            // Update
+                            app.get('/products/:id/edit', async (req,res)=>{
+                              const product = await Product.findById(req.params.id)
+                               res.render('products/edit' ,{product})
+                            })
+                            
+                            app.put('/products/:id', async (req,res) =>{
+                               const {id} = req.params;
+                              const product = await Product.findByIdAndUpdate(id, req.body, {runValidators: true, new: true});
+                              res.redirect(`/products/${product._id}`)
+                            }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Tangent on Category selector</h2>
+            <p>
+                When we are on edit page the category was not preselected
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            //in 'index.js' we have to make an array with all category
+                            const categories = ['fruit', 'vegetable', 'dairy', 'fungi'];
+                            // Update
+                            // passing the array
+                            
+                            app.get('/products/:id/edit', async (req,res)=>{
+                               const product = await Product.findById(req.params.id)
+                               res.render('products/edit' ,{product, categories})
+                            })
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">new.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            //inside the select tag this is what we are going to change
+                             &lt;select name="category" id="category">
+                                &lt;% for(let category of categories){%>
+                                    &lt;option value="&lt;%=category%>">&lt;%=category%>&lt;/option>
+                                &lt;% }%>
+                             &lt;/select>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">edit.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            //inside the select tag this is what we are going to change
+                             &lt;select name="category" id="category">
+                                 &lt;% for(let category of categories){%>
+                                    &lt;option value="&lt;%=category%>" &lt;%= product.category === category ? 'selected' : ''%>>&lt;%=category%>&lt;/option>
+                                 &lt;% }%>
+                             &lt;/select>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Deleting Products</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            //Delete
+                            app.delete('/products/:id', async (req, res) => {
+                               const { id } = req.params;
+                               await Product.findByIdAndDelete(id);
+                               res.redirect('/products');
+                            }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">show.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            //here we just going to add a form
+                            &lt;form action="/products/ &lt;%=product._id%>?_method=DELETE" method="post">
+                                &lt;button>Delete&lt;/button>
+                            &lt;/form>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Filtering By Category (Bonus)</h2>
+            <p>If we want to display all product with same category</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">show.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            //link with href set to that particular category which the shown product is
+                             &lt;li>Category:
+                                 &lt;span class="g"> &lt;a href="/products?category=&lt;%= product.category %>">
+                                        &lt;%= product.category %>
+                                 &lt;/a></span>
+                            &lt;/li>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            app.get('/products', async (req, res) => {
+                                const {category} = req.query;
+                                if(category){
+                                  const products = await Product.find({category})
+                                  res.render('products/index', { products, category });
+                                } else {
+                                  const products = await Product.find({});
+                                  res.render('products/index', { products, category: 'All' });
+                                }
+                             }); 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;h1> &lt;%= category %> Products&lt;/h1>
+                            &lt;ul>
+                                &lt;% for(let product of products) { %>
+                                &lt;li>
+                                &lt;a href="/products/&lt;%=product._id%>">&lt;%= product.name %>&lt;/a> 
+                                &lt;a href="/products/&lt;%= product._id %>/edit">edit&lt;/a>
+                                &lt;/li>
+                                &lt;% } %>
+                             &lt;/ul>
+                             &lt;a href="/products/new">New products</a>
+                             &lt;% if(category !== 'All'){%>
+                             &lt;!-- Only shown when there is query string -->
+                             &lt;a href="/products">All products&lt;/a>
+                             &lt;% }%>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="panel dark">
+                <p class="ls">
+                    
+                </p>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <script src="../main.js"></script>
+</body>

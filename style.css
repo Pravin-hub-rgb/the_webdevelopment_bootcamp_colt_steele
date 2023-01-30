@@ -1,0 +1,111 @@
+body {
+    background: #000428;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #004e92, #000428);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #004e92, #000428);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: azure;
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 0;
+}
+
+h2 {
+    color: whitesmoke;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.folder-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 2px auto;
+}
+
+.folder {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    /* background-image: url('./images/folder.svg'); */
+    background: #000428;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #004e92, #000428);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #004e92, #000428);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 5px white;
+    width: 24%;
+}
+
+@media only screen and (max-width: 480px) {
+    .folder {
+        width: 45%;
+    }
+}
+
+.folder h2 {
+    color: rgb(255, 255, 255);
+    font-size: 1.2rem;
+}
+
+.folder a {
+    font-size: 1.1rem;
+    color: whitesmoke;
+    display: block;
+    width: 96%;
+    margin: 4px auto;
+    text-align: center;
+    background-color: black;
+    border-radius: 10px;
+    box-shadow: -3px -3px 8px rgb(255, 255, 255);
+}
+
+
+/* ***** footer ******  */
+
+footer {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.123);
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 20px auto 0;
+    width: 90%;
+    text-align: center;
+}
+
+footer a {
+    color: white;
+    font-size: 1.3rem;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer span:nth-child(3) {
+    color: rgb(255, 168, 168);
+}
+
+footer img {
+    width: 60px;
+}
+
+@media only screen and (max-width:800px){
+    h1{
+        font-size: 1.6rem;
+    }
+    h2{
+        font-size: 1.5rem;
+    }
+}

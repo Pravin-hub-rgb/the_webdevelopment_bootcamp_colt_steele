@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Controllers and Star ratings</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">refactoring to campgrounds controller</a>
+        <a href="#t2" class="link">adding a reviews and users controllers</a>
+        <a href="#t3" class="link">restructuring routes</a>
+        <div class="botbut">
+            <a href="../54_yelpcamp_image_upload/index.html">Next Topic &rarr;</a>
+            <a href="../52_yelpcamp_basic_authorization/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Controllers and Star ratings</h1>
+        <div id="t1" class="wh">
+            <h2>Refactoring to Campgrounds Controller</h2>
+            <ul>
+                <li>Now we are going to focus on reorganizing our code as the code is getting long.</li>
+                <li>So we are going to introduce a pattern that is not unique to express, we are going to define 'controllers' for campgrounds, reviews and users. These are going to be a file which exports an object.</li>
+                <li>Take all the function in each routes and slim our routes as much as possible.</li>
+                <li>The term controller comes from MVC (Models Views Controllers) which is a pattern, it just an approach to structuring applications.
+                    <ul>
+                        <li>Models &rarr; putting all models in Models.</li>
+                        <li>Views &rarr; all view content, layouts and everything that user sees</li>
+                        <li>Controllers &rarr; is where we structure main logic.</li>
+                    </ul>
+                </li> 
+                <li>Make a controllers directory and add method with associated with different routes</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/campgrounds.js 
+
+                        const express = require('express')
+                        const router = express.Router()
+                        const catchAsync = require('../utils/catchAsync')
+                        const campgrounds = require('../controllers/campgrounds')
+                        const { isLoggedIn, isAuthor, validateCampground } = require('../middleware')
+                        
+                        const Campground = require('../models/campground')
+                        
+                        
+                        // ALL CAMPGROUND 
+                        router.get('/', catchAsync(campgrounds.index))
+                        
+                        // NEW 
+                        router.get('/new', isLoggedIn, campgrounds.renderNewForm)
+                        
+                        router.post('/', isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+                        
+                        // SHOW 
+                        router.get('/:id', catchAsync(campgrounds.showCampground))
+                        
+                        // EDIT 
+                        router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm))
+                        router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+                        
+                        // DELETE 
+                        router.delete('/:id', isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
+                        
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /controllers/campgrounds.js
+
+                        const Campground = require('../models/campground')
+
+                        module.exports.index = async (req, res) => {
+                            const campgrounds = await Campground.find({})
+                            res.render('campgrounds/index', { campgrounds })
+                        }
+                        module.exports.renderNewForm = (req, res) => {
+                            res.render('campgrounds/new')
+                        }
+                        module.exports.createCampground = async (req, res, next) => {
+                            const campground = new Campground(req.body.campground)
+                            campground.author = req.user._id
+                            await campground.save()
+                            req.flash('success', 'Successfully made a new campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }
+                        module.exports.showCampground = async (req, res) => {
+                            const { id } = req.params;
+                            const campground = await Campground.findById(id).populate({
+                                path: 'reviews',
+                                populate: {
+                                    path: 'author'
+                                }
+                            }).populate('author')
+                            if (!campground) {
+                                req.flash('error', 'Cannot find that campground')
+                                return res.redirect('/campgrounds')
+                            }
+                            res.render('campgrounds/show', { campground })
+                        }
+                        module.exports.renderEditForm = async (req, res) => {
+                            const campground = await Campground.findById(req.params.id)
+                            if (!campground) {
+                                req.flash('error', 'Cannot find that campground!')
+                                return res.redirect('/campgrounds')
+                            }
+                            res.render('campgrounds/edit', { campground })
+                        }
+                        module.exports.updateCampground = async (req, res) => {
+                            const campground = await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                            req.flash('success', 'Successfully updated campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }
+                        module.exports.deleteCampground = async (req, res) => {
+                            await Campground.findByIdAndDelete(req.params.id)
+                            req.flash('success', 'Successfully deleted campground')
+                            res.redirect('/campgrounds')
+                        }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Adding a Reviews and Users Controllers</h2>
+            <ul>
+                <li>Repeat the process.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>A fancy way to restructure routes</h2>
+            <ul>
+                <li>Here we will see grouping similar routes together. So the routes that have the same paths put different verbs  </li>
+                <li><a href="https://expressjs.com/en/4x/api.html#router">router.route() docs &neArr;</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/campgrounds.js 
+
+                        const express = require('express')
+                        const router = express.Router()
+                        const catchAsync = require('../utils/catchAsync')
+                        const campgrounds = require('../controllers/campgrounds')
+                        const { isLoggedIn, isAuthor, validateCampground } = require('../middleware')
+    
+                        router.route('/')
+                            .get(catchAsync(campgrounds.index)) // show all campgrounds
+                            .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+                        
+                        router.get('/new', isLoggedIn, campgrounds.renderNewForm)
+                        
+                        router.route('/:id')
+                            .get(catchAsync(campgrounds.showCampground))
+                            .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+                            .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
+                        
+                        
+                        router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm))
+                        
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <h2>Displaying star ratings</h2>
+                <ul>
+                    <li>We are using <a href="https://www.npmjs.com/package/starability" target="_blank">starability</a></li>
+                    <li>We are going to use this in two places 1- show route and 2- in review form.</li>
+                    <li>Copy the basic starability css code and paste it in public/stylesheets/stars.css</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+<body>
+    <h2>Browsing the <%=name%> subreddit</h2>
+    <p><%=description%></p>
+    <p><%=subscribers%></p>
+    <hr>
+    <ul>
+        <%for(let post of posts){%>
+            <li><%=post.title%> - <%=post.author%>
+                <ul>
+                    <li>
+                        <%if(post.img){%>
+                            <img src="<%=post.img%>" alt="image">
+                            <%}%>
+                        </li>
+                    </ul></li>
+                    <%}%>
+    </ul>
+</body>
+<%- include('partials/footer') %>

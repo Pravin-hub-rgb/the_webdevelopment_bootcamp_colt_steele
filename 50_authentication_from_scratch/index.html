@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication from scratch</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">authentication vs. authorization</a>
+        <a href="#t2" class="link">cryptographic hashing functions</a>
+        <a href="#t3" class="link">password salts</a>
+        <a href="#t4" class="link">BCRYPT</a>
+        <a href="#t5" class="link">auth demo</a>
+        <div class="botbut">
+            <a href="../51_yelpcamp_adding_in_authentication/index.html">Next Topic &rarr;</a>
+            <a href="../49_yelpcamp_restructuring_flash/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Authentication from scratch</h1>
+        <ul>
+            <li>We are going to learn authentication from scratch but in YelpCamp we are not going to implement authentication from scratch instead we are going to use a tool called 'passport' to help us.</li>
+        </ul>
+        <div id="t1" class="wh">
+            <h2>Authentication vs. Authorization</h2>
+            <div class="in">
+                <h3>Authentication</h3>
+                <ul>
+                    <li>Authentication is the process of verifying who a particular user is.
+                        <ul>
+                            <li>verifying that who they say they are.</li>
+                        </ul>
+                    </li>
+                    <li>We typically authenticate with a username/password combo, but we can also use security questions, facial recognition, etc.</li>
+                </ul>
+            </div>
+            <div class="in">
+                <h3>Authorization</h3>
+                <ul>
+                    <li>Authorization is verfifying what a specific user has access to.</li>
+                    <li>Generally, we authorize after a user has been authenticated. <br> "Now that we know who you are, here is what you are allowed to do and NOT allowed to do".</li>
+                </ul>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>How to (not) store passwords</h2>
+            <ul>
+                <li>Rule # 1 &rarr; Never Store Passwords as text in database. 
+                    <ul>
+                        <li>Reason &rarr; If anyone gets your database you are absolutely screwed.</li>
+                        <li>To not get screwed, hash the password.</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="in">
+                <h3>Hashing</h3>
+                <ul>
+                    <li>Rather than storing a password in the database, we run the password through a hasing function first and then store the result in the database.</li>
+                </ul>
+                <img src="../images/pass.png" alt="">
+                <img src="../images/pass2.png" alt="">
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <ul>
+                <li>Not every hashing function is appropriate for storing passwords. There are some specific hashing function algorithms that are appropriate</li>
+            </ul>
+            <h2>Cryptographic Hashing Functions</h2>
+            <ol>
+                <li>One-way function which is infeasible to invert. 
+                    <ul>
+                        <li>If someone get access to the database and gets the hash value then there is no way to revert it to get the password back.</li>
+                    </ul>
+                </li>
+                <li>Small change in input yields large change in the output. 
+                    <ul>
+                        <li><a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function#/media/File:Cryptographic_Hash_Function.svg">wikipedia image</a></li>
+                    </ul>
+                </li>
+                <li>Deterministic - same input yields same outpus</li>
+                <li>Unlikely to find 2 outputs with same value.</li>
+                <li>Password Hash functions are deliberately SLOW.</li>
+            </ol>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Password Salts</h2>
+            <ul>
+                <li>Salting is the extra steps that we take when we are hashing the password to make it hard to reverse engineer. Basically harder to guess a password and is extra safeguard.</li>
+                <li>There are only couple of hashing algorithms suitable for storing passwords.</li>
+                <li>The one we'll be using is called BCRYPT</li>
+                <li>If a hacker knows that a server is storing password using BCRYPT then still they can hack it using commonly password used by the user have the same hash</li>
+                <li>To prevent the reverse lookups we use 'password salts'</li>
+            </ul>
+            <div class="in">
+                <h3>Password Salts</h3>
+                <ul>
+                    <li>A salt is a random value added to the password before we hash it.</li>
+                    <li>It helps ensure unique hashes and mitigate common attacks.</li>
+                    <li>Now nothing can be gained by looking at hash passwords.</li>
+                </ul>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Intro to BCRYPT</h2>
+            <ul>
+                <li>BCRYPT is the password hashing function that we will be using.</li>
+                <li><a href="https://en.wikipedia.org/wiki/Bcrypt">wikipedia reference</a></li>
+                <li><a href="https://www.npmjs.com/package/bcrypt">NPM bcrypt</a></li>
+            </ul>
+            <div class="in">
+                <h3>Generating a salt</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const bcrypt = require('bcrypt')
+
+                            const hashPassword = async () => {
+                                const salt = await bcrypt.genSalt(10) // 10 = saltrounds
+                                console.log(salt);
+                            }
+                            
+                            hashPassword()
+                            // saltrounds the number to increase the difficulty level for this hash this is the feature of dcrypt that we
+                            // can increase the difficulty a.k.a the amount of time it takes to compute a hash so that we can slow it down
+                            
+                            // we are going to use promise version not the callback function
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Generating hash</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const bcrypt = require('bcrypt')
+
+                            const hashPassword = async (pw) => {
+                                const salt = await bcrypt.genSalt(10) // 10 = saltrounds
+                                const hash = await bcrypt.hash(pw, salt)
+                                console.log(salt);
+                                console.log(hash);
+                            }
+                            
+                            hashPassword('monkey')
+                            
+                            // salt - $2b$10$rzhTWyh84ySuIfBVdSKgCe
+                            // hash - $2b$10$rzhTWyh84ySuIfBVdSKgCecXnbYfCKiWOqIS5MbTHhj2foMgc9Geu
+                            
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <ul>
+                <li>Now lets talk about if we have saved hashed password not how we can compare the password and the hash stored in the DB.</li>
+                <li>For that there is a method called 'compare'.</li>
+                <li>Compare expects us to pass the 'plain text password' and the 'hash' that we already have stored</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const bcrypt = require('bcrypt')
+
+                        const hashPassword = async (pw) => {
+                            const salt = await bcrypt.genSalt(10) // 10 = saltrounds
+                            const hash = await bcrypt.hash(pw, salt)
+                            console.log(salt);
+                            console.log(hash);
+                        }
+                        
+                        const login = async (pw, hashedPw) => {
+                            const result = await bcrypt.compare(pw, hashedPw)
+                            if (result) {
+                                console.log("logged you in! Successful Match!");
+                            } else {
+                                console.log("Incorrect!");
+                            }
+                        }
+                        
+                        // hashPassword('monkey')
+                        login('monkey', '$2b$10$rzhTWyh84ySuIfBVdSKgCecXnbYfCKiWOqIS5MbTHhj2foMgc9Geu')
+                        
+                        // salt - $2b$10$rzhTWyh84ySuIfBVdSKgCe
+                        // hash - $2b$10$rzhTWyh84ySuIfBVdSKgCecXnbYfCKiWOqIS5MbTHhj2foMgc9Geu
+                        
+                        // logs - logged you in! Successful Match!
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>We generate hash using this method also &darr;</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const hashPassword = async (pw) => {
+                            const hash = await bcrypt.hash(pw, 12)
+                            console.log(hash);
+                        }
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>these two steps we need, 1- hash a password and 2- compare a password.</li>
+                <li>Now using these we can impliment a basic Auth.</li>
+            </ul>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Auth Demo</h2>
+            <ul>
+                <li>Let's build a simple express app where we can implement authentication using BCRYPT.</li>
+            </ul>
+            <div class="in">
+                <h3>Registering user and Login functionality</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                            <code>
+
+                                const express = require('express')
+                                const app = express()
+                                const User = require('./models/user')
+                                const mongoose = require('mongoose')
+                                const bcrypt = require('bcrypt')
+                                
+                                mongoose.connect('mongodb://localhost:27017/authDemo', { useNewUrlParser: true, useUnifiedTopology: true })
+                                    .then(() => {
+                                        console.log('Mongo Connection open!');
+                                    })
+                                    .catch(err => {
+                                        console.log('Oh no mongo connection Error!');
+                                        console.log(err)
+                                    })
+                                mongoose.set('strictQuery', true);
+                                
+                                app.set('view engine', 'ejs')
+                                app.set('views', 'views')
+                                
+                                app.use(express.urlencoded({ extended: true }))
+                                
+                                app.get('/', (req, res) => {
+                                    res.send('this is the homepage')
+                                })
+                                
+                                // 1 registering user
+                                app.get('/register', (req, res) => {
+                                    res.render('register')
+                                })
+                                app.post('/register', async (req, res) => {
+                                    // we will use bcrypt to generate hash of user password and then we will store it 
+                                    const { password, username } = req.body
+                                    const hash = await bcrypt.hash(password, 12)
+                                    const user = new User({
+                                        username, password: hash
+                                    })
+                                    await user.save()
+                                    res.redirect('/')
+                                })
+                                
+                                // 2 Login Functionality
+                                app.get('/login', (req, res) => {
+                                    res.render('login')
+                                })
+                                app.post('/login', async (req, res) => {
+                                    const { username, password } = req.body
+                                    // here the username should be unique
+                                    const user = await User.findOne({ username })
+                                    // don't give specific hint or uesrname or password is incorrect
+                                    const validPassword = await bcrypt.compare(password, user.password)
+                                    if (validPassword) {
+                                        res.send('Yay welcome')
+                                    } else {
+                                        res.send('Try again')
+                                    }
+                                })
+                                
+                                app.get('/secret', (req, res) => {
+                                    res.send('This is secret! You cannot see me unless you are logged in!!')
+                                })
+                                
+                                app.listen(3000, () => {
+                                    console.log('Serving your app');
+                                })
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Staying logged in using session</h3>
+                <ul>
+                    <li>We want to associate a given user's browser with a some piece of data that says they are logged in.</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                            <code>
+
+                                // app.js
+
+                                // common part skipped
+                                
+                                app.use(express.urlencoded({ extended: true }))
+                                app.use(session({ secret: 'notagoodsecret' }))
+                                
+                                app.get('/', (req, res) => {
+                                    res.send('this is the homepage')
+                                })
+                                
+                                // 1 registering user
+                                app.get('/register', (req, res) => {
+                                    res.render('register')
+                                })
+                                app.post('/register', async (req, res) => {
+                                    const { password, username } = req.body
+                                    const hash = await bcrypt.hash(password, 12)
+                                    const user = new User({
+                                        username, password: hash
+                                    })
+                                    await user.save()
+                                    req.session.user_id = user._id
+                                    res.redirect('/')
+                                })
+                                
+                                // 2 Login Functionality
+                                app.get('/login', (req, res) => {
+                                    res.render('login')
+                                })
+                                app.post('/login', async (req, res) => {
+                                    const { username, password } = req.body
+                                    const user = await User.findOne({ username })
+                                    const validPassword = await bcrypt.compare(password, user.password)
+                                    if (validPassword) {
+                                        req.session.user_id = user._id
+                                        res.redirect('/secret')
+                                    } else {
+                                        res.redirect('/login')
+                                    }
+                                })
+                                
+                                app.get('/secret', (req, res) => {
+                                    if(!req.session.user_id){
+                                        res.redirect('/login')
+                                    }
+                                    res.send('This is secret! You cannot see me unless you are logged in!!')
+                                })
+                                
+                                app.listen(3000, () => {
+                                    console.log('Serving your app');
+                                })
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Logout and login middleware</h3>
+                <ul>
+                    <li>All we have to do to log someone out is to just get rid of user_id in the session</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                            <code>
+
+                                // app.js
+
+                                // common part skipped
+                                
+                                app.use(express.urlencoded({ extended: true }))
+                                app.use(session({ secret: 'notagoodsecret' }))
+                                
+                                // now if we have to secure multiple route then it is better to use a middleware
+                                const requireLogin = (req, res, next) => {
+                                    if (!req.session.user_id) {
+                                        return res.redirect('/login')
+                                    } else {
+                                        next()
+                                    }
+                                }
+                                
+                                app.get('/', (req, res) => {
+                                    res.send('this is the homepage')
+                                })
+                                
+                                // 1 registering user
+                                app.get('/register', (req, res) => {
+                                    res.render('register')
+                                })
+                                app.post('/register', async (req, res) => {
+                                    const { password, username } = req.body
+                                    const hash = await bcrypt.hash(password, 12)
+                                    const user = new User({
+                                        username, password: hash
+                                    })
+                                    await user.save()
+                                    req.session.user_id = user._id
+                                    res.redirect('/')
+                                })
+                                
+                                // 2 Login Functionality
+                                app.get('/login', (req, res) => {
+                                    res.render('login')
+                                })
+                                app.post('/login', async (req, res) => {
+                                    const { username, password } = req.body
+                                    const user = await User.findOne({ username })
+                                    const validPassword = await bcrypt.compare(password, user.password)
+                                    if (validPassword) {
+                                        req.session.user_id = user._id
+                                        res.redirect('/secret')
+                                    } else {
+                                        res.redirect('/login')
+                                    }
+                                })
+                                
+                                app.post('/logout', (req, res) => {
+                                    req.session.user_id = null
+                                    // there is another method - req.session.destroy()
+                                    // so instead of removing one property this remove entire session properties 
+                                
+                                    res.redirect('/login')
+                                })
+                                
+                                app.get('/secret', requireLogin, (req, res) => {
+                                    res.render('secret')
+                                })
+                                app.get('/topsecret', requireLogin, (req, res) => {
+                                    res.send('Top Secret')
+                                })
+                                
+                                app.listen(3000, () => {
+                                    console.log('Serving your app');
+                                })
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Refactoring to model methods</h3>
+                <a href="./authDemo/">Access all files</a>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

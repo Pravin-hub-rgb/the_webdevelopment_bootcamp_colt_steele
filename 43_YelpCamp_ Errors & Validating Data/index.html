@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp Errors & Validating Data</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">JOI Schema validation</a>
+        <div class="botbut">
+            <a href="../44_Data_ relationships_with_mongo/index.html">Next Topic &rarr;</a>
+            <a href="../42_Express_Errors/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp Errors & Validating Data</h1>
+        <div class="wh">
+            <p>Now we are going to do client side validation
+            <ul>
+                <li>We are using <a href="https://getbootstrap.com/docs/5.0/forms/validation/">validation</a> of
+                    bootstrap</li>
+                <li>We are applying what we have learned from <a href="../42_Express_Errors/index.html">Express Error
+                        section</a></li>
+            </ul>
+            </p>
+            <div class="in">
+                <p>Even if we can't upload invalid data from browser but we can do it using postman.
+                    <br>to stop that we are doing this
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.post('/campgrounds', catchAsync(async (req, res, next) => {
+                                if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
+                                campground = new Campground(req.body.campground)
+                                await campground.save()
+                                res.redirect(`/campgrounds/${campground._id}`)
+                            }))
+
+
+                            app.use((err, req, res, next) => {
+                                const { statusCode = 500, message = 'Something went wrong' } = err
+                                res.status(statusCode).send(message)
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            // catchAsync.js  // for catchAsync function
+
+                            module.exports = func => {
+                                return (req, res, next) => {
+                                    func(req, res, next).catch(next)
+                                }
+                            }
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Handling other routes</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        app.all('*', (req, res, next) => {
+                            next(new ExpressError('Page Not Found', 404))
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Defining Error Template</h2>
+            <ul>
+                <li>Make a file 'error.ejs' in views directory</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- error.ejs -->
+
+                        &lt;% layout('layouts/boilerplate') %>
+                        &lt;div class="row">
+                            &lt;div class="col-6 offset-3">
+                                &lt;div class="alert alert-danger" role="alert">
+                                    &lt;h4 class="alert-heading">&lt;%=err.message%>&lt;/h4>
+                                    &lt;p>
+                                        &lt;%=err.stack%>
+                                    &lt;/p>
+                                &lt;/div>
+                            &lt;/div>
+                        &lt;/div>
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        app.use((err, req, res, next) => {
+                            const { statusCode = 500 } = err
+                            if (!err.message) err.message = 'Oh No, somthing Went wrong!'
+                            res.status(statusCode).render('error', { err })
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t1" class="wh">
+            <h2>JOI Schema Validations</h2>
+            <ul>
+                <li>Till now client side validation is done</li>
+                <li>Now the last thing to do is to validate data when new campground is created or when campground is
+                    updated.</li>
+                <li>Validation we are doing till now is checking for a missing body, price or title.</li>
+            </ul>
+            <div class="in">
+                <p>We are not going to write a logic to check every single bit like this &darr;</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.post('/campgrounds', catchAsync(async (req, res, next) => {
+                                if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
+
+                                if(!req.body.campground.price){
+                                    // do something
+                                }
+                                if(!req.body.campground.image){
+                                    // do something else
+                                }
+
+                                campground = new Campground(req.body.campground)
+                                await campground.save()
+                                res.redirect(`/campgrounds/${campground._id}`)
+                            }))
+                        </code>
+                    </pre>
+                </div>
+                <ul>
+                    <li>this is very annoying and time consuming and it is not good for more complex model</li>
+                </ul>
+            </div>
+            <ul>
+                <li>So we are not going to write our own validation, instead we are going to use a tool to do just that
+                    and it is called JOI</li>
+                <li><a href="https://github.com/hapijs/joi">Github page</a></li>
+                <li><a href="https://joi.dev/api/?v=17.7.0">JOI Docs</a></li>
+                <li>We have to install JOI</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const Joi = require('joi')
+                        // post request of creating new campground 
+
+                        app.post('/campgrounds', catchAsync(async (req, res, next) => {
+                            // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
+                            // this is not a mongoose schema
+                            // we are going to validate our data before mongoose
+                            const campgroundSchema = Joi.object({
+                                campground: Joi.object({ // everything is nested under campground
+                                    title: Joi.string().required(),
+                                    price: Joi.number().required().min(0),
+                                    image: Joi.string().required(),
+                                    location: Joi.string.required(),
+                                    description: Joi.string().required()
+                                }).required()
+                            })
+                        
+                            const { error } = campgroundSchema.validate(req.body)
+                            if (error) {
+                                const msg = error.details.map(el => el.message).join(',')
+                                throw new ExpressError(msg, 400)
+                            }
+                            console.log(result);
+                        
+                            campground = new Campground(req.body.campground)
+                            await campground.save()
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }))
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now we got two layers
+                    <ol>
+                        <li>We can't submit an empty form</li>
+                        <li>And we also have validation in our server side in case someone passes client side
+                            validation.</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <div class="wh">
+            <h2>JOI Validation Middleware</h2>
+            <ul>
+                <li>We are putting validation logic in our required route but if we are going to use this in more than
+                    one place we should move this out into something which is more usefull like middleware</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // we want this to run on selective routes
+                        const validateCampground = (req, res, next) => {
+                            // this is not a mongoose schema
+                            // we are going to validate our data before mongoose
+                            const campgroundSchema = Joi.object({
+                                campground: Joi.object({ // everything is nested under campground
+                                    title: Joi.string().required(),
+                                    price: Joi.number().required().min(0),
+                                    image: Joi.string().required(),
+                                    location: Joi.string().required(),
+                                    description: Joi.string().required()
+                                }).required()
+                            })
+                        
+                            const { error } = campgroundSchema.validate(req.body)
+                            if (error) {
+                                const msg = error.details.map(el => el.message).join(',')
+                                throw new ExpressError(msg, 400)
+                            } else {
+                                next()
+                            }
+                        }
+
+                        app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
+                            campground = new Campground(req.body.campground)
+                            await campground.save()
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }))
+
+                        app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
+                            await Campground.findByIdAndUpdate(req.params.id, { ...req.body.campground })
+                            res.redirect(`/campgrounds/${req.params.id}`)
+                        }))
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Moving JOI campgroundSchema into a separate file</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // YelpCamp/schemas.js 
+
+                        const Joi = require('joi')
+
+                        module.exports.campgroundSchema =  Joi.object({
+                            campground: Joi.object({ 
+                                title: Joi.string().required(),
+                                price: Joi.number().required().min(0),
+                                image: Joi.string().required(),
+                                location: Joi.string().required(),
+                                description: Joi.string().required()
+                            }).required()
+                        })
+                        // just require this on app.js file
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

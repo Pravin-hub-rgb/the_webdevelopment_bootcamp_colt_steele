@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Campgrounds CRUD</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <div class="botbut">
+            <a href="../40_Middleware The Key To Express/index.html">Next Topic &rarr;</a>
+            <a href="../38_Mongoose_with_Express/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: CRUD</h1>
+        <img src="../images/fileStructure.svg" alt="" class="wb">
+        <div class="wh">
+            <h2>app.js</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">app.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            express = require('express')
+                            path = require('path')
+                            mongoose = require('mongoose')
+                            Campground = require('./models/campgrounds')
+                            methodOverride = require('method-override')
+                            
+                            mongoose.connect('mongodb://localhost:27017/yelp-camp', { useNewUrlParser: true, useUnifiedTopology: true })
+                            db = mongoose.connection
+                            db.on("error", console.error.bind(console, "connection error:"))
+                            db.once("open", () => {
+                                console.log("Database connected");
+                            })
+                            app = express()
+                            
+                            app.set('view engine', 'ejs')
+                            app.set('views', path.join(__dirname, 'views'))
+                            
+                            app.use(express.urlencoded({ extended: true }))
+                            app.use(methodOverride('_method'))
+                            
+                            app.get('/', (req, res) => {
+                                res.render('home')
+                            })
+                            
+                            // ALL CAMPGROUND 
+                            app.get('/campgrounds', async (req, res) => {
+                                campgrounds = await Campground.find({})
+                                res.render('campgrounds/index', { campgrounds })
+                            })
+                            // NEW 
+                            app.get('/campgrounds/new', (req, res) => {
+                                res.render('campgrounds/new')
+                            })
+                            
+                            app.post('/campgrounds', async(req, res) => {
+                                campground = new Campground(req.body.campground)
+                                await campground.save()
+                                res.redirect(`/campgrounds/${campground._id}`)
+                            })
+                            // SHOW 
+                            app.get('/campgrounds/:id', async (req, res) => {
+                                const { id } = req.params;
+                                campground = await Campground.findById(id)
+                                res.render('campgrounds/show', { campground })
+                            })
+                            
+                            // EDIT 
+                            app.get('/campgrounds/:id/edit',async(req,res)=>{
+                                campground = await Campground.findById(req.params.id)
+                                res.render('campgrounds/edit',{campground})
+                            })
+                            app.put('/campgrounds/:id',async(req,res)=>{
+                                await Campground.findByIdAndUpdate(req.params.id,{...req.body.campground})
+                                res.redirect(`/campgrounds/${req.params.id}`)
+                            })
+                            
+                            // DELETE 
+                            app.delete('/campgrounds/:id',async(req,res)=>{
+                                await Campground.findByIdAndDelete(req.params.id)
+                                res.redirect('/campgrounds')
+                            })
+                            app.listen(3000, () => {
+                                console.log('Serving on port 3000!');
+                            })
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>models</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">campgrounds.js</button>
+                <div class="panel">
+                <pre>
+                    <code>
+
+                        mongoose = require('mongoose')
+                        Schema = mongoose.Schema
+                        
+                        CampgroundSchema = new Schema({
+                            title: String,
+                            price: String,
+                            description: String,
+                            location: String
+                        })
+                        
+                        module.exports = mongoose.model('Campground', CampgroundSchema)
+                    </code>
+                </pre>
+            </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>seeds</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                <pre>
+                    <code>
+
+                        cities = require('./citites')
+                        const { places, descriptors } = require('./seedHelpers')
+                        mongoose = require('mongoose')
+                        Campground = require('../models/campgrounds')
+                        
+                        mongoose.connect('mongodb://localhost:27017/yelp-camp', { useNewUrlParser: true, useUnifiedTopology: true })
+                        db = mongoose.connection
+                        db.on("error", console.error.bind(console, "connection error:"))
+                        db.once("open", () => {
+                            console.log("Database connected");
+                        })
+                        
+                        sample = array => array[Math.floor(Math.random() * array.length)]
+                        
+                        seedDB = async () => {
+                            await Campground.deleteMany({})
+                            for (let i = 0; i < 50; i++) {
+                                rand1000 = Math.floor(Math.random() * 1000) // as there are 1000 cities
+                                camp = new Campground({
+                                    location: `${cities[rand1000].city}, ${cities[rand1000].state}`,
+                                    title: `${sample(descriptors)} ${sample(places)}`
+                                })
+                                await camp.save()
+                            }
+                        }
+                        seedDB().then(() => {
+                            mongoose.connection.close()
+                        })
+                    </code>
+                </pre>
+            </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <div class="accordion">citites.js</div>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            module.exports = [
+                            {
+                                city: "New York",
+                                growth_from_2000_to_2013: "4.8%",
+                                latitude: 40.7127837,
+                                longitude: -74.0059413,
+                                population: "8405837",
+                                rank: "1",
+                                state: "New York",
+                            },
+                            {
+                                city: "Los Angeles",
+                                growth_from_2000_to_2013: "4.8%",
+                                latitude: 34.0522342,
+                                longitude: -118.2436849,
+                                population: "3884307",
+                                rank: "2",
+                                state: "California",
+                            },
+                            {
+                                city: "Chicago",
+                                growth_from_2000_to_2013: "-6.1%",
+                                latitude: 41.8781136,
+                                longitude: -87.6297982,
+                                population: "2718782",
+                                rank: "3",
+                                state: "Illinois",
+                            },
+                            {
+                                city: "Houston",
+                                growth_from_2000_to_2013: "11.0%",
+                                latitude: 29.7604267,
+                                longitude: -95.3698028,
+                                population: "2195914",
+                                rank: "4",
+                                state: "Texas",
+                            }
+                            // there are 1000 citites
+                        }
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">seedHelpers.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            module.exports.descriptors = [
+                            'Forest',
+                            'Ancient',
+                            'Petrified',
+                            'Roaring',
+                            'Cascade',
+                            'Tumbling',
+                            'Silent',
+                            'Redwood',
+                            'Bullfrog',
+                            'Maple',
+                            'Misty',
+                            'Elk',
+                            'Grizzly',
+                            'Ocean',
+                            'Sea',
+                            'Sky',
+                            'Dusty',
+                            'Diamond'
+                        ]
+                        
+                        module.exports.places = [
+                            'Flats',
+                            'Village',
+                            'Canyon',
+                            'Pond',
+                            'Group Camp',
+                            'Horse Camp',
+                            'Ghost Town',
+                            'Camp',
+                            'Dispersed Camp',
+                            'Backcountry',
+                            'River',
+                            'Creek',
+                            'Creekside',
+                            'Bay',
+                            'Spring',
+                            'Bayshore',
+                            'Sands',
+                            'Mule Camp',
+                            'Hunting Camp',
+                            'Cliffs',
+                            'Hollow'
+                        ]
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>views/campgrounds</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">edit.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>Edit Campgrounds&lt;/title>
+                            &lt;/head>
+                            &lt;body>
+                                &lt;form action="/campgrounds/<%=campground._id%>?_method=PUT" method="post">
+                                    &lt;div>
+                                        &lt;label for="title">Title&lt;/label>
+                                        &lt;input type="text" name="campground[title]" id="title" value="<%=campground.title%>"> <!-- grouping all values inside 'campground' -->
+                                    &lt;/div>
+                                    &lt;div>
+                                        &lt;label for="loc">Location&lt;/label>
+                                        &lt;input type="text" name="campground[location]" id="loc" value="<%=campground.location%>"> 
+                                    &lt;/div>
+                                    &lt;button>Update Campground&lt;/button>
+                                    &lt;a href="/campgrounds/<%=campground._id%>">Back to Campground</a>
+                                &lt;/form>
+                            &lt;/body>
+                            &lt;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>Campgrounds&lt;/title>
+                            &lt;/head>
+                            &lt;body>
+                                &lt;h1>All campgrounds&lt;/h1>
+                                &lt;div>
+                                    &lt;a href="/campgrounds/new">Add Campgrounds&lt;/a>
+                                &lt;/div>
+                                &lt;ul>
+                                    <%for(let campground of campgrounds){%>
+                                       &lt;li>&lt;a href="/campgrounds/<%=campground._id%>"><%=campground.title%></a></li> 
+                                    <%}%>
+                                &lt;/ul>
+                            &lt;/body>
+                            &lt;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">new.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>New Campground&lt;/title>
+                            &lt;/head>
+                            &lt;body>
+                                &lt;form action="/campgrounds" method="post">
+                                    &lt;div>
+                                        &lt;label for="title">Title&lt;/label>
+                                        &lt;input type="text" name="campground[title]" id="title"> <!-- grouping all values inside 'campground' -->
+                                    &lt;/div>
+                                    &lt;div>
+                                        &lt;label for="loc">Location&lt;/label>
+                                        &lt;input type="text" name="campground[location]" id="loc"> 
+                                    &lt;/div>
+                                    &lt;button>Add Campground&lt;/button>
+                                    &lt;a href="/campgrounds">All Campgrounds&lt;/a>
+                                &lt;/form>
+                            &lt;/body>
+                            &lt;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">show.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>Show&lt;/title>
+                            &lt;/head>
+                            &lt;body>
+                                &lt;h1><%=campground.title%>&lt;/h1>
+                                &lt;h2><%=campground.location%>&lt;/h2>
+                                &lt;form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="post">&lt;button>Delete&lt;/button>&lt;/form>
+                                &lt;footer>
+                                    &lt;a href="/campgrounds/<%=campground._id%>/edit">Edit&lt;/a>
+                                    <a href="/campgrounds">All campgrounds&lt;/a>
+                                &lt;/footer>
+                            &lt;/body>
+                            &lt;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

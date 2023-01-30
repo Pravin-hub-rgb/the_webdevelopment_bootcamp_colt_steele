@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax and API's</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Request</a>
+        <a href="#t2" class="link">AJAX</a>
+        <a href="#t3" class="link">API</a>
+        <a href="#t4" class="link">AJAJ</a>
+        <a href="#t5" class="link">JSON</a>
+        <a href="#t6" class="link">Hopp Scotch</a>
+        <a href="#t7" class="link">XMLHttpRequest</a>
+        <a href="#t8" class="link">Fetch API</a>
+        <a href="#t9" class="link">AXIOS</a>
+        <div class="botbut">
+            <a href="../29_Prototypes_Classes_OOP/index.html">Next Topic &rarr;</a>
+            <a href="../27_Async_JavaScript/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <div id="t1" class="wh">
+            <h3>REQUEST</h3>
+            <p>
+                &zigrarr;XMLHTTP
+                <br> &zigrarr;FETCH
+                <br> &zigrarr;AXIOS
+            </p>
+        </div>
+        <p>
+            We make request everytime(clicking 'go', hitting 'enter key' on forms etc) but this is not the only way
+            to make request , We can also make request from code and this is the thing that we do a lot when we are
+            making modern web applications and infact it
+            have its own term AJAX.
+        </p>
+        <div id="t2" class="wh">
+            <h3>AJAX</h3>
+            <p>
+                &zigrarr;ASYNCHRONOUS
+                <br> &zigrarr;JAVASCRIPT
+                <br> &zigrarr;AND
+                <br>&zigrarr;XML
+            </p>
+            <p>
+                It refers to the concept of making request to load information or send information on a given
+                website or web app seemlessly behind the scenes and interacting to the servers somewhere.
+            </p>
+            <p>
+                Most of the time when we are working with JavaScript and making request what we want is just data
+                and not html, css and JS.
+            </p>
+        </div>
+        <div id="t3" class="wh">
+            <h3>API</h3>
+            <p>It stands for Application Programming Interface</p>
+            <p>
+                Technically API is a very broad term that refers to any interface for one piece of software to
+                another piece of software.
+                <br>Most of the time people are referring to Web API, now a Web API are interfaces that are web
+                based (http based)
+            </p>
+        </div>
+        <div class="wh">
+            <p>There are some format that API's use to send their data back rather then sending html and css. <br>
+                So the two common format are
+                <br>&zigrarr;XML - This format is not so common nowadays
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            &lt;root>
+                                &lt;product>
+                                  &lt;Code>2941&lt;/Code>
+                                  &lt;Barcode>5474556746586545&lt;/Barcode>
+                                &lt;/product>
+                             &lt;/root> 
+                        </code>
+                    </pre>
+            </div>
+            So, now it's AJAJ not AJAX
+            <div id="t4" class="in">
+                <h3>AJAJ</h3>
+                <p>
+                    &zigrarr;ASYNCHRONOUS
+                    <br> &zigrarr;JAVASCRIPT
+                    <br> &zigrarr;AND
+                    <br> &zigrarr;JSON
+                </p>
+            </div>
+            <div id="t5" class="in">
+                <h3>JSON</h3>
+                <p><a href="https://www.json.org/json-en.html"> json docs</a></p>
+                <p><a href="https://jsonformatter.curiousconcept.com/"> json formatter</a></p>
+                <p>
+                    &zigrarr;Java
+                    <br> &zigrarr;Script
+                    <br> &zigrarr;Object
+                    <br> &zigrarr;Notation
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                {
+                                    "squadName": "Super her squad",
+                                    "homeTown": "Metro City",
+                                    "formed": 2016,
+                                    "secretBase": "Super tower",
+                                    "active": true,
+                                    "members": [
+                                       "Molecule Man",
+                                       "Madame Uppercut",
+                                       "Eternal Flame"
+                                    ]
+                                }
+                            </code>
+                        </pre>
+                </div>
+                <p>
+                    When we request information from an API we get back a giant string.
+                    <br> So, to convert in to an JS object we use a method called JSON.parse
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                //This is a string of JSON
+                                const data = '{"ticker":{"base":"BTC","target":"USD","price":"443.7807865468","volume":"31720.1493969300","change":"0.3766203596"}}';
+                                const parsedData = JSON.parse(data);
+                                //Now we can access the key, value pairs
+                                parsedData.ticker.price
+                                "443.7807865468"                                
+                            </code>
+                        </pre>
+                </div>
+                <p>
+                    If we have a information which is JS object and we want to turn it into JSON we use a method
+                    called JSON.stringify and it is useful when we need to send information to an API
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const dog = {breed:'lab', color:'black', isAlive: true, owner: undefined};
+                                JSON.stringify(dog);
+                                "{"breed":"lab", "color":"black", "isAlive": true}"
+                                //removes the key which are undefined
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>HOPP SCOTCH || POSTMAN</h2>
+            <p>As now postman requires you to signup. So, there is an opensource alternative of it called HOPP SCOTCH
+            </p>
+            <p>
+                Use to make http request to API's.
+                <br>Used by developers for testing API's.
+                <br><br>When we are getting, retriving information from an API we use GET request and when we send data
+                that we intend to impact the server side or data base.
+            </p>
+            <div class="in">
+                <h3>Status code</h3>
+                <p>learn here &rarr; <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">About Status
+                        code</a></p>
+            </div>
+            <div class="in">
+                <h3>Understanding Query String</h3>
+                <ul>
+                    <li>So when we make an http request
+                        <ul>
+                            <li>The URL we are requesting are very important</li>
+                            <li>Single character different will mess the request</li>
+                        </ul>
+                    </li>
+                    <li>We can include a lot things in a URL</li>
+                    <li>An api have different end points which have different things in it.</li>
+                    <li><b>Variable </b>
+                        <ul>
+                            <li>have ':' in front of it</li>
+                            <li>but also
+                                <ul>
+                                    <li>https://swapi.dev/api/people/:id</li>
+                                    <li>https://swapi.dev/api/people/{{id}}</li>
+                                    <li>https://swapi.dev/api/people/&lt;id></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>We can also use <b>query string</b> to include additional information in URL
+                        <ul>
+                            <li>Example &rarr;
+                                https://www.amazon.com?k=bucatini&cred=3idtufdwsoda5&sprefix=ducat%2caps%c317&ref=nb_sb_noss_2
+                            </li>
+                            <li>It contains key value pairs that are separated by '&'.</li>
+                            <li>AT the end of the URL &rarr; ?sort=desc&color=blue</li>
+                        </ul>
+                    </li>
+                    <li>We can append anything we want using query string and it will be ignored by server or web api's.
+                        Unless it is specifically looking for something of off these things.</li>
+                </ul>
+            </div>
+            <div class="in">
+                <h3>Headers</h3>
+                <p>
+                    These are bunch of key-value pairs they are like metadata for the request.
+                <ul>
+                    <li>We set it to 'application/json' so that the data is in json format</li>
+                    <li>Some API want you to send header</li>
+                    <li>It can't be done via URL</li>
+                </ul>
+                </p>
+            </div>
+            <div class="in">
+                <h3>Some API links</h3>
+                <p>
+                    &zigrarr;<a href="https://www.tvmaze.com/api">tvmaze</a>
+                    <br> &zigrarr;<a href="https://icanhazdadjoke.com/api">dadjoketvmaze</a>
+                    <br> &zigrarr;<a href="https://openweathermap.org/api">weather api</a>
+                </p>
+            </div>
+        </div>
+        <div id="t7" class="wh">
+            <h2>XMLHttpRequest</h2>
+            <p>
+                &zigrarr;The "original" way of sending requests via JS.
+                <br>&zigrarr;Does not support promises, so... lots of callbacks!
+                <br>&zigrarr;WTF is going on with the weird capitalization?
+                <br>&zigrarr;Clunky syntax that I find difficult to remember!
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const myReq = new XMLHttpRequest();
+
+                        // first event handler &darr;
+                        myReq.onload = function() {
+                           const data = JSON.parse(this.responseText);
+                           console.log(data);
+                        };
+                        // second event handler &darr;
+                        myReq.onerror = function(err) {
+                          console.log('Error!', err);
+                        };
+                        myReq.open('get', 'https://icanhazdadjoke.com/', true);
+                        myReq.setRequestHeader('Accept','application/json');
+                        myReq.send(); 
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t8" class="wh">
+            <h2>Fetch API</h2>
+            <p>
+                &zigrarr;The newer way of making request via JS.
+                <br>&zigrarr; Supports promises!
+                <br>&zigrarr;docs &rarr; <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">here</a>
+            </p>
+            <p>
+                So Fetch is not ideal that is why libraries like AXIOS exists
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        fetch('https://api.cyptonator.com/api/ticker/btc-usd') //This returns promise, so we can chain '.then'
+                        .then(res => {
+                          console.log('Response, waiting to parse...', res);
+                          return res.json(); //.json method returns promise
+                        })
+                        .then(data => {
+                           console.log('Data parsed...');
+                           console.log(data.ticker.price);
+                        })
+                        .catch(e => {
+                          console.log('Oh no! Error', e);
+                        }) 
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        fetch("https://swapi.dev/api/people/1/")
+                        .then((res) => {
+                            console.log("Resolved!", red)
+                            return res.json();
+                        })
+                        .then((data) => {
+                            return fetch("https://swapi.dev/api/people/2/")
+                        })
+                        .then((res) => {
+                            console.log("Second request resolved !!")
+                            return res.json()
+                        })
+                        .then((data) => {
+                            console.log(data)
+                        })
+                        .catch((e) => {
+                            console.log("Error!", e)
+                        })
+                    </code>
+                </pre>
+            </div>
+            <p>Using async function</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const loadStarwarsPeople = async () => {
+                            try{
+                                const res = await fetch("https://swapi.dev/api/people/1/")
+                                const data = awai res.json()
+                                console.log(data)
+                                const res2 = await fetch("https://swapi.dev/api/people/2/")
+                                const data2 = awai res.json()
+                                console.log(data)
+                            } catch(e) {
+                                console.log("Error!!", e)
+                            }
+                        }
+                    </code>
+                </pre>
+            </div>
+            <p>
+                So, fetch API is definately an imporvement but its annoying that it have to do parsing of json
+                separately.
+                So, that's where axios comes in.
+            </p>
+        </div>
+        <div id="t9" class="wh">
+            <h2>AXIOS</h2>
+            <p>A library for making HTTP Request
+                <br>&zigrarr; github &rarr; <a href="https://github.com/axios/axios">here</a>
+                <br>Uses Fetch behind the scene
+            <ul>
+                <li>Before we can use it we can to include it using script in our html
+                    <ul>
+                        <li>&lt;script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">&lt;/script></li>
+                    </ul>
+                </li>
+            </ul>
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        axios.get("https://swapi.dev/api/people/1/")
+                        .then(res => {
+                            console.log("response", res)
+                            // biggest improvement - we didn't parsed the json here, it did it itself.
+                        })
+                        .catch(e =>{
+                            console.log("Error", e)
+                        })
+                    </code>
+                </pre>
+            </div>
+            <p>refactoring it with aysnc function</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const getStarWarsPerson = async (id) => {
+                            try{
+
+                                const res = await axios.get(`https://swapi.dev/api/people/%{id}`)
+                                console.log(res.data);
+                            } catch(e) {
+                                console.log("Error", e)
+                            }
+                            }
+
+                        getStarWarsPerson(5);
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                <code>
+
+                    axios.get('https://api.cyptonator.com/api/ticker/btc-usd')
+                    .then(res => {
+                       console.log(res.data.ticker.price);
+                    })
+                    .catch((e) => {
+                       console.log('Error!', e);
+                    }) 
+                </code>
+            </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const fetchBitcoinPrice = async () => {
+                            try {
+                              const res = await axios.get('https://api.cyptonator.com/api/ticker/btc-usd')
+                              console.log(res.data.ticker.price)
+                            } catch (e) {
+                              console.log('Error!', e)
+                            }
+                         } 
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <h3>Setting header with Axios</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const getDadJoke = async () => {
+                                const config = { headers: {Accept: 'application/json'}}
+                                const res = await axios.get('https://icanhazdadjoke.com/',config)
+                                console.log(res)
+                             } 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <div class="wh">
+                    <h3>Click button to get a new dad joke</h3>
+                    <button id="dadJokeBtn">New Joke</button>
+                    <ul class="jokeUl"></ul>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        //Code
+                        const btn = document.querySelector('#dadJokeBtn');
+                        const ul = document.querySelector('.jokeUl');
+                        btn.addEventListener('click',async () => {
+                           try{
+                             const config = { headers: {Accept: 'application/json'}}
+                             const res = await axios.get('https://icanhazdadjoke.com/',config)
+                             console.log(res)
+                             const li = document.createElement('li');
+                            li.textContent=res.data.joke;
+                             ul.append(li);
+                           } catch (e) {
+                             console.log('jokes are not loading');
+                           }
+                        
+                        }) 
+                    </code>
+                </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>TV Show Search</h2>
+            <form id="tvForm">
+                <input type="text" placeholder="TV Show Title" name="query">
+                <button>Search</button>
+                <div class="imageContainer">
+
+                </div>
+            </form>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        //Code
+                        const div = document.querySelector('.imageContainer');
+                        const form = document.querySelector('#tvForm');
+                        form.addEventListener('submit',async function (e) {
+                           e.preventDefault();
+                          const searchTerm = form.elements.query.value;
+                          const config2 = { params: { q: searchTerm }};
+                           // const res = await axios.get(`http://api.tvmaze.com/search/shows?q=${searchTerm}`);
+                           const res = await axios.get('http://api.tvmaze.com/search/shows', config2);
+                           addImages(res.data)
+                           form.elements.query.value='';
+                        })
+                        
+                        const addImages = (shows) =>{
+                           for(let result of shows) {
+                             if(result.show.image){
+                               const img = document.createElement('img');
+                               img.src=result.show.image.medium;
+                               div.append(img);
+                             }
+                           }
+                        } 
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./app.js"></script>
+    <script src="../main.js"></script>
+</body>
+
+</html>

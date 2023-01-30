@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploring the terminal</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Terminal</a>
+        <a href="#t2" class="link">Terminology</a>
+        <a href="#t3" class="link">Essential commands</a>
+        <div class="botbut">
+            <a href="../31_intro_to_Node/index.html">Next Topic &rarr;</a>
+            <a href="../29_Prototypes_Classes_OOP/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div id="t1" class="content-box">
+        <h1>TERMINAL</h1>
+        <p>
+            Text based prompt where I can interact with machine through text commands.
+        </p>
+        <div class="wh">
+            <h2>Why do we need to know Terminal Commands</h2>
+            <div class="in">
+                <h3>Speed!</h3>
+                <p>
+                    Develop Faster
+                    <br>The terminal takes some getting used to, but it can be MUCH faster than using GUI(graphical
+                    user interface)
+                </p>
+            </div>
+            <div class="in">
+                <h3>Access</h3>
+                <p>
+                    With Great Power
+                    <br>The terminal provides a "mainline" into the heart of our computer, giving us access to areas we
+                    normally don't interact.
+                </p>
+            </div>
+            <div class="in">
+                <h3>Tools!</h3>
+                <p>
+                    Many of the tools we need are installed and used via the command line. We don't have much of a
+                    choice!
+                </p>
+            </div>
+            <div id="t2" class="in">
+                <h2>Terminology</h2>
+                <div class="wh">
+                    <h3>Terminal</h3>
+                    <p>
+                        A text-based interface to your computer. <br>originally a physical object, but not we use
+                        software terminals.
+                        <br>E.g. &rarr; hyper.
+                    </p>
+                </div>
+                <div class="wh">
+                    <h3>Shell</h3>
+                    <p>
+                        The program running on the terminal
+                        <br>Each program have different commands.
+                        <br>E.g. &rarr; Bash
+                    </p>
+                </div>
+                <div class="wh">
+                    <h3>Bash</h3>
+                    <p>
+                        One of the most popular shells (default on mac)
+                    </p>
+                </div>
+            </div>
+            <div id="t3" class="in">
+                <h2>Essential Commands</h2>
+                <div class="wh">
+                    <h3>LS (list)</h3>
+                    <p>Use ls to list the contents of your current directory</p>
+                </div>
+                <div class="wh">
+                    <h3>PWD (Print Working Directory)</h3>
+                    <p>Prints the path to the working directory (Where you currently are)</p>
+                </div>
+                <div class="wh">
+                    <h3>CD (Change Directory)</h3>
+                    <p>Use cd to change and move between folders</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                // cd directory_name
+                                // Use cd .. to "back up" one directory
+                                cd .. 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>Relative Vs. Absolute Paths</h3>
+                    <p>Absolute paths we can use from any directory while relative paths are always relative to current
+                        directory.</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                cd /users/xyz/abc absolute path
+
+                                cd / '/' represents root directory.Everything that we want to work with is somewhere nesting inside it.
+                                
+                                cd ~ '~' represents home directory
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>mkdir (make directory)</h3>
+                    <p>mkdir will create a new directory (or directories)</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                // Making two directories
+                                mkdir first second 
+                                // This make two directories named 'first' and 'second'                                
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <div class="in">
+                        <h3>man (mannual)</h3>
+                        <p>It doesn't impact the file system but it gives information (help command)</p>
+                        <p class="ls">
+                            man ls <span>Gives all information about ls command</span>
+                            <br><span>To quit press 'q'</span>
+                        </p>
+                    </div>
+                    <div class="in">
+                        <h3>flags</h3>
+                        <p>These are options which enables how certain command should work</p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                <code>
+
+                                    // ls -l give long information of each file in that particular directory.
+                                    // ls -a shows directory entries whose names begin with a dot (.). (hidden files)
+                                    
+                                    // combining multiple flags
+                                    ls -la 
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>touch</h3>
+                    <p>Use touch to create a file (or multiple)</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                touch purple.txt bubbs.html 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>rm</h3>
+                    <p>rem will delete a file or files <br>It permanently removes them!</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                rm app.cs index.html // both these file are gone
+
+                                // now to delete directory which are empty we use rmdir
+                                rmdir empty_directory/ 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>rm -rf</h3>
+                    <p>use rm -rf to delete directory (r = recursive, f = force)</p>
+                    <p>recursive tells it to remove the subdirectories too</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                rm -rf Plants/ 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

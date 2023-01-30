@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Loops</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#loops">Loops &darr;</a>
+        <a class="link sm" href="#forloop">for loops</a>
+        <a class="link sm" href="#infiniteloop">infinite loops</a>
+        <a class="link sm" href="#loopingarray">looping over arrays</a>
+        <a class="link sm" href="#nestedloop">nested loops</a>
+        <a href="#whileloop" class="link sm">while loop</a>
+        <a href="#break" class="link sm">The Break Keyword</a>
+        <a href="#forofloop" class="link sm">for...of loop</a>
+        <a href="#interating-obj" class="link sm">Iterating over object</a>
+        <a href="#forinloop" class="link sm">for...in loop</a>
+        <a href="#objmethods" class="link sm">special object methods</a>
+        <div class="botbut">
+            <a href="../20_new_introducing_functions/index.html">Next Topic &rarr;</a>
+            <a href="../18_javascript_object_literal/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+
+
+    <div id="loops" class="content-box">
+        <h1>Loops</h1>
+        <ul>
+            <li>Loops allow us to repeat code.
+                <ul>
+                    <li>Print 'hello' 10 times</li>
+                    <li>Sum all numbers in an array</li>
+                </ul>
+            </li>
+            <li>There are multiple types:
+                <ul>
+                    <li>for loop</li>
+                    <li>while loop</li>
+                    <li>for...of loop</li>
+                    <li>for...in loop</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div id="forloop" class="wh">
+            <h2>for loop</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            // SYNTAX
+
+                            for ([initialExpression], [condition], [incrementExpression])
+                        </code>
+                    </pre>
+            </div>
+            <div class="in">
+                <h3>Our first for loop</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                for (let i = 1; i &lt;= 10; i++) {
+                                    console.log(i);
+                                  }
+                            </code>
+                        </pre>
+                </div>
+                <div class='code'>
+                    <pre>
+                       <code>
+                       
+                        // OUTPUT
+                        1
+                        2
+                        3
+                        4
+                        5
+                        6
+                        7
+                        8
+                        9
+                        10
+                       </code>
+                   </pre>
+                </div>
+            </div>
+        </div>
+        <div id="infiniteloop" class="wh">
+            <h2>Infinite loops</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        //DO NOT RUN THIS CODE
+                        for (let i=20;i>=0;i++){
+                         console.log(i);
+                        }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="wh" id="loopingarray">
+            <h2>Looping over arrays</h2>
+            <h4>interating over array</h4>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const animals = ['lions','tigers','bears'];
+                        for (let i=0; i &lt; animals.length; i++){
+                          console.log(i,animals[i]);
+                        }
+                    </code>
+                </pre>
+            </div>
+            <p>To loop over an array, start at index 0 and continue looping to until last index (length-1)</p>
+        </div>
+        <div class="wh" id="nestedloop">
+            <h2>Nested Loops</h2>
+            <p>Putting <i> for loop</i> inside of another <i> for loop</i></p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        let str = 'LOL';
+                        for (let i = 0; i &lt;= 4; i++) {
+                          console.log("Outer:",i);
+                           for(let j=0; j &lt; str.length;j++){
+                           console.log(' Inner:', str[j]);
+                           }
+                        }
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const seatingChart = [
+                                    ['Kristen','Erik','Namita'],
+                                ['Geoffrey','Juanita','Antonio','Kevin'],
+                                ['Yuma','Sakura','Jack','Erika']
+                      ]
+                      
+                      for (let i = 0; i&lt;seatingChart.length;i++){
+                       let row =seatingChart[i];
+                        console.log(`Row #${i+1}`)
+                       for (let j=0;j&lt;row.length;j++){
+                         console.log(row[j])
+                        }
+                      }
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <div id="whileloop" class="wh">
+            <h2>While Loops</h2>
+            <p>While loops continue running as long as the test condition is true.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            let num = 0;
+                            while (num &lt; 5) {
+                             console.log(num);
+                              num++;
+                            }
+                        </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const secret = 'BabyYoda';
+                        let guess = prompt("Enter the secret code");
+                        while(guess!==secret){
+                          guess = prompt("Enter the secret code");
+                        }
+                        console.log("Congratulations you got the secret!")
+                    </code>
+                </pre>
+            </div>
+            <div class="in" id="break">
+                <h2>The Break Keyword</h2>
+                <p>This is mostly used inside while loop</p>
+                <p>&rarr; This let the program to exit out of loop immediately</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            let targetNum = Math.floor(Math.random()*10);
+                            let guess;
+                            
+                            while(true){
+                              guess = Math.floor(Math.random()*10);
+                              if(guess === targetNum){
+                               console.log(`Correct! Guessed: ${guess} & target was: ${targetNum}`);
+                               break;
+                              }else{
+                               console.log(`Guessed ${guess}....Incorrect`);
+                            }
+                            }
+                        </code>
+                    </pre>
+                </div>
+                <div class="wh">
+                    <h4>Another Example (will keep on looping until you type 'stop')</h4>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                let msg = prompt("Enter your message!");
+                                while(true){
+                                  msg=prompt(msg);
+                                  if(msg==="stop") break;
+                                }
+                                console.log("The message has been stopped!")
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in" id="guess">
+                <h2>Guessing Game Code</h2>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                    <code>
+
+                        let maximum = parseInt(prompt("Enter the maximum number"));
+                        while (!maximum) {
+                            maximum = parseInt(prompt("Enter a valid number"));
+                        }
+                        const target = Math.floor(Math.random() * maximum) + 1;
+                        
+                        let guess = prompt("Enter your first guess!");
+                        let attempts = 1;
+                        while (parseInt(guess) !== target) {
+                            attempts++;
+                            if (guess === 'q') break;
+                            if (guess > target) {
+                                guess = prompt("Too high! Enter a new guess:");
+                            } else {
+                                guess = prompt("Too low! Enter a new guess:");
+                            }
+                        }
+                        if (guess === 'q') {
+                            console.log("ok, you quit!");
+                        } else {
+                            console.log(`you got it! It took you ${attempts}`)
+                        }
+                    </code>
+                    </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="forofloop" class="wh">
+            <h2>For...of <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">(Mdn)</a>
+            </h2>
+            <p>A nice and easy way of iterating over arrays (or other iterable objects)</p>
+            <div class="in">
+                <h3>Syntax</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            for (variable of interable) {
+                                statement
+                              }
+                        </code>
+                    </pre>
+                </div>
+                <div class="wh">
+                    <h3>Example</h3>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                const subreddits = ['cringe','books','chickens','funny','pics','soccer','dance'];
+                                for (let sub of subreddits){
+                                  console.log(sub);
+                                }
+                            </code>
+                        </pre>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                const seatingChart = [
+                                ['Kristen','Erik','Namita'],
+                                ['Geoffrey','Juanita','Antonio','Kevin'],
+                                ['Yuma','Sakura','Jack','Erika']
+                                ]
+                                for(let row of seatingChart){
+                                  for(let student of row){
+                                  console.log(student)
+                                }
+                                }
+                            </code>
+                        </pre>
+                    </div>
+                    <p>We can use <i>for...of loop</i> for strings too</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                for(let char of "hello world"){
+                                    console.log(char);
+                                  }
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="interating-obj" class="wh">
+            <h2>Interating Over Objects</h2>
+            <p>Objects are not interable. So, we can not use <i>for...of</i> loop directly.</p>
+            <div class="in" id="forinloop">
+                <h3>for...in loop</h3>
+                <p>It can be used in objects to iterate over them</p>
+                <div class="code">
+                    <div class="dotc">
+                        <pre>
+                            <code>
+
+                                let testScores ={
+                                    keenan:80,
+                                    damon:67,
+                                    kim:89,
+                                    shawn:91,
+                                    marlon:72,
+                                    dwayne:77,
+                                    nadia:83,
+                                    elvira:97,
+                                    diedre:81,
+                                   vonnie:60
+                                  }
+                                  for(let person in testScores){
+                                    console.log(`${person} scored ${testScores[person]}`)
+                                  }
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in" id="objmethods">
+                <h2>Special Objects Methods</h2>
+                <div class="wh">
+                    <h3>Object.keys(testScores)</h3>
+                    <p>Returns an array made out of all the keys in an objects</p>
+                    <div class='code'>
+                       <pre>
+                           <code>
+                           
+                            ["keenan", "damon", "kim", "shawn", "marlon", "dwayne", "nadia", "elvira", "diedre", "vonnie"] 
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>Object.values(testScores)</h3>
+                    <p>Returns an array made out of all the values in an objects</p>
+                    <div class='code'>
+                       <pre>
+                           <code>
+                           
+                            [80, 67, 89, 91, 72, 77, 83, 97, 81, 60] 
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>Object.entries(testScores)</h3>
+                    <p>Returns an array made of all the key value pairs in an objects</p>
+                    <div class='code'>
+                       <pre>
+                           <code>
+                           
+                            (10) [Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2), Array(2)]
+                            0: (2) ["keenan", 80]
+                            1: (2) ["damon", 67]
+                            2: (2) ["kim", 89]
+                            3: (2) ["shawn", 91]
+                            4: (2) ["marlon", 72]
+                            5: (2) ["dwayne", 77]
+                            6: (2) ["nadia", 83]
+                            7: (2) ["elvira", 97]
+                            8: (2) ["diedre", 81]
+                            9: (2) ["vonnie", 60]
+                            length: 10 
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <p>Now using special objects methods we can use <i>for...of loop</i></p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                //adding all the score
+                                let totalSum=0;
+                                for(let score of Object.values(testScores)){
+                                  totalSum+=score;
+                                }
+                                console.log(totalSum)
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3> Todo List Project<a href="todo.html" target="_blank"> Code</a></h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                                <code>
+
+                                    let input=prompt('What whould you like to do?');
+                                    const todos=['Collect Chicken Eggs','Clean Litter Box'];
+                                    while(input!=='quit'){
+                                      if(input==='list'){
+                                       console.log('*****************');
+                                       for(let i=0;i&lt;todos.length;i++){
+                                         console.log(`${i}: ${todos[i]}`);
+                                       }
+                                       console.log('*****************');
+                                      } else if(input==='new'){
+                                       const newTodo=prompt('Ok, What is the new todo?')
+                                       todos.push(newTodo);
+                                       console.log(`${newTodo} add to the list`);
+                                      } else if(input==='delete'){
+                                       const index=parseInt(prompt('Ok, Enter an index to delete:'));
+                                       if(!Number.isNaN(index)){
+                                         const deleted = todos.splice(index,1);
+                                         console.log(`Ok, deleted ${deleted[0]}`);
+                                      }else{
+                                       console.log('Unkown Index');
+                                      }
+                                      }
+                                      input = prompt('What whould you like to do?');
+                                    }
+                                    console.log("Ok, Quit the App!");
+                                </code>
+                            </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="test.js"></script>
+    <script src="../main.js"></script>
+</body>
+
+</html>

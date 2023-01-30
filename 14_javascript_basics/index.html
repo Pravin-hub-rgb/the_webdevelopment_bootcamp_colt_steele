@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Basics</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        .chicken {
+            display: flex;
+            border: 2px solid black;
+            text-align: center;
+        }
+
+        .chicken>div {
+            border: 1px solid grey;
+            width: 20%;
+        }
+
+        .chicken p {
+            border: 1px solid white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a class="link" href="#primitive-types">Primitive Types</a>
+        <a class="link" href="#numbers">Numbers</a>
+        <a class="link" href="#strings">Strings &darr;</a>
+        <a class="link sm" href="#string-method">String Methods</a>
+        <a class="link sm" href="#to-upper-case">toUpperCase()</a>
+        <a class="link sm" href="#to-lower-case">toLowerCase()</a>
+        <a class="link" href="#template">Template Literals</a>
+        <a class="link" href="#booleans">Booleans</a>
+        <a class="link" href="#null">Null</a>
+        <a class="link" href="#undefined">Undefined</a>
+        <a class="link" href="#variables">Variables &darr;</a>
+        <a class="link sm" href="#let">Let</a>
+        <a class="link sm" href="#const">Const</a>
+        <a class="link sm" href="#var">Var</a>
+        <a class="link" href="#math-obj">Math Object</a>
+        <a class="link" href="#random">Random Numbers</a>
+        <div class="botbut">
+            <a href="../16_javascript_decision_making/index.html">Next Topic &rarr;</a>
+            <a href="../13_candy_project/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box" id="primitive-types">
+        <h1>Primitive Types</h1>
+        <h3>THE BASIC BUILDING BLOCKS</h3>
+        <p>Type - The different types of info they can store, handle and work with.</p>
+        <ul>
+            <li>Number</li>
+            <li>String</li>
+            <li>Boolean</li>
+            <li>Null</li>
+            <li>Undefined</li>
+        </ul>
+        <p>* Technically there are two others: Symbol and BigInt.</p>
+        <div id="numbers" class="wh">
+            <h1>Numbers</h1>
+            <h3>IN JAVASCRIPT</h3>
+            <ul>
+                <li>JS has one number type</li>
+                <li>Positive numbers</li>
+                <li>Negative numbers</li>
+                <li>Whole numbers (intergers)</li>
+                <li>Decimal numbers</li>
+            </ul>
+            <div class="in">
+                <h2>Math Operations</h2>
+                <div class='code'>
+                   <pre>
+                       <code>
+
+                            // Addition
+                            50 + 5
+
+                            // Subtraction
+                            50 - 5
+
+                            // Multiplication
+                            50 * 5
+
+                            // Division
+                            50 / 5 //10
+                            // This gives the quotient.
+
+                            // Modulo!!
+                            50 % 5 //0
+                            // This gives remainder.
+
+                            // Exponential
+                            2 ** 4 = 16
+                       </code>
+                   </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h2>Order of execution of operations using - PEMDAS</h2>
+                <ul>
+                    <li>P - Parantheses</li>
+                    <li>E - Exponents</li>
+                    <li>M - Multiplication</li>
+                    <li>D - Division</li>
+                    <li>A - Addition</li>
+                    <li>S - Subtraction</li>
+                </ul>
+            </div>
+            <div class="in">
+                <h2>NOT A NUMBER</h2>
+                <h3>NaN</h3>
+                <p>NaN is a numeric value that represents something that is... not a number</p>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        // Examples 
+
+                        0/0 //NaN
+
+                        1 + NaN //NaN
+
+
+                        // typeof Operator
+
+                        typeof 5 //"number"
+                        
+                        typeof 0/0 //NaN
+                        
+                        typeof NaN //"number"
+                        
+                       </code>
+                   </pre>
+                </div>
+            </div>
+        </div>
+        <div id="strings" class="wh">
+            <h1>Strings</h1>
+            <h2>"STRINGS OF CHARACTERS"</h2>
+            <p>Strings are another primitive type in JavaScript. They represent <i>text</i>, and must be wrapped in
+                quotes.</p>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    let firstName = "Ziggy"; //Double quotes work
+                    let msg = "Please do not feed the chimps!";
+                    let animal = 'Dumbo Octopus'; //So do single quotes
+                    let bad = "this is wrong'; //This DOES NOT work
+                   </code>
+               </pre>
+            </div>
+            <p>It's fine to use either single or double quotes, just be consistent in your codebase.</p>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+
+                    "He said 'hi' " //This can work
+
+                    'He said "hi" ' //This can also                    
+                   </code>
+               </pre>
+            </div>
+            <div class="in">
+                <h3>STRINGS ARE INDEXED</h3>
+                <div class="chicken wh">
+                    <div>
+                        <p class="c-para">C</p>
+                        <p>0</p>
+                    </div>
+                    <div>
+                        <p class="c-para">H</p>
+                        <p>1</p>
+                    </div>
+                    <div>
+                        <p class="c-para">I</p>
+                        <p>2</p>
+                    </div>
+                    <div>
+                        <p class="c-para">C</p>
+                        <p>3</p>
+                    </div>
+                    <div>
+                        <p class="c-para">K</p>
+                        <p>4</p>
+                    </div>
+                    <div>
+                        <p class="c-para">E</p>
+                        <p>5</p>
+                    </div>
+                    <div>
+                        <p class="c-para">N</p>
+                        <p>6</p>
+                    </div>
+                </div>
+                <p>Each character has a corresponding index (a positional number)</p>
+                <div class="wh">
+                    <h3>Accessing character using indices</h3>
+                    <div class='code'>
+                        <div class='dotc'></div>
+                        <pre>
+                           <code>
+                           
+                            chicken[0] //"c"
+
+                            chicken[99] //undefined
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>String Properties</h3>
+                <div class="wh">
+                    <h4>string.length</h4>
+                    <p>This tells the number of characters inside a variable.</p>
+                    <div class='code'>
+                        <div class='dotc'></div>
+                        <pre>
+                           <code>
+                           
+                            let user = "Bob";
+                            user.length //3
+                            
+                            "hello".length //5                            
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Adding Strings</h3>
+                <p>This is also called concatenation</p>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+
+                        "lol" + "lol" //"lollol"
+
+                        let firstName = "River";
+                        let LastName = "Phoenix";
+                        firstName + " " + LastName   //"River Phoenix"
+                        
+                        1 + "hi"   //"1hi"                        
+                       </code>
+                   </pre>
+                </div>
+            </div>
+            <div class="wh" id="string-method">
+                <h2>String Methods <a
+                        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"
+                        target="_blank">MDN reference</a></h2>
+                <h3>METHODS ARE BUILT-IN ACTIONS WE CAN PERFORM WITH INDIVIDUAL STRINGS</h3>
+                <P>They help us do things like:</P>
+                <ul>
+                    <li>Searching within a string</li>
+                    <li>Replacing part of a string</li>
+                    <li>Changing the casing of a string</li>
+                </ul>
+                <div class="in">
+                    <h4>Syntax</h4>
+                    <p>thing.method()</p>
+                </div>
+                <div class="in">
+                    <h3>Casing</h3>
+                    <div class="wh" id="to-upper-case">
+                        <h3>toUpperCase()</h3>
+                        <div class='code'>
+                            <div class='dotc'></div>
+                            <pre>
+                               <code>
+                               
+                                let msg = 'I am king';
+                                let yellMsg = msg.toUpperCase(); //'I AM KING'
+                               </code>
+                           </pre>
+                        </div>
+                    </div>
+                    <div class="wh" id="to-lower-case">
+                        <h3>toLowerCase()</h3>
+                        <div class='code'>
+                            <div class='dotc'></div>
+                            <pre>
+                               <code>
+                               
+                                let angry = 'LeAvE mE aLoNe!';
+                                angry.toLowerCase(); //'leave me alone!'
+                               </code>
+                           </pre>
+                        </div>
+                    </div>
+                    <p>So, the original are still same unless we update them.</p>
+                </div>
+                <div id="trim" class="in">
+                    <h3>Trim</h3>
+                    <p>It trims any void space at the beginning of a string or at the end of the string.</p>
+                    <div class='code'>
+                        <div class='dotc'></div>
+                        <pre>
+                               <code>
+                               
+                                let greeting = '      leave me alone plz       ';
+                                greeting.trim() //'leave me alone plz'
+                               </code>
+                           </pre>
+                    </div>
+                </div>
+                <div class="in">
+                    <h2>Strings Methods With Arguments</h2>
+                    <h3>thing.method(arg)</h3>
+                    <p>Some methods accept arguments that modify their behavior. <br>Think of them as inputs that we
+                        can pass in. We pass these arguments inside of the parentheses.</p>
+                    <div id="indexof" class="wh">
+                        <h3>indexOf</h3>
+                        <p>Returns the index within the calling <i>string</i> object of the first occurence of the
+                            specified value.</p>
+                        <div class='code'>
+                            <div class='dotc'></div>
+                            <pre>
+                               <code>
+                               
+                                let tvShow = 'catdog';
+                                tvShow.indexOf('cat');   //0
+                                tvShow.indexOf('dog');   //3
+                                tvShow.indexOf('z');   //-1 (not found)
+                               </code>
+                           </pre>
+                        </div>
+                    </div>
+                    <div class="wh" id="slice">
+                        <h3>slice</h3>
+                        <div class='code'>
+                            <div class='dotc'></div>
+                            <pre>
+                               <code>
+                               
+                                let str = 'supercalifragilisticexpialdocious';
+                                str.slice(0,5);   //'super'
+                                str.slice(5);   //'califragilisticexpialidocious'
+                               </code>
+                           </pre>
+                        </div>
+                    </div>
+                    <div class="wh" id="replace">
+                        <h3>replace</h3>
+                        <div class='code'>
+                            <div class='dotc'></div>
+                            <pre>
+                               <code>
+                               
+                                let annoyingLaugh = 'teehe so funny! teehe!';
+                                annoyingLaugh.replace('teehe','haha');   //'haha so funny! teehee!'
+                               </code>
+                           </pre>
+                        </div>
+                        <p>Notice that it only replaces the first instance.</p>
+                    </div>
+                    <div class="wh" id="repeat">
+                        <h3>repeat</h3>
+                        <div class='code'>
+                            <div class='dotc'></div>
+                            <pre>
+                               <code>
+                               
+                                "lol".repeat(3);   //"lollollol"
+                               </code>
+                           </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wh" id="template">
+                <h2>Template Literals</h2>
+                <p>Template literals are strings that allow embedded expressions, which will be evaluated and then
+                    turned into a resulting string.</p>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        `I counted ${3 + 4} sheep`;   //"I counted 7 sheep"
+                        `Your total is $${44 * 5}`;   //"Your total is $220"
+                       </code>
+                   </pre>
+                </div>
+                <p>We use back-ticks not single quotes</p>
+            </div>
+        </div>
+        <div id="booleans" class="wh">
+            <h2>BOOLEANS</h2>
+            <p>These are used to store <span style="color:rgb(49, 231, 49);">TRUE</span> or <span
+                    style="color: rgb(216, 52, 52);">FALSE</span> values</p>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    let isLoggedIn = true;
+                    let gameOver = false;
+                    const isWaterWet = true;
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div id="null" class="wh">
+            <h2>Null</h2>
+            <ul>
+                <li>"Intentional absense of any value"</li>
+                <li>"Must be assigned</li>
+            </ul>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    //No one is logged in yet...
+                    let loggedInUser = null;   //value is explicitly nothing
+                    //A user logs in...
+                    loggedInUser = 'Alan Rickman'; 
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div id="undefined" class="wh">
+            <h2>Undefined</h2>
+            <ul>
+                <li>Variables that do not have an assinged value are undefined</li>
+            </ul>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    let x;
+                    x   //undefined
+
+                    "hello"[99];   //undefined
+                   </code>
+               </pre>
+            </div>
+        </div>
+    </div>
+
+    <div id="variables" class="content-box">
+        <h1>Variables</h1>
+        <h2>VARIABLES ARE LIKE LABELS FOR VALUES</h2>
+        <ul>
+            <li>We can store a value and give it a name so that we can:
+                <ul>
+                    <li>Refer back it later</li>
+                    <li>use that value to do...stuff</li>
+                    <li>Or change it later on.</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="wh">
+            <h2>BASIC SYNTAX</h2>
+            <div class='code'>
+                <pre>
+                   <code>
+
+                    let someName = value;
+
+                    let year = 1985;                    
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div class="wh" id="let">
+            <h1>LET</h1>
+            <p>LET is a keyword which comes before variable name while declaring variables.</p>
+            <div class='code'>
+               <div class='dotc'></div>
+               <pre>
+                   <code>
+                   
+                        let apple = 5;
+
+                        // We can reassign value here
+                        apple = 10;
+
+                        // We cannot redeclare
+                        let apple = 3; //ERROR
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>RECALL VALUES</h2>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    let hens = 4;
+                    let roosters = 2;
+                    hens + roosters //6
+                   </code>
+               </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>UPDATING VARIABLES</h2>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    let score = 0;
+                    score //0
+                    score = 5;
+                    score //5
+                    score = score + 5;
+                    score //10
+
+                    // shortcut syntax
+                    score += 5;
+
+                    // Increment by one
+                    score++;
+
+                    // Decrement by one
+                    score--;
+                   </code>
+               </pre>
+            </div>      
+        </div>
+        <div id="const" class="wh">
+            <h1>CONST</h1>
+            <p>const works just like let, except you CANNOT change,reassign or update the value</p>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    const hens = 4;
+                    hens = 20; //ERROR
+                   </code>
+               </pre>
+            </div>
+                <h2>WHY USE CONST?</h2>
+                <p>Used to store constant value which should be not changed in program</p>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        const pi = 3.14159;
+                        const daysInWeek = 7;
+                        const minHeightForRide = 60;
+                       </code>
+                   </pre>
+                </div>
+                <p>
+                    We use <i>const</i> in arrays because the variable is storing the address of an array. So, the
+                    values can change as long as the reference remains the same.
+                </p>
+        </div>
+        <div id="var" class="wh">
+            <h1>VAR</h1>
+            <h2>THE OLD VARIABLE KEYWORD</h2>
+            <p>Before <i>let</i> & <i>const</i>, <i>var</i> was the only way of declaring variables. These days,
+                there isn't really a reason to use it.</p>
+        </div>
+        <div class="wh">
+            <h2>Variables can change types</h2>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+                   
+                    let numPuppies = 23; //Number
+                    numPuppies = false; //Now a Boolean
+                    numPuppies = 100; //Back to Number!
+                   </code>
+               </pre>
+            </div>
+            <p>It doesn't really make sense to change from a number to a boolean here, but we can!</p>
+            <p>In TypeScript we cannot change the variable types.</p>
+        </div>
+        <div class="wh">
+            <h2>Variable Naming & Conventions</h2>
+            <p>There are some rules in JavaScript that we should follow for variable naming</p>
+            <div class='code'>
+               <div class='dotc'></div>
+               <pre>
+                   <code>
+                   
+                        // No space in name
+                        let hello world; //ERROR
+
+                        // No digit at the beginning.
+                        let 1game; //ERROR
+
+                        // Use camel case
+                        let camelCaseVersion = true;
+                   </code>
+               </pre>
+            </div>
+        </div>
+    </div>
+    <div id="math-obj" class="content-box">
+        <h1>Math Object</h1>
+        <p>Contains properties and methods for mathematical constants and functions</p>
+            <div class='code'>
+                <div class='dotc'></div>
+                <pre>
+                   <code>
+
+                    Math.PI   //3.141592653589793
+                    //Rounding a number:
+                    
+                    Math.round(4.9)   //5
+                    
+                    //Absolute value:
+                    Math.abs(-456)   //456
+                    
+                    //Raises 2 to the 5th power:
+                    Math.pow(2,5)   //32
+                    
+                    //Removes decimal:
+                    Math.floor(3.9999)   //3                    
+                   </code>
+               </pre>
+            </div>
+            <div class="wh" id="random">
+                <h3>Random Numbers</h3>
+                <p>Math.random() gives us a random decimal between 0 and 1 (non-exclusive)</p>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        Math.random(); //0.234532543534534
+
+                        Math.random(); //0.124235347547457
+                        
+                        Math.random(); //0.3446547656545                      
+                       </code>
+                   </pre>
+                </div>
+                <div class="in">
+                    <h3>Random Integers</h3>
+                    <p>Let's generate random numbers between 1 and 10</p>
+                    <div class='code'>
+                        <div class='dotc'></div>
+                        <pre>
+                               <code>
+                               
+                                const step1 = Math.random();   //0.592345235235
+                                const step2 = step1 * 10;   //5.92345235235 (gives number between 0 and 10)
+                                const step3 = Math.floor(step2);   //5
+                                const step4 = step3 + 1;   //6
+                               </code>
+                           </pre>
+                    </div>
+                    <div class='code'>
+                        <pre>
+                               <code>
+                               
+                                Math.floor(Math.random()*10)+1;
+                               </code>
+                           </pre>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

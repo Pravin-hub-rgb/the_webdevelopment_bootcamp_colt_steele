@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other usefull property</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        .alphabox {
+            width: 500px;
+            height: 300px;
+            background-color: rgb(255, 0, 0);
+        }
+
+        .alphaboxin1 {
+            width: 300px;
+            height: 200px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .alphaboxin2 {
+            width: 300px;
+            height: 200px;
+            background-color: rgb(255, 255, 255);
+            opacity: 0.5;
+        }
+
+        .apply {
+            border: 4px solid black;
+            width: 250px;
+            height: 250px;
+            margin: 10px;
+        }
+
+        .apply:hover {
+            border-radius: 50%;
+            background-color: cadetblue;
+        }
+
+        #box1 {
+            transition: all 3s ease;
+        }
+
+        #box2 {
+            transition: all 3s ease-in;
+        }
+
+        #box3 {
+            transition: all 3s ease-out;
+        }
+
+        #box4 {
+            transition: all 3s linear;
+        }
+
+        /* transform */
+        .apply2 {
+            border: 4px solid black;
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            transition: all 4s;
+        }
+
+
+        .rot:hover {
+            transform: rotate(40deg);
+        }
+
+        .roty:hover {
+            transform: rotateY(360deg);
+            background-color: red;
+        }
+
+        .rotx:hover {
+            transform: rotateX(360deg);
+            background-color: red;
+        }
+
+        .class2 div:nth-of-type(1):hover {
+            transform: scale(2);
+        }
+
+        .class2 div:nth-of-type(2):hover {
+            transform: scaleX(2);
+        }
+
+        .class2 div:nth-of-type(3):hover {
+            transform: scaleY(2);
+        }
+
+        .class2 div:nth-of-type(4):hover {
+            transform: scale(2, 0.3);
+        }
+
+        /* translate */
+
+        .translate div:nth-of-type(1):hover {
+            transform: translateX(50px);
+        }
+
+        .translate div:nth-of-type(2):hover {
+            transform: translateY(50px);
+        }
+
+        @media only screen and (max-width: 800px) {
+            .alphabox {
+                width: 90%;
+                height: 100px;
+                flex-wrap: wrap;
+            }
+
+            .alphaboxin1 {
+                width: 90%;
+                height: 50%;
+                background-color: rgba(255, 255, 255, 0.5);
+            }
+
+            .alphaboxin2 {
+                width: 90%;
+                height: 50%;
+                background-color: rgb(255, 255, 255);
+                opacity: 0.5;
+            }
+            .apply {
+            border: 4px solid black;
+            width: 120px;
+            height: 120px;
+            margin: 6px;
+            padding: 3px;
+        }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">The Alpha Channel</a>
+        <a href="#t2" class="link">Opacity</a>
+        <a href="#t3" class="link">Position Property</a>
+        <a href="#t4" class="link">Sticky</a>
+        <a href="#t5" class="link">Transition</a>
+        <a href="#t6" class="link">Transform</a>
+        <a href="#t7" class="link">Box shadow</a>
+        <a href="#t8" class="link">Background</a>
+        <a href="#t9" class="link">Photo blog Project</a>
+        <div class="botbut">
+            <a href="../10_responsive_CSS_&_flexbox/index.html">Next Topic &rarr;</a>
+            <a href="../8_The_CSS_Box_Model/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Other assorted usefull CSS properties</h1>
+        <div id="t1" class="wh">
+            <h1>The Alpha Channel</h1>
+            <p>rgba(0,200,2,0.5) <br> there is the fourth channel which covers the transparency of the color.
+                <br>It's value is between 0 to 1.
+            </p>
+            <div class="alphabox">
+                <div class="alphaboxin1">
+                    <p>So, this is not going to affect the text color of the content inside it.</p>
+                </div>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h1>Opacity</h1>
+            <p>opcaity: 0.5; <br>Opacity covers the transparency of entire element including it's content.</p>
+            <div class="alphabox">
+                <div class="alphaboxin2">
+                    <p>So, this is going to affect the text color of the content inside it.</p>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2 id="t3">Position Property <a class="lb" href="./3_the_position_property.html" target="_blank">here
+                    &neArr;</a></h2>
+            <h2 id="t4">Sticky <a class="lb" href="./3.1_sticky.html">demo &neArr;</a></h2>
+        </div>
+        <div id="t5" class="wh">
+            <h1>Transition:</h1>
+            <p>Transition is seen on hover effect.</p>
+            <h2>property name | duration | timing function | delay</h2>
+            <h3>Timing function: ease | ease-in | ease-out | ease-in-out | linear | </h3>
+            <section style="display: flex; flex-wrap: wrap;">
+                <div class="apply" id="box1">
+                    <p>transition: all 3s ease;</p>
+                </div>
+                <div class="apply" id="box2">
+                    <p>transition: all 3s ease-in;</p>
+                </div>
+                <div class="apply" id="box3">
+                    <p>transition: all 3s ease-out;</p>
+                </div>
+                <div class="apply" id="box4">
+                    <p>transition: all 3s linear;</p>
+                </div>
+            </section>
+        </div>
+        <div id="t6" class="wh">
+            <h1>Transform</h1>
+            <p>The transform CSS property lets you rotate, scale, skew, or translate an element. It modifies the
+                coordinate space of the CSS visual formatting model.</p>
+            <section style="display: flex; padding:50px; flex-wrap:wrap;" class="in">
+                <div class="rot apply2">
+                    transform: rotate(40deg);
+                </div>
+                <div class="roty apply2">
+                    transform:rotateY(360deg)
+                </div>
+                <div class="rotx apply2">
+                    transform:rotateX(360deg)
+                </div>
+            </section>
+            <section style="display: flex; padding:50px; flex-wrap:wrap;" class="class2 in">
+                <div class="apply2">transform:scale(2);</div>
+                <div class="apply2">transform:scaleX(2);</div>
+                <div class="apply2">transform:scaleY(2);</div>
+                <div class="apply2">transform:scale(2,0.3);</div>
+            </section>
+            <section style="display: flex; padding:50px; flex-wrap:wrap;" class="translate in">
+                <div class="apply2">transform:translateX(50px);</div>
+                <div class="apply2">transform:translateY(50px);</div>
+            </section>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Box shadow <a href="./7_box_shadow.html" class="lb" target="_blank">here &neArr;</a></h2>
+        </div>
+        <div id="t8" class="wh">
+            <h2>Background <a href="./8_background.html" class="lb" target="_blank">here &neArr;</a></h2>
+        </div>
+        <div id="t9" class="wh">
+            <h2>Project <a href="./9_photo_blog_project.html" class="lb" target="_blank">here &neArr;</a></h2>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

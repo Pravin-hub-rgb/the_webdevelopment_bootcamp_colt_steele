@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Align self</title>
+    <style>
+        body{
+            padding: 30px;
+            background-color: rgb(112, 180, 240);
+        }
+        section {
+            background-color: #003049;
+            width: 90%;
+            height: 500px;
+            margin: 0 auto;
+            border: 5px solid #003049;
+            display: flex;
+        }
+        
+        section div {
+            width: 200px;
+            height: 200px;
+            font-size: 3em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Align Self</h1>
+    <p>
+        This property is set to the items not container. And we can change the alignment of element in cross axis.
+    </p>
+    <h2>align-self:flex-end;</h2>
+    <style>
+        #container1 {
+            flex-direction: row;
+            justify-content: center;
+            align-content: flex-start;
+        }
+    </style>
+    <section id="container1">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66); align-self: flex-end;">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>align-self:center;</h2>
+    <style>
+        #container2 {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+    <section id="container2">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66); align-self:center;">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>align-content:center;</h2>
+    <style>
+        #container7 {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-content: center;
+        }
+    </style>
+    <section id="container7">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>align-content:space-between;</h2>
+    <style>
+        #container3 {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-content: space-between;
+        }
+    </style>
+    <section id="container3">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>align-content:space-around;</h2>
+    <style>
+        #container4 {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-content: space-around;
+        }
+    </style>
+    <section id="container4">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+</body>
+
+</html>

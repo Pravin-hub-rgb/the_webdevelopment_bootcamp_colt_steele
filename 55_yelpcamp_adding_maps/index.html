@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Adding Maps</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">registering for maps</a>
+        <a href="#t2" class="link">geocoding our locations</a>
+        <a href="#t3" class="link">working with GeoJSON</a>
+        <a href="#t4" class="link">displaying a map</a>
+        <a href="#t5" class="link">centering map on a campground</a>
+        <a href="#t6" class="link">fixing seed bug</a>
+        <a href="#t7" class="link">cutomizing map popup</a>
+        <div class="botbut">
+            <a href="../56_yelpcamp_fancy_cluster_map/index.html">Next Topic &rarr;</a>
+            <a href="../54_yelpcamp_image_upload/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Adding Maps</h1>
+        <div id="t1" class="wh">
+            <h2>Registering for mapbox</h2>
+            <ul>
+                <li>Next big feature we are going to add in is maps for now we will just display a map on show for given
+                    campground with a little pin on it that represents location of the campground.</li>
+                <li>Later we will add geo coding so that a user does not have to enter longitude and latitude
+                    coordinates.</li>
+                <li>User will provide location and we have to figure out about coordinates. So for that we are going to
+                    use API's.</li>
+                <li>So we are going to store coordinates along with location on our database and create pin on the map.
+                </li>
+                <li>Now there are a lot of map tools availabe out there like google maps, open street map and what we
+                    are going to use is <a href="https://www.mapbox.com/">map box.</a></li>
+                <li>First we need to create an account and copy the token and put in '.env' file.</li>
+            </ul>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Geocoding our locations</h2>
+            <ul>
+                <li>Now we are going to work on the geocoding process.</li>
+                <li>When our form is submitted to make a new campground and when we specify a location then we are going
+                    to take that address try to get latitude and longitude coordinates for that.</li>
+                <li>We are going to do this using mapbox's geocoding API.</li>
+                <li>We are going to use a node client called <a href="https://github.com/mapbox/mapbox-sdk-js">mapbox
+                        sdk</a> that we can include in our app. So install it.</li>
+                <li>There are a lot services but we are looking for <a
+                        href="https://github.com/mapbox/mapbox-sdk-js/blob/main/docs/services.md#forwardgeocode">forward
+                        geocoding</a>. This takes some query as parameters and find coordinates.</li>
+                <li>In our controllers/campgrounds.js files we are going to require it</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /controllers/campgrounds.js 
+
+                        const { cloudinary } = require('../cloudinary')
+                        const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding')
+                        const mapBoxToken = process.env.MAPBOX_TOKEN
+                        const geocoder = mbxGeocoding({ accessToken: mapBoxToken }) // this contains forward geocode.
+
+                        module.exports.createCampground = async (req, res, next) => {
+                            const geoData = await geocoder.forwardGeocode({
+                                query: 'Yosemite, CA',
+                                limit: 1
+                            }).send()
+                            // inside geoData.body.features[0].geometry.coordinates cordinates are stored.
+                            // this gives us an array in which first element is longitude and second element is latitude.
+                            res.send(geoData.body.features[0].geometry.coordinates);
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Next we are going to take the map data and store them and we can use them to display a map after
+                    that.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Working with GeoJSON</h2>
+            <ul>
+                <li>We want to store map data in our campground model</li>
+                <li>geoData.body.features[0].geometry gives us geoJSON <br>
+                    {"type":"Point","coodinates":[-90.73333,14.56667]} <br>so we are going to store this entire thing in
+                    our model.</li>
+                <li><a href="https://mongoosejs.com/docs/geojson.html">Mongo supports geocoding</a>. So we have to
+                    update our schema now.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /models/campgrounds.js
+
+                        const campgroundSchema = new Schema({
+                            title: String,
+                            images: [ImageSchema],
+                            geometry: { // ****
+                                type: {
+                                    type: String, // Don't do `{ location: { type: String } }`
+                                    enum: ['Point'], // 'type' must be 'Point'
+                                    required: true
+                                },
+                                coordinates: {
+                                    type: [Number],
+                                    required: true
+                                }
+                            },
+                            price: Number,
+                            description: String,
+                            location: String,
+                            author: {
+                                type: Schema.Types.ObjectId,
+                                ref: 'User'
+                            },
+                            reviews: [
+                                {
+                                    type: Schema.Types.ObjectId,
+                                    ref: "Review"
+                                }
+                            ]
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now we are going to store it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/camprounds.js 
+
+                        module.exports.createCampground = async (req, res, next) => {
+                            const geoData = await geocoder.forwardGeocode({
+                                query: req.body.campground.location,
+                                limit: 1
+                            }).send()
+                            const campground = new Campground(req.body.campground)
+                            campground.geometry = geoData.body.features[0].geometry
+                            campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
+                            campground.author = req.user._id
+                            await campground.save()
+                            console.log(campground);
+                            req.flash('success', 'Successfully made a new campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Displaying a Map</h2>
+            <ul>
+                <li>Now we are going to display a map on show page of campground.</li>
+                <li>For that we are going to use <a href="https://docs.mapbox.com/mapbox-gl-js/guides/">mapbox GL JS</a>
+                    library &rarr; is the tool that render intractive map</li>
+                <li>Copy the <a href="https://docs.mapbox.com/mapbox-gl-js/guides/install/#quickstart">CDN</a> and put
+                    in boilerplate </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // to show map use this code 
+
+
+                        &lt;div id='map' style='width: 400px; height: 300px;'>&lt;/div>
+                        &lt;script>
+                        mapboxgl.accessToken = 'pk.eyJ1Ijoid29ybGR3aWJld2ViIiwiYSI6ImNsYzd5dWt0ZTBtdHczcXAyb3ZhNTR4bnoifQ.VSG5ixHOaeh0SDGYmCh1BQ';
+                        const map = new mapboxgl.Map({
+                            container: 'map', // container ID
+                            style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                            center: [-74.5, 40], // starting position [lng, lat]
+                            zoom: 9, // starting zoom
+                        });
+                        &lt;/script>
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- inlcude this at bottom -->
+                        &lt;!--  so that mapToken is accessable in showPageMaps.js file -->
+                        &lt;script>
+                            const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
+                        &lt;/script>
+
+                        &lt;script src="/javascripts/showPageMaps.js">&lt;/script>
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /public/javascript/showPageMaps.js 
+
+                        mapboxgl.accessToken = mapToken;
+                        const map = new mapboxgl.Map({
+                            container: 'map',
+                            style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                            center: [-74.5, 40], // starting position [lng, lat]
+                            zoom: 9, // starting zoom
+                        });
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Next we are going to learn about how we can map to be centered on the actual location of the
+                    campground.</li>
+            </ul>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Centering the map on a campground</h2>
+            <ul>
+                <li>We are going to add marker to a map</li>
+                <li><a href="https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/">default Marker</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;script>
+                            // to have access of these on client side 
+                            const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+                            const campground = <%-JSON.stringify(campground)%>
+                        &lt;/script>
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /public/javascript/showPageMaps.js 
+
+                        mapboxgl.accessToken = mapToken;
+                        const map = new mapboxgl.Map({
+                            container: 'map',
+                            style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                            center: campground.geometry.coordinates, // starting position [lng, lat]
+                            zoom: 10, // starting zoom
+                        });
+                        const marker = new mapboxgl.Marker()
+                        .setLngLat(campground.geometry.coordinates)
+                        .addTo(map);
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Problems &rarr; wrong location or misspelled location could cause problems.</li>
+            </ul>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Fixing our seed bug</h2>
+            <ul>
+                <li>Campground index page will not work because new campground created without image will not array of
+                    images in it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /views/campgrounds/index.js 
+
+                        <% if(campground.images.length){ %>
+                            <img src="<%=campground.images[0].url%>" alt="" class="img-fluid">
+                        <% } else { %>
+                            <img src="" alt="" class="img-fluid">
+                        <% } %>
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Map will not work for previously created campground as they don't have geometery field in it. So we
+                    have to add that.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /seeds/index.js 
+
+                        geometry: {
+                            type: "Point",
+                            coordinates: [-133.1331, 47.0202] // default
+                        }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Customizing Map popup</h2>
+            <ul>
+                <li><a href="https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup">Popup docs</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            // /public/javascripts/showPageMaps.js 
+
+                            mapboxgl.accessToken = mapToken;
+                            const map = new mapboxgl.Map({
+                                container: 'map',
+                                style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                                center: campground.geometry.coordinates, // starting position [lng, lat]
+                                zoom: 10, // starting zoom
+                            });
+                            const marker = new mapboxgl.Marker()
+                                .setLngLat(campground.geometry.coordinates)
+                                .setPopup( // *********
+                                    new mapboxgl.Popup({ offset: 25 })
+                                        .setHTML(`&lt;h3>${campground.title}&lt;/h3>&lt;p>${campground.location}&lt;/p>`)
+                                )
+                                .addTo(map);
+                        </code>
+                    </pre>
+            </div>
+            <ul>
+                <li><a href="https://docs.mapbox.com/mapbox-gl-js/example/setstyle/">Change a map's style</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /public/javascipts/showPageMaps.js 
+
+                        style: 'mapbox://styles/mapbox/light-v10', // style URL
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

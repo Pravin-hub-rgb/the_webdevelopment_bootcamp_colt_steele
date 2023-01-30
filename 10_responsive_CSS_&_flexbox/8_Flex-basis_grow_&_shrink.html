@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex-basis_grow_&_shrink</title>
+    <style>
+        body{
+            padding: 30px;
+            background-color: rgb(112, 180, 240);
+        }
+        section {
+            background-color: #003049;
+            /* width: 90%; */
+            /* height: 500px; */
+            margin: 0 auto;
+            border: 5px solid #003049;
+            display: flex;
+        }
+        
+        section div {
+            width: 200px;
+            height: 200px;
+            font-size: 3em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Flex Sizing Properties</h1>
+    <hr>
+    <h2>Flex-basis</h2>
+    <p>Defines the initial size of an element before additional space is distributed, acc. to the main axis direction.</p>
+    <style>
+        #container1 div {
+            flex-basis: 300px;
+        }
+    </style>
+    <section id="container1">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66); ">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>Flex-grow</h2>
+    <p>Controls the amount of available space an element should take up. Accepts a unit-less number value.</p>
+    <p>This accepts unit less number which act as proportion</p>
+    <style>
+        #container2 div:nth-of-type(1) {
+            flex-grow: 1;
+        }
+    </style>
+    <section id="container2">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66); ">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <p>by using max-width and min-width we can control the max and min width so that we don't go beyond that.</p>
+    <style>
+        #container3 {
+            flex-wrap: wrap;
+        }
+        
+        #container3 div {
+            flex-grow: 1;
+            min-width: 200px;
+            max-width: 400px;
+        }
+    </style>
+    <section id="container3">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66); ">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <style>
+        #container4 {
+            flex-wrap: wrap;
+        }
+        
+        #container4 div:nth-of-type(1) {
+            flex-grow: 1;
+        }
+        
+        #container4 div:nth-of-type(2) {
+            flex-grow: 3;
+        }
+    </style>
+    <section id="container4">
+        <div style="background-color: rgb(255, 62, 62);">flex-grow: 1;</div>
+        <div style="background-color: rgb(203, 253, 66); ">flex-grow: 3; This one take 3 times more space than the other one.</div>
+        <!-- <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div> -->
+    </section>
+    <hr>
+    <h2>Flex-shrink</h2>
+    <p>If items are larger than the container, they shrink according to the flex-shrink. (When there is no free space)</p>
+    <style>
+        #container5 div {
+            font-size: 18px;
+            flex-grow: 1;
+        }
+        
+        #container5 div:nth-of-type(1) {
+            flex-shrink: 1;
+        }
+        
+        #container5 div:nth-of-type(2) {
+            flex-shrink: 6;
+        }
+    </style>
+    <section id="container5">
+        <div style="background-color: rgb(255, 62, 62);">flex-srink: 1;</div>
+        <div style="background-color: rgb(203, 253, 66); ">flex-srink: 2; this one will shrink twice faster than the other.</div>
+        <!-- <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div> -->
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Comments</title>
+</head>
+<body>
+    <h1>comments</h1>
+    <ul>
+    <% for(let c of comments){ %>
+        <li><a href="/comments/<%=c.id%>"><%=c.comment%> - <b>[[<%=c.username%>]]</b></a></li>
+    <% } %>
+</ul>
+<div>
+    <a href="/comments/new">Add new comment +</a>
+</div>
+</body>
+</html>

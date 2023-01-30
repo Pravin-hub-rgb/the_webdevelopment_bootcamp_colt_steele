@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox- flex-direction</title>
+    <style>
+        body{
+            padding: 30px;
+            background-color: rgb(126, 189, 245);
+        }
+        section {
+            background-color: #003049;
+            width: 90%;
+            height: 500px;
+            margin: 0 auto;
+            border: 5px solid #003049;
+        }
+        
+        #container {
+            display: flex;
+        }
+        
+        section div {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Flexbox Properties</h1>
+    <h2>Flex Direction</h2>
+    <p>This is used to change the direction of main axis. <br> So, the default is flex-direction:row;</p>
+    <p>Here the main axis goes from left to right (default)</p>
+    <section id="container">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <!--<div style="background-color: rgb(86, 255, 64);"></div>
+        <div style="background-color: rgb(53, 129, 243);"></div> -->
+    </section>
+    <hr>
+    <h2>flex-direction:row-reverse;</h2>
+    <p>Here the main axis goes from right to left</p>
+    <style>
+        #container3 {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+    </style>
+    <section id="container3">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+    </section>
+    <hr>
+    <h2>flex-direction:column;</h2>
+    <p>Here the main axis goes from top to bottom</p>
+    <style>
+        #container2 {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+    <section id="container2">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+    </section>
+    <hr>
+    <h2>flex-direction:column-reverse;</h2>
+    <p>Here the main axis goes from bottom to top</p>
+    <style>
+        #container4 {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+    </style>
+    <section id="container4">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+    </section>
+</body>
+
+</html>

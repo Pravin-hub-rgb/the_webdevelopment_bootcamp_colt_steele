@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express session and flash</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">sessions</a>
+        <a href="#t2" class="link">express sessions</a>
+        <a href="#t3" class="link">flash</a>
+        <div class="botbut">
+            <a href="../49_yelpcamp_restructuring_flash/index.html">Next Topic &rarr;</a>
+            <a href="../47_express_router_and_cookies/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Express session and flash</h1>
+        <div id="t1" class="wh">
+            <h2>Sessions</h2>
+            <ul>
+                <li>Cookies are in client side and sessions are in severs side.</li>
+                <li>We store the actual data itself on the server side not in the browser. Why?? what's wrong with
+                    cookies.
+                    <ul>
+                        <li>There is nothing wrong with cookies but there are couple of considerations.
+                            <ol>
+                                <li>Cookies have maximum size</li>
+                                <li>If we want to store large number of data of user then cookies may be not the best
+                                    choice.</li>
+                                <li>And also cookies are not secure as storing information as server side. So this is
+                                    where sessions come in.</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </li>
+                <li>The idea of a session is that we store information on the server side and then we send a little
+                    cookie back to the client that says here is your id that you need to unlock that sessions</li>
+                <li>It's not very practical (or secure) to store a lot of data client-side using cookies. This is where
+                    sessions come in?</li>
+                <li>Sessions are server-side data store that we use to make HTTP stateful. Instead of storing data using
+                    cookies, we store the data on the server-side and then send the browser a cookie that can be used to
+                    retrieve the data.</li>
+            </ul>
+            <img class="wb" src="../images/session.svg" alt="">
+            <ul>
+                <li>One of these ID's are associated with client's browser.</li>
+                <li>So server is going to send id as a cookie and a key to unlock the data and the browser stores that.
+                </li>
+                <li>Then the browser do this &darr;</li>
+            </ul>
+            <img src="../images/session2.svg" alt="" class="wb">
+            <ul>
+                <li>Server get an ID from the browser and takes that ID and go to the session's data store and retrieve
+                    all
+                    relevent information.</li>
+                <li>So we can store ton of information on server side but all we need to store in a browser is some sort
+                    of
+                    ID or key to unlock that session</li>
+                <li>Data store is not same as database</li>
+            </ul>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Express Session</h2>
+            <ul>
+                <li>Now we are going to install express session which is a tool by which we can implement sessions in
+                    express app.</li>
+                <li>Note &rarr; just like cookies, sessions are not unique to express concept they are universal accorss
+                    HTTP and web development.</li>
+                <li><a href="https://www.npmjs.com/package/express-session">NPM express-session</a></li>
+                <li>we have to use 'express-session' as a middleware</li>
+                <li>configuring 'express-session' is a long process</li>
+                <li>For basics we have to pass a secret to the middleware function</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const express = require('express')
+                        const app = express()
+                        const session = require('express-session')
+                        
+                        app.use(session({ secret: 'thisisnotagoodsecret' }))
+                        
+                        app.get('/viewcount', (req, res) => {
+                            if (req.session.count) {
+                                req.session.count += 1
+                            } else {
+                                req.session.count = 1 // setting it for the first time
+                            }
+                            // these variable will be associated to individual users or browsers.
+                            res.send(`You have view this page ${req.session.count} times`)
+                        })
+                        
+                        /* 
+                            in default sessions are stored in browser and it is not compatible for production.
+                            So for production we can use connect.redis or connect.mongo
+                        */
+                        
+                        app.listen(3000, () => {
+                            console.log('listening on port 3000');
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>More Express Sessions</h2>
+            <div class="in">
+                <h3>removing warnings</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const sessionOptions = { secret: 'thisisnotagoodsecret', resave: false, saveUninitialized: false }
+                            app.use(session(sessionOptions))
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <ul>
+                <li>If we will restart our browser then all our sessions will reset because it is stored in local memory
+                </li>
+                <li>We can store multiple data in session</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+    
+                        app.get('/register', (req, res) => { 
+                            const { firstname = 'Anonymous', lastname } = req.query 
+                            req.session.username = `${firstname} ${lastname}`
+                            res.redirect('/greet')
+                        })
+                        
+                        // here query string will be localhost:3000/register?firstname=Henry&lastname=Ford
+    
+                        app.get('/greet', (req, res) => {
+                            const { username } = req.session
+                            res.send(`Welcome back ${username}`)
+                        })
+                        
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>We never put data that is critical in session but we store things like the current logged in users
+                    for
+                    this browser.
+                    <ul>
+                        <li>Worse case if we loose it we just have the user log in again</li>
+                        <li>But it is good that the user does not have to sign-in in every single page as we can
+                            remember it
+                            in sessions.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Intro to Flash</h2>
+            <ul>
+                <li>Here we are going to use a package called 'connect-flash' </li>
+                <li>The idea of a flash is basically a place in a session to flash a message to a user.
+                    <ol>
+                        <li>Like a success message or a confirmation/ failure message that shows up one time and then
+                            goes away</li>
+                        <li>So this is not something we want in the template is it usually after some actions and
+                            typically before you redirect somewhere</li>
+                        <li>Example &rarr; when we create an account we display 'successfully created an account'</li>
+                        <li>but when we refresh the page it don't show up</li>
+                        <li>That's where 'connect-flash' tool comes in</li>
+                    </ol>
+                </li>
+                <li><a href="https://www.npmjs.com/package/connect-flash" target="_blank">NPM connect-flash docs</a>
+                </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // index.js
+                        
+                        // requiring flash 
+                        const flash = require('connect-flash');
+
+                        const sessionOptions = { secret: 'thisisnotagoodsecret', resave: false, saveUninitialized: false }
+                        app.use(session(sessionOptions));
+                        app.use(flash());
+
+                        app.post('/farms', async (req, res) => {
+                            const farm = new Farm(req.body);
+                            await farm.save();
+                            req.flash('success', 'Successfully made a new farm!'); // key and then the message we want to display   
+                            res.redirect('/farms')
+                        })
+
+                        app.get('/farms', async (req, res) => {
+                            const farms = await Farm.find({});
+                            res.render('farms/index', { farms, messages: req.flash('sucess')})
+                        })
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <h3>res.locals & Flash</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            res.render('farms/index',{farms, messages: req.flash('success')})
+                            // instead of doing this we can middleware
+                        </code>
+                    </pre>
+                </div>
+                <p>middleware</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.use((req,res,next)=>{
+                                res.locals.messages = req.flash('success')
+                                // we will have access to 'messages' in every single template 
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <ul>
+                    <li><a href="http://expressjs.com/en/api.html#res.locals" target="_blank">res.local docs &neArr;</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="in">
+        <ul>
+            <li><a href="./FlashDemo/" target="_blank">Access all files &neArr;</a></li>
+        </ul>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

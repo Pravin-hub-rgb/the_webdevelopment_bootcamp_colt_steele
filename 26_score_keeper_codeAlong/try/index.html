@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My try on 9/08/22</title>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><span class="s1">0</span> to <span class="s2">0</span></h1>
+    <p>Use these buttons below to keep score.</p>
+    <div>
+        <label for="playTill">Play Till</label>
+        <select name="playTill" id="playTill">
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <div>
+            <button id="b1">+1 Player One</button>
+            <button id="b2">+1 Player Two</button>
+            <button id="b3">reset</button>
+        </div>
+    </div>
+    <script>
+        let score1 = document.querySelector('.s1')
+        let score2 = document.querySelector('.s2')
+        let playTill = document.querySelector('#playTill')
+        let b1 = document.querySelector('#b1')
+        let b2 = document.querySelector('#b2')
+        let reset = document.querySelector('#b3')
+        b1.addEventListener('click', () => {
+
+            score1.innerText = parseInt(score1.innerText) + 1;
+            if (parseInt(score1.innerText) == playTill.value) {
+                score1.classList.add('green');
+                score2.classList.add('red');
+                // b1.setAttribute('disabled', true)
+                // b2.setAttribute('disabled', true)
+                b1.disabled = true;
+                b2.disabled = true;
+            }
+        })
+        b2.addEventListener('click', () => {
+            score2.innerText = parseInt(score2.innerText) + 1;
+            if (parseInt(score2.innerText) == playTill.value) {
+                score2.classList.add('green');
+                score1.classList.add('red');
+                // b1.setAttribute('disabled', true)
+                // b2.setAttribute('disabled', true)
+                b1.disabled = true;
+                b2.disabled = true;s
+            }
+        })
+        reset.addEventListener('click', () => {
+            score1.innerText = 0
+            score2.innerText = 0
+            // b1.removeAttribute('disabled')
+            // b2.removeAttribute('disabled')
+            b1.disabled = false;
+            b2.disabled = false;
+            score1.removeAttribute('class')
+            score2.removeAttribute('class')
+        })
+
+    </script>
+</body>
+
+</html>

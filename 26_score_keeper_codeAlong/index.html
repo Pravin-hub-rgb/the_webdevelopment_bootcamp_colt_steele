@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score keeper</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <div class="botbut">
+            <a href="../27_Async_JavaScript/index.html">Next Topic &rarr;</a>
+            <a href="../25_DOM_events/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <section>
+        <h1><span class="oneScore">0</span> to <span class="twoScore">0</span></h1>
+        <p>Use this buttons below to keep score.</p>
+        <label for="playingTo">Playing To</label>
+        <select name="playingTo" id="playingTo">
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+        <br>
+        <button class="playerOne">+1 Player One</button>
+        <button class="playerTwo">+1 Player Two</button>
+        <button class="reset">Reset</button>
+    </section>
+    <script src="app.js"></script>
+    <script src="../main.js"></script>
+</body>
+
+</html>

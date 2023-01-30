@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">HTML Skeleton</a>
+        <a href="#t2" class="link">HTML Elements</a>
+        <a href="#t3" class="link">Inline and Block elements</a>
+        <a href="#t4" class="link">Slightly interesting elements</a>
+        <a href="#t5" class="link">select</a>
+        <a href="#t6" class="link">Comments</a>
+        <a href="#t7" class="link">Entity Codes</a>
+        <a href="#t8" class="link">Tables</a>
+        <a href="#t9" class="link">Forms</a>
+        <a href="#t10" class="link">Semantic Markup</a>
+        <div class="botbut">
+            <a href="../6_CSS_the_very_basic/index.html">Next Topic &rarr;</a>
+            <a href="../2_intro_to_web_dev/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>HTML</h1>
+        <div class="wh">
+            <p>
+                <b>Definition:</b> Html is the underlying structure of a webpage.
+                <br><b>Full form:</b> Hypertext Markup Language
+            </p>
+            <div class="in">
+                <h3>HTML 5</h3>
+                <p>
+                    HTML 5 is the latest evolution of the standard that defines HTML. The term represents two different concepts. It is a new version of the language HTML with new elements, attributes, and behaviors and a larger set of technologies that allow the building of more diverse and powerful Web sites and applications.
+                </p>
+            </div>
+            <div id="t1" class="in">
+                <h3>Html Skeleton</h3>
+                <ul>
+                    <li>The vs code shortcut for loading skeleton is "! + tab".</li>
+                    <li>We write our HTML in a standard "skeleton."</li>
+                    <li>
+                        <b>&lt;!DOCTYPE html></b> &rarr; tells the version of HTML that we are using.
+                    </li>
+                    <li>The doctype for HTML5 is very simple. To indicate that your HTML content uses HTML5, simply use
+                        &lt;!DOCTYPE html></li>
+                    <li>The browsers that don't presently support HTML 5 will enter "standards mode," which means that they'll interpret the long-established parts of HTML in an HTML5-compliant way while ignoring the new features of HTML5.</li>
+                    <li><b>&lt;html></b>
+                        <ul>
+                            <li>
+                                The HTML root element (&lt;html>) represents the root of an HTML document. All other
+                                elements must be descendants of this element.</li>
+                        </ul>
+                    </li>
+                    <li><b>&lt;head></b> &rarr; The document metadata (header) element
+                        <ul>
+                            <li>contains machine-readable information (metadata) about the document, like its title,
+                                scripts, and style sheets.</li>
+                        </ul>
+                    </li>
+                    <li><b>META TAGS</b>
+                        <ul>
+                            <li>provides information to the browser about our websites.</li>
+                            <li>
+                                Meta tags go to the head of the html boilerplate.
+                            </li>
+                            <ol>
+                                <li>&lt;meta charset=”UTF-8”></li>
+                                <li>&lt;meta name=”description” content =”This page is a webpage to learn html”></li>
+                                <li>&lt;meta name=”keywords” content=”html5, blah, blah"”> &rarr;
+                                    So, when these keywords are searched, the search engine will show my website in the search results.</li>
+                                <li>&lt;meta name=”author” content=”Pravin”></li>
+                                <li>&lt;meta name=”viewport” content=”width=device-width, initial-scale=1.0”> &rarr;
+                                    To be responsive on any device with different screen sizes.</li>
+                            </ol>
+                        </ul>
+                    </li>
+                    <li><b>&lt;body></b>
+                        <ul>
+                            <li>represents the content of an HTML document. There can be only one
+
+                                <body> element in a document.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="t2" class="in">
+                <h2>HTML Elements</h2>
+                <p>
+                    To write HTML, we pick from a set of standard elements that all browsers recognize.
+                    <br>Common elements include:
+                <ul>
+                    <li> &lt;p> element- represents a paragraph of text.</li>
+                    <li> &lt;h1> element- represents the main header on a page.</li>
+                    <li> &lt;img> element- Embeds an image.</li>
+                    <li> &lt;form> element- represents a form.</li>
+                    <li>Read more <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">here. (MDN
+                            reference)</a></li>
+                </ul>
+                </p>
+                <div class="wh">
+                    <h3>HTML Tags</h3>
+                    <p>We create elements by writing tags.
+                        <br>Most (but not all) elements consist of an opening and closing tag.
+                        <br><b>&lt;p> (opening tag) I am a paragraph &lt;/p> (closing tag)</b>
+                    </p>
+                    <ol>
+                        <li><b>&lt;h1></b>
+                            <ul>
+                                <li>This is for the heading, which has different levels like &lt;h2>, &lt;h3>, ... till
+                                    &lt;h6></li>
+                                <li>Block level elements &rarr; take their own block.</li>
+                            </ul>
+                        </li>
+                        <li><b>&lt;p></b> &rarr; this is for including the paragraph.</li>
+                        <li><b>&lt;a></b> &rarr; anchor tag to make a link. <ul>
+                                <li>
+                                    It creates a hyperlink to web pages, files, email addresses, locations on the same
+                                    page, or anything else a URL can address. Content within each &lt;a> should indicate
+                                    the link’s destination.
+                                </li>
+                                <li>
+                                    attribute is additional information that we can pass to a tag.
+                                    <ul>
+                                        <li>&lt; a href="link">word</a></li>
+                                        <li>Attribute- target=”_blank” -this is used to open the link in a new tab.
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><b>&lt;b> and &lt;strong></b> &rarr; this is used for making a word <b>bold</b>.</li>
+                        <li>
+                            <b>&lt;i> and&lt;em></b> &rarr; italic to make a word <i>italic</i>.
+                        </li>
+                        <li><b>Lists</b>
+                            <ul>
+                                <li><b>&lt;ul></b>&rarr; unordered list</li>
+                                <li><b>&lt;ol></b>&rarr; ordered lists
+                                    <ul>
+                                        <li>ol have an attribute &rarr; <b>type = "(i,A,a,1)"</b></li>
+                                    </ul>
+                                </li>
+                                <li><b>&lt;li></b> &rarr; list items</li>
+                            </ul>
+                        </li>
+                        <li><b>&lt;img src = "image link" /></b>
+                            <ul>
+                                <li>to include images</li>
+                                <li>attribute <b>alt</b> holds the text description of the image, so in case the image didn't load, the text can describe it.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <b>&lt;hr></b> &rarr; it will make a horizontal rule.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div id="t3" class="in">
+                <h3>Inline and Block elements</h3>
+                <ul>
+                    <li>
+                        <b>Inline &rarr;</b> fit in alongside other elements example=&lt;b>, &lt;i>.
+                    </li>
+                    <li><b>Block</b> &rarr; take aup a whole "block" of space ex - &lt;h1>.</li>
+                    <li>Using css <b>display</b> we can interchange then
+                        <ul>
+                            <li>display: inline-block;</li>
+                        </ul>
+                    </li>
+                    <li><b>&lt;span> &rarr; </b>used for piece of text. (inline element)</li>
+                    <li><b>&lt;div> &rarr; </b>
+                        <div> used for grouping of content so that we can apply style later on using CSS. (block
+                            element)
+                    </li>
+                </ul>
+            </div>
+            <div id="t4" class="in">
+                <h3>Slightly interesting elements</h3>
+                <ul>
+                    <li>
+                        <b>&lt;sup></b> &rarr; The superscript element-> to raise the power of something a to the power
+                        b.
+                    </li>
+                    <li>
+
+                        <b>&lt;sub></b> &rarr; the subscript element-> if we want to put footnote number (56).
+                    </li>
+                    <li>
+                        <b>&lt;video></b> &rarr; by this we can embed a video in a webpage.
+                        <ul>
+                            <li>
+                                attributes-> src, width="400px, autoplay, muted, controls, loop, poster="image.jpg"
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>&lt;audio></b>
+                    </li>
+                    <li>
+                        <b>&lt;iframe src="webpage.com"></b> &rarr; to get a separate webpage inside your current
+                        webpage.
+                        <ul>
+                            <li>
+                                attributes->src, title="naam", width, height.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="t5" class="in">
+                <p>Select <a href="https://www.w3schools.com/tags/att_option_selected.asp">reference</a></p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            &lt;select id="cars">
+                                &lt;option value="volvo">Volvo&lt;/option>
+                                &lt;option value="saab">Saab&lt;/option>
+                                &lt;option value="vw">VW&lt;/option>
+                                &lt;option value="audi" selected>Audi&lt;/option>
+                              &lt;/select>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div id="t6" class="in">
+                <h3>Comments</h3>
+                <ul>
+                    <li>
+                        &lt;!-- comments --> or in vs code CTRL + /.
+                    </li>
+                </ul>
+            </div>
+            <div id="t7" class="in">
+                <h3>Entity Codes</h3>
+                <ul>
+                    <li>An entity is a piece of text that begins with an ampersand (&) and ends with a semicolon (;).</li>
+                    <li>
+                        to write in special symbols that are not available on the keyboard.
+                    </li>
+                    <li>
+                        <ul>
+                            <li> & hearts; &hearts;</li>
+                            <li> & copy; &copy;</li>
+                            <li> & nbsp; &nbsp; (non breaking space- to put some space.)</li>
+                            <li> & lt; -(&lt;) • & gt; (>)</li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="t8" class="in">
+                <h3>Tables</h3>
+                <ul>
+                    <li>
+                        Tables are structured sets of data made up of rows and columns. They can be a great way of
+                        displaying data clearly.
+                    </li>
+                    <li>
+                        &lt;table>
+                    </li>
+                    <li>
+                        &lt;tr> These are wrapped around td.
+                    </li>
+                    <li>
+                        &lt;td> (table data cells) – this element defines a cell of a table that contains data.
+                    </li>
+                    <li>
+                        &lt;th> (table header cells)
+                    </li>
+                    <li>
+                        &lt;thead> thead are wrapped around those tr which contain th
+                    </li>
+                    <li>
+                        &lt;tbody>
+                    </li>
+                    <li>
+                        &lt;tfoot>
+                    </li>
+                    <li>
+                        &lt;caption>
+                        <ul>
+                            <li>
+                                it specifies the caption of table
+                                it should be the first child of its parents&lt;table> elements it should not be
+                                floating in middle of the table data.
+                                attributes-> colspan and rowspan
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <div id="t9" class="in">
+                <h3>Forms</h3>
+                <ul>
+                    <li>
+                        <b>&lt;input></b> &rarr; element is used to create interactive controls for web-based applications in order to accept data from the user.
+                    </li>
+                    <li>Attributes
+                        <ul>
+                            <li>
+                                1- type="text" maxlength=10-> to input the text from the user
+                            </li>
+                            <li>
+                                3- type="email" -> to get a valid email address
+                            </li>
+                            <li>
+                                4- type="color"
+                            </li>
+                            <li>
+                                5- type="password"
+                            </li>
+                            <li>
+                                6-type="number" min="1" max="10" step="2"
+                            </li>
+                            <li>
+                                7-type=”phone”-> to get phone number
+                            </li>
+                            <li>
+                                8-type=”reset” value=”Reset Now” -> this is used to reset our whole form.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>Labels</b>
+                        <ul>
+                            <li>
+                                These are associated with a particular input.
+                            </li>
+                            <li>
+                                &lt;label for="same word in input"> associated text &lt;input type="text" id="same word
+                                in label"/>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+                <ul>
+                    <li>
+                        <b>&lt;form></b> &rarr; to submit the many inputs at once.
+                    </li>
+                    <li>
+                        attributes
+                        <ul>
+                            <li>
+                                action="next website"(where the data should be sent)
+                            </li>
+                            <li>
+                                name="label the data"
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>&lt;button></b> &rarr; also &lt;input type="submit" value="go">
+                    </li>
+                    <li>
+                        If we want a cursor as a pointer in our button, then in CSS we have to do this. 
+                        <br> .btn{cursor: pointer;}
+                    </li>
+                    <li>
+                        <b>Radio buttons</b>
+                        <ul>
+                            <li>
+                                &lt;input type="radio" name="common" value="">
+                            </li>
+                        </ul>
+                    </li>
+                    <li><b>Check Boxes</b>
+                        <ul>
+                            <li>
+                                &lt;input type="checkbox" checked required (can't leave bank)>
+                            </li>
+                            <li>
+                                &lt;textarea name="" id="" rows="" cols="">&lt;/textarea>
+                            </li>
+                            <li>
+                                &lt;select> which gives a menu from which we can pick an option.
+                            </li>
+                            <li>
+                                &lt;option>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+            <div id="t10" class="in">
+                <h3>Semantic Markup</h3>
+                <ul>
+                    <li>
+                        Semantic: relating to meaning
+                    </li>
+                    <li>
+                        These are new elements.
+                    </li>
+                    <li>
+                        HTML should be coded to represent the data that will be populated and not based on its default presentation styling. Presentation (how it should look) is the sole responsibility of CSS.
+                    </li>
+                    <li>
+                        Some of the benefits of writing semantic markup are as follows:
+                        <ul>
+                            <li>
+                                Search engines will consider its contents as important keywords to influence the
+                                page’s search rankings (see SEO).
+                            </li>
+                            <li>Screen readers can use it as a signpost to help visually impaired users navigate a
+                                page.</li>
+                            <li>Finding blocks of meaningful code is significantly easier than searching through
+                                endless divs with or without semantic or namespaced classes.</li>
+                            <li>Suggests to the developer the type of data that will be populated.</li>
+                            <li>Semantic naming mirrors proper custom element/component naming.</li>
+                        </ul>
+                    </li>
+                    <li>Instead of DIVs, use more specific elements like:
+                        <ul>
+
+                            <li>&lt;section></li>
+                            <li>&lt;article></li>
+                            <li>&lt;nav></li>
+                            <li>&lt;main></li>
+                            <li>&lt;header></li>
+                            <li>&lt;footer></li>
+                            <li>&lt;aside></li>
+                            <li>&lt;summary></li>
+                            <li>&lt;details></li>
+                        </ul>
+                    </li>
+                    <li>
+                        Why use these?
+                        <ul>
+                            <li>
+                                1-maintainability
+                            </li>
+                            <li>
+                                2-accessibility
+                            </li>
+                            <li>
+                                3-SEO (search engine optimization)
+                                <ul>
+                                    <li>code reading code.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        A brief Explanation of each
+                        <ul>
+                            <li><b>&star;&lt;nav>&star;</b>
+                                element represents a section of a page whose purpose is to provide navigation links,
+                                either within the current document or to other documents. Common examples of navigation sections are menus, tables of contents and indexes.
+                            </li>
+                            <li><b>&star;&lt;header>&star;</b>
+                                represents introductory content, typically a group of introduction or navigation
+                                aids, it may contain some heading elements but also a logo, a search form, an author
+                                name, and other elements.</li>
+                            <li><b>&star;&lt;footer>&star;</b>
+                                represents introductory content, typically a group of introductions or navigation aids; it may contain some heading elements but also a logo, a search form, an author name, and other elements.</li>
+                            <li><b>&star;&lt;article>&star;</b>
+                                represents a self-contained composition in a document, page, application or site
+                                which is intended to be independently distribute or reusable. Example include a form
+                                post, a magazine or a blog entry.</li>
+                            <li><b>&star;&lt;section>&star;</b>
+                                represents the parts of an article.</li>
+                            <li><b>&star;&lt;aside>&star;</b>
+                                represents a portion of a document whose content is only indirectly related to the
+                                document's main content. Asides are frequently presented as sidebars or call-out
+                                boxes.</li>
+                            <li><b>&star;&lt;main>&star;</b>
+                                represents the dominant content of the &lt;body> of a document.
+                                The main content area consists of content that is directly related to or expands
+                                upon the central topic of document, or the central functionality of an application.
+                                it should be the core content which is unique to the web.</li>
+                            <li><b>&star;&lt;time>&star;</b>
+                                The HTML &lt;time> element represents a specific period in time. It may include the
+                                datetime attribute to translate dates into machine-readable format, allowing for
+                                better search engine results, or custom features such as reminders.</li>
+                            <li><b>&star;&lt;figure>&star;</b>
+                                The HTML &lt;figure> (Figure with optional caption) element represents
+                                self-contained content, potentially with an optional caption, which is specified
+                                using the (&lt;figcaption>) element. The figure, its caption, and its contents are
+                                referenced as a single unit.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

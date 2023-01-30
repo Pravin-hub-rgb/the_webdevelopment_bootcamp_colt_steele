@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(123, 191, 250);
+            padding: 20px;
+        }
+        
+        .bg1 {
+            width: 80%;
+            height: 600px;
+            background-image: url('https://images.unsplash.com/photo-1498588543704-e0d466ddcfe5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
+            background-size: cover;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        
+        li,
+        p {
+            font-weight: 900;
+            font-size: 18pxs;
+        }
+        
+        .bg2 {
+            width: 80%;
+            height: 600px;
+            margin: 0 auto;
+            padding: 10px;
+            background: center/contain no-repeat url('https://images.unsplash.com/photo-1502318217862-aa4e294ba657?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=658&q=80') red;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="bg1">
+        <h1>This is heading!</h1>
+    </section>
+    <h2>Background properties</h2>
+    <ul>
+        <li>background-image: url()</li>
+        <li>background-size: cover, contain,</li>
+        <li>background-position</li>
+        <ul>
+            <li>background-position: top ;</li>
+            <li>background-position: bottom;</li>
+            <li>background-position: left;</li>
+            <li>background-position: right;</li>
+            <li>background-position: center;</li>
+        </ul>
+        <li>Background-repeat</li>
+        <ul>
+            <li>background-repeat: repeat-x;</li>
+            <li>background-repeat: repeat-y;</li>
+            <li>background-repeat: repeat;</li>
+            <li>background-repeat: space;</li>
+            <li>background-repeat: round;</li>
+            <li>background-repeat: no-repeat;</li>
+        </ul>
+    </ul>
+    <p>The &lt;bg-size&gt; value may only be included immediately after &lt;position&gt;, separated with the '/' character, like this: "center/80%".</p>
+    <section class="bg2"> </section>
+</body>
+
+</html>

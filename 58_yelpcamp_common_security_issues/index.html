@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Common security issues</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Mongo injection</a>
+        <a href="#t2" class="link">Cross Site Scripting</a>
+        <a href="#t3" class="link">sanitizing HTML w/ JOI</a>
+        <a href="#t4" class="link">changes in session/cookies</a>
+        <a href="#t5" class="link">hiding errors</a>
+        <a href="#t6" class="link">Helmet</a>
+        <a href="#t7" class="link">content security policy</a>
+        <div class="botbut">
+            <a href="../59_yelpcamp_deploying/index.html">Next Topic &rarr;</a>
+            <a href="../57_yelpcamp_styles_clean_up/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Common security issues</h1>
+        <div id="t1" class="wh">
+            <h2>Mongo Injection</h2>
+            <ul>
+                <li>Now we are going to talk about common security issues.</li>
+                <li><a href="https://en.wikipedia.org/wiki/SQL_injection" target="_blank">About SQL injection</a> &rarr; the way they work that they take advantage of the sql syntax. The user can put a query which can easily delete whole server data. So the concept is that someone can inject there own queries into some original query.</li>
+                <li>In mongo injection, users can manipulate the original query.</li>
+                <li>To address this basic level of attacks we can not allow users to have any symbols related to query strings (like $, ', ", ., etc). So we want to block any dynamic query comming from the user as input.</li>
+                <li>So there is a package that help us do that called <a href="https://www.npmjs.com/package/express-mongo-sanitize">'express-mongo-sanitize'</a>. So have to install it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // app.js 
+
+                        const mongoSanitize = require('express-mongo-sanitize')
+                        app.use(mongoSanitize())
+                        // this sanitizes req.body, req.params
+                        // it is not gonna allow any keys which have '$' or '.' in it 
+
+                        // we can also replace them 
+                        // app.use(mongoSanitize({
+                        //    replaceWith: '_'
+                        //}))
+
+                        // { '$gt' : 'erwer'} --> { '_gt' : 'erwer' }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Cross Site Scripting (<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>)</h2>
+            <ul>
+                <li>Next type of vulnerability we are going to talk about is XSS which is very powerfull vulnerability the idea is to inject some client side script into somebody else's web page. Spo they way this works is that some attacker going to inject their own client side code that will run in the browser on somebody else's application</li>
+                <li><a href="https://xss-game.appspot.com/" target="_blank">XSS game &neArr; &rarr;</a>  </li>
+                <li>If we can get our code to run in some websites then we can easily access information and do something with. </li>
+                <li>We can also access cookies through javascript</li>
+                <li>Script can also we included in image url.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Sanitizing HTML w/ JOI</h2>
+            <ul>
+                <li>If we embed html tag in title of campground while creating new campground it escapes because of ejs syntax but the popup in map can show the html.</li>
+                <li>We have to sanitize our input to make sure that if somebody creates a campground or edit, they cannot include any sort of html element and specially they cannot include scripts as that will break things.</li>
+                <li>We are using JOI and it does not comes with its own validation for escaping HTML or scripts.</li>
+                <li>We are going to write our own version of validation on top of JOI. JOI allow us to create extensions and these extensions allow us define things like 'Joi.string().required().htmlSafe()' which is our own method and we will use it for validations.</li>
+                <li><a href="https://www.npmjs.com/package/sanitize-html">Sanitize Html docs</a>, install it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const BaseJoi = require('joi')
+                        const sanitizeHtml = require('sanitize-html')
+                        
+                        const extension = (joi) => ({
+                            type: 'string',
+                            base: joi.string(),
+                            messages: {
+                                'string.escapeHTML': '{{#label}} must not include HTML!'
+                            },
+                            rules: {
+                                escapedHTML: {
+                                    validate(value, helpers) {
+                                        const clean = sanitizeHtml(value, {
+                                            allowedTages: [], // nothing is allowed - no string character at all
+                                            allowedAttributes: {},
+                                        })
+                                        if (clean !== value) return helpers.error('string.escapeHTML', { value })
+                                        return clean;
+                                    }
+                                }
+                            }
+                        })
+                        // this is defining an extension on joi.string called escapeHTML 
+                        // inside it there is a function validate which automatically gets called with what ever value it receives 
+                        // also we are using a package called 'sanitizeHtml' -- this does the job of sanitizing html input, it is going to 
+                        // strip the Html or script tags away.
+                        const Joi = BaseJoi.extend(extension)
+                        // now we can use escapeHtml
+                        module.exports.campgroundSchema = Joi.object({
+                            campground: Joi.object({ // everything is nested under campground
+                                title: Joi.string().required().escapedHTML(),
+                                price: Joi.number().required().min(0),
+                                location: Joi.string().required().escapedHTML(),
+                                description: Joi.string().required().escapedHTML()
+                            }).required(),
+                            deleteImages: Joi.array()
+                        })
+                        
+                        module.exports.reviewSchema = Joi.object({
+                            review: Joi.object({
+                                rating: Joi.number().required().min(1).max(5),
+                                body: Joi.string().required().escapedHTML()
+                            }).required()
+                        })                        
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now we can prevent basic attacks.</li>
+            </ul>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Minor changes to session/cookies</h2>
+            <ul>
+                <li>In our sessionConfig we have set httpOnly to true which means that our cookies are only accessible over http, they are not acessible through javascript. So if someone is trying to access our cookies through javascript they can't.</li>
+                <li>Adding secure: true &rarr; this means our cookies should only work over https.</li>
+                <li>locahost:3000 is not https but when we deploy we want secure option so that cookies can only be configured on secure connections.</li>
+                <li>One other thing that is recommended is to change the default name of our session so that people don't easily find sessions.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const sessionConfig = {
+                            name: 'session',
+                            secret: 'thisshouldbeabettersecret',
+                            resave: false,
+                            saveUninitialized: true,
+                            cookie: {
+                                httpOnly: true,
+                                // secure: true,
+                                expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                                maxAge: 1000 * 60 * 60 * 24 * 7
+                            }
+                        }
+                        app.use(session(sessionConfig))
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Hiding Errors</h2>
+            <ul>
+                <li>Another thing to worry about when we are deploying is that you are not giving your users development errors because it tells our users that  how our files are setuped and what line is causing error and it is also a bad experience.</li>
+                <li>So we don't want to show error in production mode.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        <% if(process.env.NODE_ENV !== "production") {%>
+                            &lt;p><%=err.stack%>&lt;/p>
+                        <%}%>
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Using Helmet</h2>
+            <ul>
+                <li>So the final security related topic that we will cover for now is a package called <a href="https://helmetjs.github.io/" target="_blank">helment &neArr;</a>.</li>
+                <li>Helment comes with set of 11 middleware that all have to do with http headers, changing the behavior and manipulating headers all in the name of security.</li>
+                <li>Read docs for detailed explaination.</li>
+                <li>Install helmet.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const helment = require('helment')
+
+                        // app.use(helmet()) // no need to do this in newer version
+                        // that automatically enables all 11 of the middleware 
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>conentSecurityPolicy() middleware does not all any script to run in our app because helment automatically enables it and it screws things up.</li>
+                <li>So for now we will disable it.</li>
+                <li>Using helmet there are many new headers that are added like xss filter</li>
+            </ul>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Content security policy</h2>
+            <ul>
+                <li>CSP is extra layer of security that allow us to specify which website are allowed to run scripts from a particular specified website, so we specify list of sources which are allowed to display the content or run scripts on our website</li>
+                <li>We can specify our own CSP. <a href="https://github.com/helmetjs/helmet">Example</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+                    
+                    // in future if you add more stuff from other website then you have to include them here.
+
+                    const scriptSrcUrls = [
+                        "https://stackpath.bootstrapcdn.com/",
+                        "https://api.tiles.mapbox.com/",
+                        "https://api.mapbox.com/",
+                        "https://kit.fontawesome.com/",
+                        "https://cdnjs.cloudflare.com/",
+                        "https://cdn.jsdelivr.net",
+                        ];
+                        const styleSrcUrls = [
+                        "https://kit-free.fontawesome.com/",
+                        "https://stackpath.bootstrapcdn.com/",
+                        "https://api.mapbox.com/",
+                        "https://api.tiles.mapbox.com/",
+                        "https://fonts.googleapis.com/",
+                        "https://use.fontawesome.com/",
+                        "https://cdn.jsdelivr.net", // ******** include this here also *********
+                    ];
+                    const connectSrcUrls = [
+                        "https://api.mapbox.com/",
+                        "https://a.tiles.mapbox.com/",
+                        "https://b.tiles.mapbox.com/",
+                        "https://events.mapbox.com/",
+                    ];
+                    const fontSrcUrls = [];
+                    app.use(
+                        helmet.contentSecurityPolicy({
+                            directives: {
+                                defaultSrc: [],
+                                connectSrc: ["'self'", ...connectSrcUrls],
+                                scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+                                styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+                                workerSrc: ["'self'", "blob:"],
+                                objectSrc: [],
+                                imgSrc: [
+                                    "'self'",
+                                    "blob:",
+                                    "data:",
+                                    "https://res.cloudinary.com/douqbebwk/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                                    "https://images.unsplash.com/",
+                                ],
+                                fontSrc: ["'self'", ...fontSrcUrls],
+                            },
+                        })
+                    );
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>So basically we are restricting the locations that we can fetch resources from.</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

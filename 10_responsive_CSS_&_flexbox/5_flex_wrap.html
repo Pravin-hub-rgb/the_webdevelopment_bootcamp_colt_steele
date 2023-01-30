@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex-wrap</title>
+    <style>
+        body{
+            padding: 30px;
+            background-color: rgb(121, 190, 250);
+        }
+        section {
+            background-color: #003049;
+            width: 60%;
+            height: 500px;
+            margin: 0 auto;
+            border: 5px solid #003049;
+        }
+        
+        section div {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Flex wrap</h1>
+    <p>Instead of shrinking in main axis, the box wraps into new line</p>
+    <h2>flex-wrap:wrap;</h2>
+    <p></p>
+    <style>
+        #container5 {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+    <section id="container5">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+    <hr>
+    <h2>flex-wrap:wrap-reverse;</h2>
+    <p></p>
+    <style>
+        #container6 {
+            display: flex;
+            flex-wrap: wrap-reverse;
+        }
+    </style>
+    <section id="container6">
+        <div style="background-color: rgb(255, 62, 62);">1</div>
+        <div style="background-color: rgb(203, 253, 66);">2</div>
+        <div style="background-color: rgb(63, 197, 231);">3</div>
+        <div style="background-color: rgb(86, 255, 64);">4</div>
+        <div style="background-color: rgb(53, 129, 243);">5</div>
+    </section>
+</body>
+
+</html>

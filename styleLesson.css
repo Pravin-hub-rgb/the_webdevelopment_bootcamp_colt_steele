@@ -1,0 +1,350 @@
+.grad {
+    background: #000046;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1CB5E0, #000046);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1CB5E0, #000046);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#navbar {
+    width: 100vw;
+    height: 40px;
+    position: fixed;
+    top: 0;
+    padding: 4px;
+    display: flex;
+}
+
+#navbar>div {
+    /* width: 50%; */
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+#navbar>div:nth-child(1) {
+    width: 20%;
+}
+
+#navbar>div:nth-child(2) {
+    width: 70%;
+    display: flex;
+    justify-content: end;
+}
+
+#navbar h2 {
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+#nav-icon1 span {
+    display: block;
+    margin: 4px;
+    height: 7px;
+    width: 40px;
+    background: #000000;
+    border-radius: 9px;
+}
+
+
+/* **** w3school **** */
+
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidepanel {
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    /* background-color: #111; */
+    background: #000428;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #004e92, #000428);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #004e92, #000428);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidepanel a {
+    padding: 3px 3px 3px 12px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #eeeeee;
+    display: block;
+    transition: all 0.3s;
+}
+.link{
+    border: 1px solid grey;
+    margin: 3px 0;
+}
+.sidepanel .sm {
+    font-size: 0.9rem;
+    color: rgb(197, 196, 196);
+}
+
+.sidepanel .home {
+    font-size: 25px;
+}
+
+.sidepanel a:hover {
+    color: #ecffa6;
+}
+
+.sidepanel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+}
+
+.sidepanel .botbut {
+    position: absolute;
+    bottom: 90px;
+    width: 98%;
+    /* height: 60px; */
+    /* border: 2px solid red; */
+    text-align: center;
+    color: white;
+}
+
+
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    text-align: center;
+    border: none;
+    width: 45px;
+}
+
+.openbtn:hover {
+    background-color: rgba(0, 0, 0, 0.158)
+}
+
+
+/* ******** Local Stuff *************** */
+
+.content-box {
+    background-color: rgb(26 164 210);
+    border-radius: 20px;
+    padding: 10px 3px;
+    margin: 55px 3px 20px 3px;
+}
+
+.wh {
+    background-color: #7fcce6;
+    padding: 10px 3px;
+    border-radius: 10px;
+    margin: 10px 5px;
+    color: black;
+    box-shadow: 0 0 20px rgb(2 14 82);
+}
+.wb{
+    background-color: rgba(255, 255, 255, 0.271);
+}
+.wh>a,
+.wh>p a,
+.wh>ul li a {
+    color: #0f64aa ;
+}
+
+.in {
+    /* background-color: rgba(0, 0, 0, 0.76); */
+    background-color: #0c528b;
+    padding: 10px 5px;
+    border-radius: 5px;
+    margin: 20px 5px;
+    box-shadow: 0 0 5px 5px #014074;
+    color: white;
+}
+
+.in>a,
+.in>p a,
+.in>ul li a,.lb {
+    color: #1CB5E0 ;
+}
+
+body {
+    background: #000428;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #004e92, #000428);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #004e92, #000428);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-size: 2rem;
+    text-align: center;
+}
+
+p {
+    font-size: 1.1rem;
+    line-height: 23px;
+}
+
+li {
+    font-size: 1.1rem;
+}
+
+button {
+    font-size: 1rem;
+}
+
+
+/* **** Accordion **** */
+
+.accordion {
+    background-color: #0c528b;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+
+.active,
+.accordion:hover {
+    background-color: #0f64aa;
+}
+
+
+/* Style the accordion panel. Note: hidden by default */
+
+.panel {
+    padding: 0 5px;
+    background-color: rgb(0, 0, 0);
+    display: none;
+    overflow: hidden;
+}
+
+pre {
+    overflow: auto;
+    margin: 0;
+}
+
+/* **** PART2 ****** */
+
+.part2>div {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.part2>div div {
+    background-color: rgba(0, 0, 0, 0.11);
+    padding: 8px;
+    margin: 2px;
+    width: 45%;
+}
+
+
+/* ****** part 3****** */
+
+.part3>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border: 2px solid black;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.part3>div div {
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+    background-color: rgba(248, 248, 248, 0.37);
+}
+
+.apply {
+    width: 400px;
+    height: 200px;
+    border: 10px solid black;
+    margin: 10px;
+}
+
+@media only screen and (max-width: 800px) {
+    .apply {
+        width: 90%;
+        height: 50%;
+        border: 6px solid black;
+    }
+    img {
+        height: auto;
+        width: 98%;
+    }
+    .code {
+        font-size: 0.7rem !important;
+    }
+    h1 {
+        font-size: 1.4rem;
+    }
+    h2,h3{
+        font-size: 1.2rem;
+    }
+    p {
+        font-size: 1rem;
+        line-height: 20px;
+    }
+    ul{
+        padding: 2px 13px;
+    }
+    li {
+        font-size: 1rem;
+    }
+    
+}
+
+
+/* ***************code********** */
+.code {
+    color: white;
+    background-color: #000000;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.dots {
+    display: flex;
+    margin: 5px;
+}
+
+.dots div {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 3px;
+
+}
+
+.f {
+    background-color: red;
+}
+
+.s {
+    background-color: yellow;
+}
+
+.t {
+    background-color: green;
+}

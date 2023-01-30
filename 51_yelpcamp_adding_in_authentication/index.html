@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Adding in Authentication</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>   
+        <a href="#t1" class="link">passport</a>
+        <a href="#t2" class="link">creating user model</a>
+        <a href="#t3" class="link">configuring passport</a>
+        <a href="#t4" class="link">register form</a>
+        <a href="#t5" class="link">register route logic</a>
+        <a href="#t6" class="link">login routes</a>
+        <a href="#t7" class="link">isLoggedIn middleware</a>
+        <a href="#t8" class="link">adding login</a>
+        <a href="#t9" class="link">currentUser helper</a>
+        <a href="#t10" class="link">fixing register route</a>
+        <a href="#t11" class="link">returnTo behaviour</a>
+        <div class="botbut">
+            <a href="../52_yelpcamp_basic_authorization/index.html">Next Topic &rarr;</a>
+            <a href="../50_authentication_from_scratch/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Adding in Authentication</h1>
+        <ul>
+            <li>Now we are going to work on integrating authentication and a user model into our YelpCamp App.</li>
+        </ul>
+        <div id="t1" class="wh">
+            <h2>Introduction to Passport</h2>
+            <ul>
+                <li>As we know how to setup authentication from scratch using BCRYPT and hashing a password ourself and
+                    storing stuff in sessions but we are not going to do that here.</li>
+                <li>We are going to use a tool called 'passport'.
+                    <ul>
+                        <li>It is a library which helps you add authentication into node apps.</li>
+                        <li>It comes with bunch of <a href="https://www.passportjs.org/packages/"
+                                target="_blank">stratergies</a> &rarr; these are the ways or services to log someone in
+                            using google login and twitter login etc. </li>
+                    </ul>
+                </li>
+                <li>By using passport we are going to hide some of the basic stuff but we know how they work.</li>
+                <li>First we are going to passport local login which is just username and password. </li>
+                <li>There is a specialized tool <a href="https://www.npmjs.com/package/passport-local-mongoose">passport
+                        local mongoose</a> which makes it even easier if we are using mongoDB </li>
+                <li>If we want to use 'passport local mongoose' it do require passport.local and later on we can add
+                    passport twitter etc.</li>
+                <li>Install all three &rarr; npm i passport passport-local passport-local-mongoose.</li>
+                <li>Next we are going to setup our user model</li>
+            </ul>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Creating our user model</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const mongoose = require('mongoose')
+                        const Schema = mongooge.Schema
+                        const passportLocalMongoose = require('passport-local-mongoose')
+                        
+                        const UserSchema = new Schema({
+                            email: {
+                                type: String,
+                                required: true,
+                                unique: true
+                            }
+                        })
+                        
+                        UserSchema.plugin(passportLocalMongoose) // this will add on to our schema a username and password field
+                        // it is going to make sure those usernames are unique, they are not duplicated
+                        
+                        module.exports = mongoose.model('User', UserSchema)
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li><a href="https://github.com/saintedlama/passport-local-mongoose">Passport local mongoose github docs
+                        &neArr;</a></li>
+                <li>Next we are going to configure our app to use passport.</li>
+            </ul>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Configuring Passport</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // app.js 
+
+                        const LocalStrategy = require('passport-local') 
+                        const User = require('./models/user')
+                        
+                        
+                        app.use(passport.initialize())
+                        app.use(passport.session()) // this middleware enables persistance login sessions
+                        // note * app.use(session()) should be before passport.session()
+                        passport.use(new LocalStrategy(User.authenticate())) // authenticate is a static method that has been added automatically  
+                        
+                        passport.serializeUser(User.serializeUser()) // this is telling passport how to serialize a user
+                        // serialization - how do we store a user in the session 
+                        passport.deserializeUser(User.deserializeUser()) // how to get that user out of that session. These two plugins are from passport-local-mongoose
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <h3>Demonstrating how we will register a user</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+                            
+                            app.get('/fakeUser', async (req, res) => {
+                                const user = new User({ email: 'colttt@gmail.com', username: 'colttt' }) // here we are not passing the password because next we are going to use a register method which is provided as a helper
+                                const newUser = await User.register(user, 'chicken') // this takes the newly created user and password and it is going to hash the password and store it
+                                res.send(newUser)
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <ul>
+                    <li>This actually does not use BCRYPT it uses Pbkdf2 it was choses because it is platform
+                        independent.</li>
+                </ul>
+            </div>
+        </div>
+        <div idt4 class="wh">
+            <h2>Register Form</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // changes in app.js 
+
+                        const User = require('./models/user')
+
+                        const userRoutes = require('./routes/users')
+                        const campgroundRoutes = require('./routes/campgrounds')
+                        const reviewRoutes = require('./routes/reviews')
+
+
+                        app.use('/',userRoutes)
+                        app.use('/campgrounds', campgroundRoutes)
+                        app.use('/campgrounds/:id/reviews', reviewRoutes)
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // new file routes/users.js 
+
+                        const express = require('express')
+                        const router = express.Router()
+                        const User = require('../models/user')
+                        
+                        router.get('/register', (req, res) => {
+                            res.render('users/register')
+                        })
+                        router.post('/register', async (req, res) => {
+                            res.send(req.body)
+                        })
+                        
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // register form views/users/register.ejs 
+
+                        <% layout('layouts/boilerplate') %>
+                        &lt;h1>Register&lt;/h1>
+                        &lt;form action="/register" class="validated-form" method="post" novalidate>
+                            &lt;div class="mb-3">
+                                &lt;label for="username" class="form-label">Username&lt;/label>
+                                &lt;input type="text" class="form-control" name="username" id="username" required>
+                                &lt;div class="valid-feedback">Looks good!&lt;/div>
+                            &lt;/div>
+                            &lt;div class="mb-3">
+                                &lt;label for="email" class="form-label">Email&lt;/label>
+                                &lt;input type="email" class="form-control" name="email" id="email" required>
+                                &lt;div class="valid-feedback">Looks good!&lt;/div>
+                            &lt;/div>
+                            &lt;div class="mb-3">
+                                &lt;label for="password" class="form-label">Password&lt;/label>
+                                &lt;input type="password" class="form-control" name="password" id="password" required>
+                                &lt;div class="valid-feedback">Looks good!&lt;/div>
+                            &lt;/div>
+                            &lt;button class="btn btn-success">Submit&lt;/button>
+                        &lt;/form>
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Register Route Logic</h2>
+            <ul>
+                <li>Now we are going to take the form data and create a new user</li>
+                <li>If we create a user with a username that is already exist it will give us error.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const express = require('express')
+                        const router = express.Router()
+                        const User = require('../models/user')
+                        const catchAsync = require('../utils/catchAsync')
+                        
+                        router.get('/register', (req, res) => {
+                            res.render('users/register')
+                        })
+                        router.post('/register', catchAsync(async (req, res) => {
+                            // instead of using default error handler where user have to go back again and deal with that again 
+                            // it will be much better to flash a message on the same page
+                            // so we are going to make our own try and catch here
+                            try {
+                        
+                                const { email, username, password } = req.body
+                                const user = new User({ email, username })
+                                const registeredUser = await User.register(user, password)
+                                console.log(registeredUser);
+                                req.flash('success', 'Welcome to YelpCamp')
+                                res.redirect('/campgrounds')
+                            } catch (e) {
+                                req.flash('error', e.message)
+                                res.redirect('/register')
+                            }
+                        }))
+                        // till now we are just creating a user but we are not logged in - we are not keeping record of who is logged in
+                        
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Login Routes</h2>
+            <ul>
+                <li>When we will login we don't need email, we only need username and password</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // route/users.js
+
+                        // Login
+                        router.get('/login', (req, res) => {
+                            res.render('users/login')
+                        })
+                        // passport gives us a middleware that we can use
+                        // it except us to give a strategy and some options to specify
+                        router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
+                            req.flash('success', 'Welcome back!')
+                            res.redirect('/campgrounds')
+                            // after successfully pass the middleware we will know that the user is authenticated because of passport middleware
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Next we are going to talk about what it means to be logged in and where does the session comes in
+                    play, how do w know who is logged in and how do we display their name or log them out.</li>
+            </ul>
+        </div>
+        <div id="t7" class="wh">
+            <h2>isLoggedIn middleware</h2>
+            <ul>
+                <li>Now we have the ability of login</li>
+                <li>Now we will protect some of our routes
+                    <ul>
+                        <li>Like making a new campground, you cannot submit a new campground unless you are currently
+                            signed in </li>
+                        <li>For that we will check if someone is currently logged in or if they are authenticated</li>
+                    </ul>
+                </li>
+                <li>So we are going to use a helper method that comes from passport and its called 'isAuthenicated' and
+                    it is automatically added to the request object itself.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // routes/campgrounds.js 
+
+                        router.get('/new', (req, res) => {
+                            if (!req.isAuthenticated()) {
+                                req.flash('error', 'You must be signed in')
+                                return res.redirect('/login')
+                            }
+                            res.render('campgrounds/new')
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now we are just protecting the new form itself but we can still send data using postman or ajax and
+                    make a campground</li>
+                <li>So for that we can make a middleware
+                    <ul>
+                        <li>And we can use that middleware on any route we want insure a user has to be logged in before
+                            they can access that route.</li>
+                    </ul>
+                </li>
+                <li>We need to put our middleware in separate file so that other group of route can also use it like
+                    review routes.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // middleware.js
+
+                        module.exports.isLoggedIn = (req, res, next) => {
+                            if (!req.isAuthenticated()) {
+                                req.flash('error', 'You must be signed in')
+                                return res.redirect('/login')
+                            }
+                            next()
+                        }
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // routes/campgrounds.js
+
+                        // NEW 
+                        router.get('/new', isLoggedIn, (req, res) => {
+                            res.render('campgrounds/new')
+                        })
+                        
+                        // putting middleware in post route so that even using Postman the campground is created.
+                        router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
+                            // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
+                            const campground = new Campground(req.body.campground)
+                            await campground.save()
+                            req.flash('success', 'Successfully made a new campground!')
+                            res.redirect(`/campgrounds/${campground._id}`)
+                        }))
+
+                        // same for edit, delete routes
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t8" class="wh">
+            <h2>Adding Logout</h2>
+            <ul>
+                <li>Giving the user the ability of logout.</li>
+                <li>With passport this is very easy there is a method added to 'req' object automatically called login
+                    and logout</li>
+            </ul>
+            <div class="in">
+                <h3>Change in code</h3>
+                <ul>
+                    <li>Since version 0.6.0 of passport (which was released this year by the time of writing this),
+                        req.logout is asynchronous. This is part of a larger change that averts session fixation
+                        attacks.</li>
+                    <li><a href="https://medium.com/passportjs/fixing-session-fixation-b2b68619c51d" target="_blank">See
+                            the release announcement:</a></li>
+                    <li> The other major change is that that req.logout() is now an asynchronous function, whereas
+                        previously it was synchronous. For instance, a logout route that was previously:</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>  
+                                
+                                router.get('/logout', (req, res) => {
+                                  req.logout();
+                                  req.flash("success", "GOOD BYE!!");
+                                  res.redirect('/campgrounds');
+                                });
+                            
+                                // should be modified to:
+                            
+                                app.post('/logout', function(req, res, next) {
+                                  req.logout(function(err) {
+                                    if (err) { return next(err); }
+                                    req.flash("success", "GOOD BYE!!");
+                                    res.redirect('/campgrounds');
+                                  });
+                                });
+                            
+                                Hope this helps.
+                            
+                                Let us know if your query is resolved/ any further challenges.
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t9" class="wh">
+            <h2>currentUser helper</h2>
+            <ul>
+                <li>Showing register, login and logout links on navbar according to the presence of the logged user</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        &lt;!-- navbar.ejs -->
+                        &lt;ul class="navbar-nav ms-auto">
+                            <% if(!currentUser){ %> &lt;!-- this will be pass via res.locals -->
+                              &lt;a href="/login" class="nav-link">Login&lt;/a>
+                              &lt;a href="/register" class="nav-link">Register&lt;/a>
+                            <% } else { %>
+                              &lt;a href="/logout" class="nav-link">Logout&lt;/a>
+                            <% } %>
+                        &lt;/ul>
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // app.js 
+
+                        app.use((req, res, next) => {
+                            res.locals.currentUser = req.user
+                            res.locals.success = req.flash('success')
+                            res.locals.error = req.flash('error')
+                            next()
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t10" class="wh">
+            <h2>Fixing Register Route</h2>
+            <ul>
+                <li>Problem that we are having is that when we are registering a user we are redirected but that user is not logged in. So just after registering the user have to again log in.</li>
+                <li>So what we wanna do, when a user registers and we successfully make that user we want to log the user in.</li>
+                <li>We are going to use a helper method called <a href="https://www.passportjs.org/concepts/authentication/login/" target="_blank">'login()'</a> on a request.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // /routes/users.js 
+
+                        router.post('/register', catchAsync(async (req, res, next) => {
+                            try {
+                                const { email, username, password } = req.body
+                                const user = new User({ email, username })
+                                const registeredUser = await User.register(user, password)
+                                req.login(registeredUser, err => {
+                                    if (err) return next(err)
+                                    req.flash('success', 'Welcome to YelpCamp')
+                                res.redirect('/campgrounds')
+                                })        
+                            } catch (e) {
+                                req.flash('error', e.message)
+                                res.redirect('/register')
+                            }
+                        }))
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t11" class="wh">
+            <h2>ReturnTo Behaviour</h2>
+            <ul>
+                <li>Final thing we should tackle is redirecting user to where ever they were trying to go.</li>
+                <li>Before authentication We will store the url that they were requesting and pass it to post route and redirect them to the stored url.</li>
+                <li>We are going to store the url in session so that we have some persistance between different request.</li>
+                <li>So there are two things that we could use 
+                    <ol>
+                        <li>req.path</li>
+                        <li>req.originalUrl</li>
+                    </ol>
+                </li>
+                <li>These are both added to req object</li>
+                <li>We will store the req.originalUrl path because it is full path.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // middleware.js 
+
+                        module.exports.isLoggedIn = (req, res, next) => {
+                            if (!req.isAuthenticated()) {
+                                req.session.returnTo = req.originialUrl
+                                req.flash('error', 'You must be signed in')
+                                return res.redirect('/login')
+                            }
+                            next()
+                        }
+                        // usually the route which needs authentication needs returning url method.
+                        </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), (req, res) => {
+                            req.flash('success', 'Welcome back!')
+                            const redirectUrl = req.session.returnTo || '/campgrounds'
+                            console.log(redirectUrl);
+                            delete req.session.returnTo
+                            res.redirect(redirectUrl)
+                        })
+                        // with the newer version of passport we have to add 'keepSessionInfo: true'
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Next we are going to integrate users with reviews and with campgrounds and permissions, authorization.</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

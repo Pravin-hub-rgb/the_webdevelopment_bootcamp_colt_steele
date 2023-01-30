@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newer JavaScript Features</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+
+        <a href="#defaultparams">Default Params</a>
+        <a href="#spread">Spread</a>
+        <a href="#funcall" class="sm">In Func. Call</a>
+        <a href="#arrlit" class="sm">In Array Literals</a>
+        <a href="#objlit" class="sm">In Object Literals</a>
+        <a href="#rest">Rest</a>
+        <a href="#argument" class="sm">Arguments Obj.</a>
+        <a href="#restparams" class="sm">Rest Params</a>
+        <a href="#destructure">Destructuring</a>
+        <a href="#arraydestructure" class="sm">Array Destructuring</a>
+        <a href="#objdestructure" class="sm">Object Destructuring</a>
+        <a href="#paramdestructure" class="sm">Param Destructuring</a>
+        <div class="botbut">
+            <a href="../24_dom_intro/index.html">Next Topic &rarr;</a>
+            <a href="../22_callbacks_&_array_methods/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div id="defaultparams" class="content-box">
+        <h1>DEFAULT PARAMS</h1>
+        <p>If we don't pass any parameter there should be a default value</p>
+        <div class="wh">
+            <h2>The Old Way</h2>
+            <p>The syntax is longer</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                              function multiply(a, b) {
+                                b = typeof b !== 'undefined' ? b : 1;
+                                return a * b;
+                              }
+                              multiply(7); //7
+                              multiply(7,3) //21
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>The New Way</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                              function multiply(a, b = 1) {
+                                return a * b;
+                              }
+                              multiply(7); //7
+                              multiply(7,3) //21
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <p>The default parameter should always be at the back in function definition.</p>
+        <div id="spread" class="wh">
+            <h1>SPREAD</h1>
+            <p>Spread syntax allows an iterable such as an array to be <b>expanded</b> in places where zero or more
+                arguments (for function calls) or elements (for array literals) are expected, or an object expression to
+                be expanded in places where zero
+                or more key-value pairs (for object literals) are expected.
+            </p>
+            <div id="funcall" class="in">
+                <h2>Spread For Function Calls</h2>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        const nums = [9, 3, 2, 8];
+                        Math.max(nums); //NaN
+                        //Use spread!
+                        Math.max(...nums); //9
+                        // Same as calling:
+                        // Math.max(9, 3, 2, 8)
+                    </code>
+                </pre>
+                </div>
+                <p>Expands an iterable (array, string, etc.) <br> into a list of arguments</p>
+            </div>
+            <div id="arrlit" class="in">
+                <h2>Spread In Array Literals</h2>
+                <p>Create a new array using an existing array. Spreads the elements form one array into a new array.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        const nums1 = [1, 2, 3];
+                        const nums2 = [4, 5, 6];
+                        
+                        [...nums1, ...num2];
+                        //[1, 2, 3, 4, 5, 6]
+                        
+                        ['a', 'b', ...nums2];
+                        //["a", "b", 4, 5, 6]
+                        
+                        [...nums1, ...nums2, 7, 8, 9];
+                        //[1, 2, 3, 4, 5, 6,7 , 8, 9]
+                        
+                        [..."abc"];
+                        //["a", "b", "c"]
+                    </code>
+                </pre>
+                </div>
+            </div>
+            <div id="objlit" class="in">
+                <h2>Spread In Object Literals</h2>
+                <p>Copies properties form one object into another object literal.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        const feline = {legs: 4, family: 'Felidae'};
+                        const canine = {family: 'Caninae', furry: true};
+                        
+                        const dog = { ...canine, isPet: true};
+                        //{family: "Caninae", furry: true, isPet: ture}
+                        
+                        const lion = { ...feline, genus: 'Panthera'};
+                        //{legs: 4, family: "Felidae", genus: "Panthera"}
+                        
+                        const catDog = {...feline, ...canine};
+                        //{legs: 4, family: "Caninae", furry: ture}
+                    </code>
+                </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        {...[2,4,6,8]}
+                        {0: 2, 1: 4, 2: 6, 3: 8}
+                        //index becomes the key here
+                    </code>
+                </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="rest" class="content-box">
+        <h1>REST</h1>
+        <p>It looks like spread but it's not!</p>
+        <p>We need to know about the Argument Object</p>
+        <div id="argument" class="wh">
+            <h2>THE ARGUMENT OBJECTS</h2>
+            <ul>
+                <li>Available inside every function.</li>
+                <li>It's an <b>array-like</b> object
+                    <ul>
+                        <li>Has a length property</li>
+                        <li>Does not have array methods like push/pop, reduce...</li>
+                    </ul>
+                </li>
+                <li>Contains all the arguments passed to the function</li>
+                <li>Not available inside of an arrow functions!</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function sumAll() {
+                            let total = 0;
+                              for(let i = 0; i &lt; arguments.length; i++){
+                                total += arguments[i];
+                              }
+                              return total;
+                        }
+                        sumAll(8, 4, 3, 2); // 17
+                        sumAll(2, 3); //5
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function sum(){
+                            return arguments.reduce((total,el) => total + el);
+                        }
+                        sum(3,4,6,7,9)
+                        //ERROR - arguments.reduce is not a function
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <p>Here's where <b>rest</b> comes in</p>
+        <div id="restparams" class="wh">
+            <h2>REST PARAMS</h2>
+            <p>Collects all remaining arguments into an actual array</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function sumAll(...nums) {
+                            let total = 0;
+                            for(let n of nums) total += n;
+                              return total;
+                        }
+                          
+                        sumAll(1,2); //3
+                        sumAll(1, 2, 3, 4, 5); //5
+                    </code>
+                </pre>
+            </div>
+            <p>Now all methods can work here</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function sum(...arr){
+                            return arr.reduce((total,el) => total + el);
+                        }
+                        sum(3,4,6,7,9) //31
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function raceResults(gold, silver, ...restOfPlayers){
+                            console.log(`GOLD MEDAL GOES TO: ${gold}`);
+                            console.log(`SILVER MEDAL GOES TO: ${silver}`);
+                            console.log(`THANKS TO REST OF PLAYERS: ${restOfPlayers}`);
+                        }
+                        raceResults('Tammy', 'Todd', 'Tina', 'Trevor', 'Travis');
+                          
+                        //GOLD MEDAL GOES TO: Tammy
+                        //SILVER MEDAL GOES TO: Todd
+                        //THANKS TO REST OF PLAYERS: Tina,Trevor,Travis 
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <div id="destructure" class="content-box">
+        <h1>DESTRUCTURING</h1>
+        <p>A short, clean syntax to 'unpack':</p>
+        <ul>
+            <li>Values from arrays</li>
+            <li>Properties from objects</li>
+        </ul>
+        <p>Into distinct variables.</p>
+        <div id="arraydestructure" class="wh">
+            <h2>ARRAY Destructuring</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const raceResults = [ 'Eliud Kiphoge', 'Feyisa Lelisa', 'Galen Rupp'];
+
+                        const [ gold, silver ,bronze ] = raceResults;
+                        gold; // "Eliud Kiphoge"
+                        silver; //"Feyisa Lelisa"
+                        bronze; //"Galen Rupp"
+                        
+                        const [fastest, ...everyoneElse] = raceResults;
+                        fastest; //"Eliud Kiphoge"
+                        everyoneElse; //["Feyisa Lelisa", "Galen Rupp"]
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <div id="objdestructure" class="wh">
+            <h2>OBJECT Destructuring</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const runner = {
+                            first: "Eliud",
+                            last: "Kiphoge",
+                            country: "Kenya",
+                            title: "Elder of the Order of the Golden Heart of Kenya"
+                        }
+                        const {first,last,country}= runner;
+                          
+                        first; //"Eliud"
+                        last; //"Kiphoge"
+                        country; //"Kenya"
+                    </code>
+                </pre>
+            </div>
+            <p>We can also change the variable name</p>
+            <div class="code">
+                <div class="dotc">
+                    <pre>
+                        <code>
+
+                            const user = {
+                                born: 1888,
+                                died: 1932
+                            }
+                              
+                            const {born: birthYear}= user;
+                            born; //born is not defined
+                            birthYear; //1888
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>We can give default value</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const user2 = {
+                            born: 2000
+                        }
+                          
+                        const {born, died= "N/A"} = user2;
+                        died; //"N/A"
+                    </code>
+                </pre>
+            </div>
+        </div>
+
+        <div id="paramdestructure" class="wh">
+            <h2>PARAM Destructuring</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const fullName = ({first, last}) => {
+                            return `${first} ${last}`
+                        }
+                        const runner = {
+                          first: "Eluid",
+                          last: "Kiphoge",
+                          country: "Kenya"
+                        }
+                          
+                        fullName(runner); //"Eluid Kiphoge"
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

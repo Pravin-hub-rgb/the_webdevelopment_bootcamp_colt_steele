@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="widp=device-widp, initial-scale=1.0">
+    <title>CSS</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Basics</a>
+        <a href="#t2" class="link">Including Css</a>
+        <a href="#t3" class="link">Properties</a>
+        <a href="#t4" class="link">Color systems</a>
+        <a href="#t5" class="link">Text properties</a>
+        <a href="#t6" class="link">Font size</a>
+        <a href="#t7" class="link">Font family</a>
+        <div class="botbut">
+            <a href="../7_The_world_of_CSS_Selector/index.html">Next Topic &rarr;</a>
+            <a href="../3_HTML/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>CSS</h1>
+        <div id="t1" class="wh">
+            <h2>What is it?</h2>
+            <p>CSS is a language for describing how documents are presented visually - how pey are arranged and styled.
+            </p>
+
+            <h2>What Does it stand for?</h2>
+            <p>CSS stands for Cascading Style Sheets.</p>
+
+            <h2>CSS Rules</h2>
+            <p>(almost) everyping you do in CSS follows pis basic pattern.</p>
+            <div class='code'>
+               <pre>
+                   <code>
+                   
+                    selector {
+                        property: value;
+                    }
+                   </code>
+               </pre>
+            </div>
+            <div>
+                <h3>make all &lt;h1> elements purple</h3>
+                <div class='code'>
+                   <pre>
+                       <code>
+                       
+                        h1{
+                            color: purple;
+                        }
+                       </code>
+                   </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h1>Including CSS</h1>
+            <div class="in">
+                <h2>INLINE STYLES</h2>
+                <p>You can write your styles directly inline on each element. but pis is <b>Not A Good Idea</b> most of
+                    pe time.</p>
+                   <div class='code'>
+                   <pre>
+                       <code>
+                       
+                        &lt;h1 style="color: purple"> Hello World &lt;/h1>
+                       </code>
+                   </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h2>&lt;STYLES&gt; ELEMENT</h2>
+                <p>You can write you styles inside of a &lt;style&gt; element. pis is easy, but it makes it impossible
+                    to share styles between documents. <b>Not Recommended Eiper.</b></p>
+                <div class='code'>
+                   <pre>
+                       <code>
+                       
+                        &lt;head>
+                            &lt;style>
+                                h2 {
+                                    color: purple;
+                                }
+                            &lt;/style>
+                        &lt;/head>
+                        </code>
+                   </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h2>EXTERNAL STYLESHEET</h2>
+                <p>Write your styles in a .css file and pen include pe using a &lt;link&gt; in pe head of you html
+                    document. <b>Recommended</b></p>
+                <div class='code'>
+                   <pre>
+                       <code>
+                       
+                        &lt;link rel="stylesheet" href="style.css"&gt;
+                       </code>
+                   </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh" id="t3">
+            <h1>Properties</h1>
+            <div class="in">
+                <h2>color</h2>
+                <p>pis one is used to change pe color of pe text of any element.</p>
+                <p style="color:teal">color: teal;</p>
+            </div>
+            <div class="in">
+                <h2>background-color</h2>
+                <p>to change pe background-color of elements</p>
+                <p style="background-color: plum;">background-color: plum;</p>
+            </div>
+        </div>
+        <div class="wh" id="t4">
+            <h1>Color System</h1>
+            <p>pere are 140 named color. A typical computer can display ~ 16,000,000 different colors</p>
+            <p>pere are different color systems pat we can use to reference pose colors.</p>
+            <ul>
+                <li>Named Color</li>
+                <ul>
+                    <li>color:blue;</li>
+                </ul>
+                <li>RGB</li>
+                <ul>
+                    <li>Red, Green, Blue channels</li>
+                    <li>Each Channel ranges from 0-255</li>
+                    <ul>
+                        <li style="color: rgb(255,0,0);">rgb(255,0,0)</li>
+                        <li style="color: rgb(0,255,0);">rgb(0,0,0)</li>
+                        <li style="color: rgb(0,0,255);">rgb(0,0,255)</li>
+                    </ul>
+                </ul>
+                <li>HEX</li>
+                <ul>
+                    <li>still Red, Green, Blue channels</li>
+                    <li>Each Channel ranges from 0-255 BUT represented wip hexadecimal</li>
+                    <li>Decimal- 0 1 2 3 4 5 6 7 8 9</li>
+                    <li>Hexadecimal- 0 1 2 3 4 5 6 7 8 9 A B C D E F</li>
+                    <li style="font-size: 25px;">Syntax -#<span style="color:red">ff</span><span
+                            style="color:green">ff</span><span style="color:blue">ff</span></li>
+                    <ul>
+                        <li style="color: #ff0000;">#ff0000</li>
+                        <li style="color: #00ff00;">#00ff00</li>
+                        <li style="color: #0000ff;">#0000ff</li>
+                    </ul>
+                    <li>shortcut- #000000 = #000</li>
+                </ul>
+                <li>HSL</li>
+                <ul>
+                    <li>hsl(270,60%,70%)</li>
+                </ul>
+            </ul>
+        </div>
+        <div class="wh">
+            <h1 id="t5">CSS Text Properties</h1>
+            <ul>
+                <li>text-align: Set pe horizontal alignment of a block element.</li>
+                <li>font-weight: Sets pe weight (or boldness) of pe font. pe weights available depend on pe
+                    font-family you are using.</li>
+                <li>text-decoration: Sets pe appearance of decorative lines on text.</li>
+                <li>line-height: Sets pe height of a line box. It's commonly used to set pe distance between lines of
+                    text.</li>
+                <li>letter-spacing: Sets pe horizontal spacing behavior between text characters.</li>
+            </ul>
+            <div class="in">
+                <h1 style="text-align:center;">text-align:center;</h1>
+            </div>
+            <div class="in">
+                <h1 style="text-align:right;">text-align:right;</h1>
+            </div>
+            <div class="in">
+                <h1 style="text-align:left;">text-align:left;</h1>
+            </div>
+            <div class="in">
+                <h1 style="text-align:justify;">text-align:justify;</h1>
+            </div>
+            <div class="in">
+                <h1 style="font-weight: 400;">font-weight: 400 or normal;</h1>
+                <h1 style="font-weight: 700;">font-weight: 400 or bold;</h1>
+            </div>
+            <div class="in">
+                <h1 style="text-decoration: underline;">text-decoration: underline;</h1>
+                <h1 style="text-decoration: underline dotted;">text-decoration: underline dotted;</h1>
+                <h1 style="text-decoration: underline wavy red;">text-decoration: underline dotted red;</h1>
+                <h1 style="text-decoration: underline overline #ff3028;">text-decoration: underline overline #ff3028;
+                </h1>
+            </div>
+            <div class="in">
+                <p style="line-height:normal;">line-height:normal; <br> Lorem, ipsum dolor. <br> Lorem, ipsum dolor.
+                    <br> Lorem, ipsum dolor.
+                </p>
+            </div>
+            <div class="in">
+                <p style="line-height:32px;">line-height:32px; <br> Lorem, ipsum dolor. <br> Lorem, ipsum dolor. <br>
+                    Lorem, ipsum dolor.</p>
+            </div>
+            <div class="in">
+                <p style="letter-spacing:normal;">letter-spacing:normal;</p>
+                <p style="letter-spacing:10px;">letter-spacing:10px;</p>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h1>Font Size</h1>
+            <div class="part2">
+                <div>
+                    <div>
+                        <p>Relative</p>
+                    </div>
+                    <div>
+                        <p>Absolute</p>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <p>EM</p>
+                    </div>
+                    <div>
+                        <p>PX</p>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <p>REM</p>
+                    </div>
+                    <div>
+                        <p>PT</p>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <p>VH</p>
+                    </div>
+                    <div>
+                        <p>CM</p>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <p>VW</p>
+                    </div>
+                    <div>
+                        <p>IN</p>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <p>%</p>
+                    </div>
+                    <div>
+                        <p>MM</p>
+                    </div>
+                </div>
+                <div>
+                    <p>And More!</p>
+                </div>
+            </div>
+            <h1 style="font-size:80px;">font-size:80px;</h1>
+        </div>
+        <div id="t7" class="wh">
+            <h1>Font Family</h1>
+            <p style="font-family:'Gill Sans Bolted', sans-serif;">Property specifies a priortized list of one or more
+                font family names and generic family names for the selected element.</p>
+            <h2 style="font-family:'Gill Sans Bolted', sans-serif;">font-family:"Gill Sans Bolted", sans-serif;</h2>
+            <p style="font-family:'Gill Sans Bolted', sans-serif;">The Values are separated by commas to indicate that
+                they are alternatives. The browser will select the first font in that list that is installed or that can
+                be downloaded using a @font-face at-rule.</p>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM events</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        .script {
+            display: flex;
+            background-color: #040404;
+            color: #73dfa5;
+            margin: 10px 0;
+            align-items: center;
+        }
+
+        .script div {
+            padding: 0 10px;
+        }
+
+        .first {
+            border-right: 2px solid rgb(16, 90, 6);
+        }
+
+
+        /* color exercise */
+
+        .colorexercise h2 {
+            background-color: azure;
+        }
+
+        .colorexercise {
+            height: 50vh;
+            text-align: center;
+        }
+
+        .colorexercise button {
+            margin: 10px auto;
+        }
+
+
+        /* Colorize */
+
+        .colorize {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+        }
+
+        .colorize button {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px 10px;
+        }
+
+
+        /* bubble */
+
+        .bubble1,
+        .bubble2 {
+            border: 2px solid rgb(195, 224, 25);
+            margin: 10px;
+        }
+
+        #tweets2 li {
+            border: 1px solid white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">DOM Events</a>
+        <a href="#t2" class="link">Inline events</a>
+        <a href="#t3" class="link">Elements property</a>
+        <a href="#t4" class="link">addEventListener</a>
+        <a href="#t5" class="link">Events & 'this' keyword</a>
+        <a href="#t6" class="link">Keyboard events & event objects</a>
+        <a href="#t7" class="link">Form events & PreventDefault</a>
+        <a href="#t8" class="link">input & change events</a>
+        <a href="#t9" class="link">Event bubbling</a>
+        <a href="#t10" class="link">Event delegation</a>
+        <div class="botbut">
+            <a href="../26_score_keeper_codeAlong/index.html">Next Topic &rarr;</a>
+            <a href="../24_dom_intro/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+
+
+    <div id="t1" class="content-box">
+        <h1>DOM Events</h1>
+        <p>Events - Responding to user inputs and actions! <br>like:</p>
+        <ul>
+            <li>clicks</li>
+            <li>drags</li>
+            <li>drops</li>
+            <li>hovers</li>
+            <li>scrolls</li>
+            <li>form
+                <ul>
+                    <li>submission</li>
+                </ul>
+            </li>
+            <li>key presses</li>
+            <li>focus/blur</li>
+            <li>mouse wheel</li>
+            <li>double click</li>
+            <li>copying</li>
+            <li>audio start</li>
+            <li>screen resize</li>
+            <li>printing</li>
+        </ul>
+        <div class="wh">
+            <p>There are 3 ways by which you can respond to user inputs and actions!</p>
+            <div id="t2" class="in">
+                <h2>1- Inline Events</h2>
+                <div class="second">
+                    <button>Click Me!</button>
+                    <button>Click Me Too!</button>
+                </div>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        &lt;button onclick="alert('you clicked me!');"&gt;Click Me!&lt;/button&gt;
+                        &lt;button onclick="alert('you clicked me too!');"&gt;Click Me!&lt;/button&gt;
+                        //this is not an ideal option
+                       </code>
+                   </pre>
+                </div>
+            </div>
+            <div id="t3" class="in">
+                <h2>2- Elements property</h2>
+                <p>We use use function which runs when the event occurs</p>
+                <div class="wh">
+                    <h3>onClick</h3>
+                    <div class="first">
+                        <button>Click Me!</button>
+                    </div>
+                    <div class='code'>
+                        <div class='dotc'></div>
+                        <pre>
+                           <code>
+                           
+                            //inside Javascript file
+                            const btn = document.querySelector('button');
+                            btn.onClick = function(){
+                                alert('you clicked me!');
+                            }
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h3>onmouseenter</h3>
+                    <div class="first">
+                        <div class="div" style="height: 100px; width: 100px; border: 2px solid red;">mouse enter
+                        </div>
+                    </div>
+                    <div class='code'>
+                        <div class='dotc'></div>
+                        <pre>
+                           <code>
+                           
+                            //js file
+                            const div = document.querySelector('.div');
+                            div.onmouseenter = function(){
+                                alert('you entered the mouse.')
+                            }
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+            </div>
+            <div id="t4" class="in">
+                <h2>3- addEventListener (the best way)</h2>
+                <p>Specify the event type and a callback to run.</p>
+                <div class="first">
+                    <button>Click Me!</button>
+                </div>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        const button = document.querySelector('button');
+                        
+                        button.addEventListener('click', () => {
+                            alert("you clicked me!!")
+                        })
+                       </code>
+                   </pre>
+                </div>
+                <div class="script">
+                    <div class="second">
+                        <p class="ls">
+
+                        </p>
+                    </div>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            function twist(){
+                                console.log("Twist!");
+                             }
+                             function shout(){
+                                console.log("Shout!");
+                             }
+                             const btn = document.querySelector('button');
+                             // using onClick
+                             btn.onClick = twist;
+                             btn.onClick = shout;
+                             // twist is overwritten by shout, so using onClick we cannot have two call back function for the same event.
+                             
+                             //But, using addEventListener we can do it.
+                             btn.addEventListener('click',twist);
+                             btn.addEventListener('click',shout); 
+                        </code>
+                    </pre>
+                </div>
+                <p>So, the third argument that we can pass in addEventListener is <b>options</b></p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            btn.addEventListener('click',twist,{once:true});
+                            btn.addEventListener('click',shout);
+                            //So, twist function runs only once and addEventListener is removed from it.
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Background Color Changer Exercise</h2>
+            <div class="colorexercise wh">
+                <h2>Click Me</h2>
+                <button>Change Color</button>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        //JS code
+                        const genRan = () =>{
+                           return Math.floor(Math.random()*255)+1;
+                        }
+                        const h2 = document.querySelector('.colorexercise>h2')
+                        const back = document.querySelector('.colorexercise')
+                        const colorBtn = document.querySelector('.colorexercise>button');
+                        colorBtn.addEventListener('click',()=>{
+                           let randColor = `rgb(${genRan()},${genRan()},${genRan()})`;
+                          back.style.backgroundColor = randColor;
+                          h2.textContent = randColor;
+                        }) 
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Events & The Keyword This</h2>
+            <div class="in">
+                <div class="colorize">
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                    <button>Click Me!</button>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const buttons = document.querySelectorAll('button');
+                            for (let button of buttons){
+                               button.addEventListener('click',colorize);
+                            }
+                            
+                            function colorize(){
+                               this.style.backgroundColor = `rgb(${genRan()},${genRan()},${genRan()})`;
+                            }
+                            // We are using keyword 'this' inside a function which refers
+                            //the button that we are clicking and changing it's background.
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Keyboard Events & Event Objects</h2>
+            <div class="in">
+                <h3>Event Objects</h3>
+                <p>This is automatically passed to callback function in addEventListener. It contains information
+                    about the objects.
+                    <br> We often have to rely on event Object when we are working with keyword events because we
+                    wanna know what key was pressed.
+                </p>
+                <div class="wh">
+                    <button class="evt">Click it.</button>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                        <code>
+
+                            document.querySeletor('button').addEventListener('click',function (evt){
+                                console.log(evt); //See the console.
+                             });                             
+                        </code>
+                    </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    input: <input type="text" class="evtInput">
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                        <code>
+
+                            const evtInput = document.querySelector('.evtInput');
+                            evtInput.addEventListener('keydown',function (evt){
+                               console.log(evt.key,evt.code);
+                            })
+                            
+                        </code>
+                    </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="t7" class="wh">
+            <h2>Form Events & PreventDefault</h2>
+            <p>Usually when we submit the form it take us to another page(link that we pass in action) that's the
+                default behaviour,but we can prevent it</p>
+            <div class="in">
+                <h3>value attibute</h3>
+                <p>On the input object we have an attribute called 'value' which holds the value of that input.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            document.querySelector('input').value = "changing it"; 
+                        </code>
+                    </pre>
+                </div>
+                <p>We can also do this.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                // HTML code
+                                &lt;form id="subForm">
+                                    &lt;input type="text" name="username" placeholder="username">
+                                    &lt;button>Post&lt;/button>
+                                &lt;/form> 
+                            </code>
+                        </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                // inside the elements property of 'form' object which contains
+                                // collections of 'inputs' and properties setuped as the attibute 'name' of input
+                                const subForm=document.querySelector('#subForm');
+                                subForm.addEventListener('submit',function(e){
+                                   console.log(subForm.elements.username.value);
+                                }); 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in">
+                <p>
+                    <b>e.preventDefault() &rarr; does not let the form submit when clicked on submit</b>
+                </p>
+                <div class="first">
+                    <p class="ls">
+                    <form action="/dogs" id="tweetForm">
+                        <input type="text" name="username" placeholder="username">
+                        <input type="text" name="tweet" placeholder="tweet">
+                        <button>Post Tweet</button>
+                    </form>
+                    <h3>Tweets:</h3>
+                    <ul id="tweets">
+                        <li><b>Colt</b>- lololo </li>
+                    </ul>
+                    </p>
+                </div>
+                <div class='code'>
+                    <div class='dotc'></div>
+                    <pre>
+                       <code>
+                       
+                        const tweetForm = document.querySelector('#tweetForm');
+                        const tweetContainer = document.querySelector('#tweets');
+                        tweetForm.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            const usernameInput = tweetForm.elements.username;
+                            const tweetInput = tweetForm.elements.tweet;
+                            addTweet(usernameInput.value, tweetInput.value);
+                            usernameInput.value = '';
+                            tweetInput.value = '';
+                        })
+                        
+                        const addTweet = (username, tweet) => {
+                            const newTweet = document.createElement('li');
+                            const bTag = document.createElement('b');
+                            bTag.append(username);
+                            newTweet.append(bTag);
+                            newTweet.append(`- ${tweet}`);
+                            tweetContainer.append(newTweet);
+                        } 
+                       </code>
+                   </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="t8" class="wh">
+        <h2>input & change Events</h2>
+        <div class="in">
+            <h3>change event</h3>
+            <p>When there is change in that input and then we blur out(or press enter), that triggers the event.
+            </p>
+            <div class="first">
+                <h4 class="changeH4">Type below:</h4>
+                <input type="text" class="changeEvent" placeholder="change">
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                                <code>
+
+                                    const input = document.querySelector('input');
+                                    const h4=document.querySelector('h4');
+                                    input.addEventListener('change',()=>{
+                                       h4.textContent=input.value;
+                                    })
+                                    
+                                </code>
+                            </pre>
+            </div>
+        </div>
+        <p>Now if we want that happen eveytime there is change we use 'input' event</p>
+        <div class="in">
+            <h3>input event</h3>
+            <p>As soon as something changes inside the input the event fires.</p>
+                <div class="first">
+                    <h4 class="inputH4">Type below:</h4>
+                    <input type="text" class="inputEvent" placeholder="input">
+                </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                                <code>
+
+                                    const input = document.querySelector('input');
+                                    const h4=document.querySelector('h4');
+                                    input.addEventListener('input',()=>{
+                                       h4.textContent=input.value;
+                                    }) 
+                                </code>
+                            </pre>
+                    </div>
+        </div>
+    </div>
+    <div id="t9" class="wh">
+        <h2>Event Bubbling</h2>
+            <div class="in">
+                <div class="bubble1" onclick="alert('div clicked')">
+                    div
+                    <p class="bubble2" onclick="alert('paragraph clicked')">
+                        paragraph
+                        <button class="bubble3" onclick="alert('button clicked')">Click me</button>
+                    </p>
+                </div>
+            </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                &lt;div class="bubble1" onclick="alert('div clicked')">
+                                    div
+                                    &lt;p class="bubble2" onclick="alert('paragraph clicked')">
+                                     paragraph
+                                     &lt;button class="bubble3" onclick="alert('button clicked')">Click me&lt;/button>
+                                    &lt;/p>
+                                &lt;/div> 
+                            </code>
+                        </pre>
+                </div>
+        <p>
+            Above when we click on button, the paragraph & div alerts are also showing this is what we called
+            event bubbling. <br> And we can stop this using stopPropagation() method and this prevent the event
+            from bubbling up.
+        </p>
+            <div class="in">
+                <h3 class="stopPropH3 bubble1">Click to Hide <button class="stopPropBtn">Click me</button></h3>
+                <button class="bringBack">Bring it Back!</button>
+            </div>
+            <div class="second">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const stopPropH3=document.querySelector('.stopPropH3');
+                                const stopPropBtn=document.querySelector('.stopPropBtn');
+                                
+                                stopPropBtn.addEventListener('click',function (e){
+                                   stopPropH3.style.backgroundColor=`rgb(${genRan()},${genRan()},${genRan()})`;
+                                   e.stopPropagation();
+                                })
+                                stopPropH3.addEventListener('click',function(){
+                                  stopPropH3.classList.toggle('hide');
+                                }) 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+    </div>
+    <div id="t10" class="wh">
+        <h2>Event Delegation</h2>
+        <div class="in">
+            <p>Click on list items</p>
+            <form action="/dogs" id="tweetForm2">
+                <input type="text" name="username" placeholder="username">
+                <input type="text" name="tweet" placeholder="tweet">
+                <button>Post Tweet</button>
+            </form>
+            <h3>Tweets:</h3>
+            <ul id="tweets2">
+                <li><b>Colt</b>- lololo </li>
+            </ul>
+        </div>
+        <div class="code">
+            <div class="dotc"></div>
+            <pre>
+                    <code>
+
+                        // event delegation
+                        const tweetForm2 = document.querySelector('#tweetForm2');
+                        const tweetContainer2 = document.querySelector('#tweets2');
+                        tweetForm2.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            const usernameInput = tweetForm2.elements.username;
+                            const tweetInput = tweetForm2.elements.tweet;
+                            addTweet2(usernameInput.value, tweetInput.value);
+                            usernameInput.value = '';
+                            tweetInput.value = '';
+                        
+                        })
+
+                        tweetContainer2.addEventListener('click', function (e) {
+                            e.target.nodeName === 'LI' && e.target.remove();
+                            // Every element contains a property called 'nodeName' 
+                            // which conatins name of the element but in all caps
+
+                            // This is checking for clicks on ul
+                            // and to delete the one we click
+                            // it is using e.target so that the one we clicked gets removed
+                            // the second condition is actually a statement which gets executed
+                            // as the first one becomes true
+                        })
+
+                        const addTweet2 = (username, tweet) => {
+                            const newTweet = document.createElement('li');
+                            const bTag = document.createElement('b');
+                            bTag.append(username);
+                            newTweet.append(bTag);
+                            newTweet.append(`- ${tweet}`);
+                            tweetContainer2.append(newTweet);    
+                        }
+                        
+                    </code>
+                </pre>
+        </div>
+    </div>
+    </div>
+    <script src="./script.js"></script>
+    <script src="../main.js"></script>
+</body>
+
+</html>

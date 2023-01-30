@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YelpCamp: Deploying</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">mongo atlas</a>
+        <a href="#t2" class="link">mongo for session store</a>
+        <a href="#t3" class="link">changes to do</a>
+        <a href="#t4" class="link">using render </a>
+        <div class="botbut">
+            <a href="../yelpcamp_final/" target="_blank">Next Topic &rarr;</a>
+            <a href="../58_yelpcamp_common_security_issues/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>YelpCamp: Deploying</h1>
+        <ul>
+            <li>This section is all about deploying our application.</li>
+            <li>There are some changes that are needed to made to deploy outside our local machine.</li>
+            <li>And we are going to start with out mongo database.</li>
+            <li>So we are going to setup a production database and for that we are going to use Atlas.</li>
+        </ul>
+        <div id="t1" class="wh">
+            <h2>Setting up mongo atlas</h2>
+            <ul>
+                <li><a href="https://www.mongodb.com/atlas" target="_blank"> Atlas</a> is cloud database services.</li>
+                <li>We are going to create a new mongo database that we don't store on our machine at all, it is stored
+                    in the cloud and then we can connect to it very easily.</li>
+                <li>We are using atlas because it makes very easy to manage permissons, privacy and security, we can
+                    setup user and a password very easily.</li>
+                <li>We can see fancy visualization of what is happening with our database.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // app.js 
+
+                        // now we can connect to online data server
+
+                        const dbUrl = process.env.DB_URL
+
+                        mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+                        db = mongoose.connection
+                        db.on("error", console.error.bind(console, "connection error:"))
+                        db.once("open", () => {
+                            console.log("Database connected");
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Using Mongo for our session store</h2>
+            <ul>
+                <li>Now we are going to configure our application to the session information using mongo.</li>
+                <li>Sessions are easy to configure, there is a tool to help us called <a
+                        href="https://www.npmjs.com/package/connect-mongo" target="_blank"> connect mongo</a>. Install
+                    it.</li>
+                <li>We require and execute it and we pass in session.</li>
+                <li>The default store is the memory store instead if we want our session information to be stored in
+                    mongo we need to now use that mongo store that we just required.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // app.js 
+
+                        const MongoDBStore = require('connect-mongo')(session)
+
+                        const store = new MongoDBStore({
+                            url: dbUrl,
+                            secret: 'thisshouldbeabettersecret',
+                            touchAfter: 24 * 60 * 60 // time period in sec
+                            // if we are using newer version of express session, we don't want to 
+                            // resave all the session on data base every single time when the user refreshes the page 
+                            // we can lazy update the session by limiting period of time
+                            // so this is basically refering to unecessary resave where the save in sessions have not changed
+                            // if the data does not changes it won't be updated.
+                        })
+                        store.on('error', function (e) {
+                            console.log('session store error');
+                        })
+                        const sessionConfig = {
+                            store,
+                            name: 'session',
+                            secret: 'thisshouldbeabettersecret',
+                            resave: false,
+                            saveUninitialized: true,
+                            cookie: {
+                                httpOnly: true,
+                                //secure: true,
+                                expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                                maxAge: 1000 * 60 * 60 * 24 * 7
+                            }
+                        }
+                        app.use(session(sessionConfig))
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Changes to make before publishing</h2>
+            <ul>
+                <li>Before deployement we have to change the local database to atlas and create SECRET environment
+                    variable.</li>
+                <li>As we don't want to upload our .env file and node_module folder so we mention them in .gitignore
+                    file. <a
+                        href="https://stackoverflow.com/questions/30696930/how-to-hide-env-file-from-github/30697067#30697067">about
+                        gitignore</a></li>
+                <li>Our server don't know which file to run, so for that we have to specify it.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+    
+                            // package.json 
+    
+                            "scripts": {
+                                "test": "echo \"Error: no test specified\" && exit 1",
+                                "start": "node app.js"
+                            },
+                        </code>
+                    </pre>
+            </div>
+            <ul>
+                <li>And also we want to change the port we are serving one '3000' </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+    
+                            const port = process.env.PORT || 3000 // PORT will be setuped automatically
+                            app.listen(port, () => {
+                                console.log(`Serving on port ${port}!`);
+                            })
+                        </code>
+                    </pre>
+            </div>
+            <ul>
+                <li>
+                    <a
+                        href="https://cloud.mongodb.com/v2/63b061a7198ef05c11947fed#/security/network/accessList/addToAccessList">IP
+                        address access</a>
+                </li>
+                <li><a
+                        href="https://www.udemy.com/course/the-web-developer-bootcamp/learn/lecture/22346220#questions/2758358">Yelpcamp
+                        break down concern.</a></li>
+                <li><a
+                        href="https://stackoverflow.com/questions/66654037/mongo-connect-error-with-mongo-connectsession">mongo-connect
+                        error fix</a></li>
+            </ul>
+        </div>
+        <div id="t4" class="wh">
+            <h2>I am using <a href="">Render</a> to host YelpCamp applications</h2>
+            <ul>
+                <li>
+                    <a
+                        href="https://www.udemy.com/course/the-web-developer-bootcamp/learn/lecture/22643951#questions/18721156" target="_blank">Refer
+                        to this.</a>
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Comments</title>
+</head>
+<body>
+    <h1><%=c.username%></h1>
+    <ul>
+        <li><%=c.comment%></li>
+    </ul>
+    <div>
+        <a href="/comments/<%=c.id%>/edit">Edit</a>
+        <br><br>
+        <form action="/comments/<%=c.id%>?_method=DELETE" method="post">
+            <button>DELETE</button>
+        </form>
+    </div>
+</body>
+</html>

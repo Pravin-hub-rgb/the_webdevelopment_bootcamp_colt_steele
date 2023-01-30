@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express Router and Cookies</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">express router intro</a>
+        <a href="#t2" class="link">express router and middleware</a>
+        <a href="#t3" class="link">cookies</a>
+        <a href="#t4" class="link">sending cookies</a>
+        <a href="#t5" class="link">cookie parser middleware</a>
+        <a href="#t6" class="link">signing cookies</a>
+        <div class="botbut">
+            <a href="../48_express_session_and_flash/index.html">Next Topic &rarr;</a>
+            <a href="../46_yelpcamp_adding_the_review_model/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Express Router and Cookies</h1>
+        <div id="t1" class="wh">
+            <h2>Express Router Intro</h2>
+            <ul>
+                <li>Express comes with different way of writing our routes, slightly different structure then what we
+                    have been using.</li>
+                <li>We can write all of our route in a single file directly on app.js, it works but in large app with
+                    lots of routes that can be a very very long file difficult to organize, just not how we want to
+                    create a real application.</li>
+                <li>So express comes with a function called Router
+                    <ul>
+                        <li><a href="https://expressjs.com/en/4x/api.html#router">Docs &LongLeftArrow;</a></li>
+                    </ul>
+                </li>
+                <li>It creates a new Router object for us.</li>
+                <li>Using Router we can group similar routes and put them in separate file and it reduces repitition of
+                    common part of route
+                    <ul>
+                        <li>/dogs
+                            <br>POST /dogs
+                            <br>/dogs/:id
+                            <br>/dogs/:id/breed
+                        </li>
+                    </ul>
+                </li>
+                <li>We are going to make a directory called router and for each similar types of route we are going to
+                    make a js file.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // route/shelter.js
+
+                        const express = require('express')
+                        const router = express.Router() // making an empty router
+                        
+                        router.get('/shelters', (req, res) => { // here we are adding four different routes
+                            res.send("All Shelters")
+                        })
+                        router.post('/shelters', (req, res) => {
+                            res.send("Creating Shelter")
+                        })
+                        router.get('/shelters/:id', (req, res) => {
+                            res.send("One Shelter")
+                        })
+                        router.get('/shelters/:id/edit', (req, res) => {
+                            res.send("Editig a Shelters")
+                        })
+                        
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Now in out index.js file we can require that</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // index.js 
+
+                        const express = require('express')
+                        const app = express()
+                        const shelterRoutes = require('./route/shelter')
+                        
+                        // now using the required routes
+                        app.use('/',shelterRoutes) // take all routes from router and apply to our app and here prefix them with nothing.  
+                        // now all the route works
+                        
+                        app.listen(3000,(req,res)=>{
+                            console.log("Listening on port 3000");
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>adding prefix /shelters to all routes</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // index.js 
+
+                        app.use('/shelters',shelterRoutes)
+                        // now we have to edit the shelter.js file
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // shelter.js 
+
+                        const express = require('express')
+                        const router = express.Router() // making an empty router
+                        
+                        router.get('/', (req, res) => { // here we are adding four different routes
+                            res.send("All Shelters")
+                        })
+                        router.post('/', (req, res) => {
+                            res.send("Creating Shelter")
+                        })
+                        router.get('/:id', (req, res) => {
+                            res.send("One Shelter")
+                        })
+                        router.get('/:id/edit', (req, res) => {
+                            res.send("Editig a Shelters")
+                        })
+                        
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Express Router and Middleware</h2>
+            <ul>
+                <li>We can also add middleware to all the routes in a particular router.</li>
+                <li>If we will define our middleware in index.js it will be applied to all routes rather than a
+                    particular group of routes.</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // admin.js 
+
+                        const express = require('express')
+                        const router = express.Router()
+                        
+                        router.use((req, res, next) => { // this middleware will work on every single 
+                            if (req.query.isAdmin) { // checking for isAdmin query
+                                next()
+                            }
+                            res.send("Sorry not an Admin!!")
+                        })
+                        
+                        router.get('/topsecret', (req, res) => {
+                            res.send('this is top secret.')
+                        })
+                        
+                        router.get('/deleteeverything', (req, res) => {
+                            res.send('Ok deleted it all!')
+                        })
+                        // let say we want to protect these two routes with some middleware
+                        // every route in here is going to use above middleware
+                        module.exports = router
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // index.js
+
+                        const express = require('express')
+                        const app = express()
+                        const shelterRoutes = require('./route/shelter')
+                        const adminRoutes = require('./route/admin')
+                        
+                        app.use('/shelters', shelterRoutes)
+                        app.use('/admin', adminRoutes)
+                        
+                        app.listen(3000, (req, res) => {
+                            console.log("Listening on port 3000");
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Cookies</h2>
+            <ul>
+                <li>Cookies are little bits of information that are stored in a user's browser when browsing a
+                    particular website.</li>
+                <li>Once a cookie is set, a user's browser will send the cookie on every subsequent request to the site.
+                </li>
+                <li><b>Cookies</b> allow use to make HTTP stateful</li>
+                <li>Example :
+                    <ul>
+                        <li>Storing information about users preference of dark mode.
+                            <ul>
+                                <li>It is helpful because user does not have to change that every single time.</li>
+                            </ul>
+                        </li>
+                        <li>Storing information about users shopping cart, how much item and which items are stored in
+                            there.</li>
+                        <li>Remember information about users and to show relevant content to a user overtime.</li>
+                    </ul>
+                </li>
+                <li>Traking :
+                    <ul>
+                        <li>Controversial thing</li>
+                        <li>Some websites track their users information and sell them.</li>
+                    </ul>
+                </li>
+                <li><a href="https://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">wikipedia referece &neArr;</a>
+                </li>
+            </ul>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Sending Cookies</h2>
+            <ul>
+                <li>Now we are going to see how we can use express to set a cookie and also how parse a cookie on coming
+                    request.</li>
+                <li><a href="http://expressjs.com/en/4x/api.html#res.cookie" target="_blank">express cookie docs
+                        &neArr;</a></li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // sending a cookie 
+
+                        const express = require('express')
+                        const app = express()
+                        
+                        app.get('/greet', (req, res) => {
+                            res.send('Hey there')
+                        })
+                        
+                        app.get('/setname', (req, res) => {
+                            // we are not going to ask a user for a name 
+                            // instead we are give a static name and add it to the cookie using res.cookie()
+                            res.cookie('name', 'stevie chicks') // this is a part of a response 
+                            // res.cookie('animal','harley shrimp') // sending two cookie
+                            res.send('Okay set you a cookie')
+                        })
+                        
+                        app.listen(3000, () => {
+                            console.log('Listening on port 3000!');
+                        })
+                    </code>
+                </pre>
+            </div>
+            <img src="../images/cookie.png" alt="">
+            <ul>
+                <li>Now we are going to see how we can understand those cookies and parse them so that we can use them.
+                </li>
+            </ul>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Cookie Parser Middleware</h2>
+            <ul>
+                <li>we find the send cookies in 'req.cookies' on the incoming request.
+                    <ul>
+                        <li>Express parses it and turns it into an object.</li>
+                    </ul>
+                </li>
+                <li>Unfortunately express doesnot have this functionality in built. So we need to install a package
+                    called cookie parser.</li>
+                <li><a href="https://www.npmjs.com/package/cookie-parser" target="_blank">NPM cookie-parser &neArr;</a>
+                </li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const express = require('express')
+                        const app = express()
+                        
+                        const cookieParser = require('cookie-parser')
+                        app.use(cookieParser()) // now in every incoming request we have property called 'req.cookies'
+                        
+                        app.get('/greet', (req, res) => {
+                            const { name = 'anonymous' } = req.cookies
+                            res.send('Hey there ' + name)
+                        })
+                        
+                        app.get('/setname', (req, res) => {
+                            res.cookie('name', 'stevie chicks')
+                            res.send('Okay set you a cookie')
+                        })
+                        
+                        app.listen(3000, () => {
+                            console.log('Listening on port 3000!');
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li>Next we are going to talk about signing cookies</li>
+            </ul>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Signing Cookies</h2>
+            <ul>
+                <li>Now we are going to drift the world of cryptography to talk about signed cookies</li>
+                <li>Optionally you may enable signed cookie support by passing a secret string, which assigns req.secret
+                    so it may be used by other middleware. -- from npm cookie-parser page
+                    <ul>
+                        <li>In digital world signing something means a digital signature or cryptographic signature</li>
+                        <li>Signed cookie means we are going to take a cookie which is being send to a user but instead
+                            of sending directly as {name: 'stevie chicks'} we are going to send it as a signed cookie.
+                        </li>
+                        <li>What that will do is have cookie-parser sign it using a secret code that we are going to
+                            specify.</li>
+                        <li>Sign it then send it to the client and the the signed cookie on the client side will be sent
+                            back as any other cookie.</li>
+                        <li>But on the server side when we are looking at the cookies, cookie-parser will verify and
+                            tell us that any of that signed cookies have been tempered with. If somebody screwed them we
+                            will be able to tell it because they won't match.</li>
+                        <li>So signing is not about hiding the information, its not about encrypting it but it is about
+                            making sure that the original data that we sent to the browser is still the data being sent
+                            back to us so it is like temper prove seal.</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="in">
+                <ul>
+                    <li>for using the signed cookies and have cookie-parser support that</li>
+                    <li>we need to pass in a secret like this &darr;</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.use(cookieParser('thisismysecret'))
+                        </code>
+                    </pre>
+                </div>
+                <ul>
+                    <li>In production this string should be an actual secret</li>
+                    <li>We don't even write this in a file instead we put this in an environment variable.</li>
+                    <li>That above string is going to be used by cookie-parser to sign cookies and to verify that the
+                        things still have not been changed or tempered with once we get those signed cookies back.</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.get('/getsignedcookie', (req, res) => {
+                                res.cookie('fruit', 'grape', { signed: true })
+                                // third variable is used for signing
+                                res.send('Okay signed your fruit cookie')
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <img src="../images/cookie2.png" alt="">
+                <ul>
+                    <li>We can still see the value so it is not hidden</li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="in">
+                <ul>
+                    <li>But when we are trying to log res.cookies we cannot see the signed cookies</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.get('/verifyfruit', (req, res) => {
+                                res.send(req.cookies)
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <img src="../images/cookie3.png" alt="">
+                <ul>
+                    <li>So see or access signed cookies we use <a
+                            href="http://expressjs.com/en/4x/api.html#req.signedCookies">req.signedCookies &neArr;</a>
+                        <ul>
+                            <li>Using it they will be unsigned and ready to use.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.get('/verifyfruit', (req, res) => {
+                                res.send(req.signedCookies)
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <ul>
+                    <li>If somebody will try to change the cookie value it will either not show it or set it to false.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>HMAC: Signing</h2>
+            <ul>
+                <li><a href="https://en.wikipedia.org/wiki/HMAC" target="_blank">HMAC wikipedia reference &neArr;</a></li>
+            </ul>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

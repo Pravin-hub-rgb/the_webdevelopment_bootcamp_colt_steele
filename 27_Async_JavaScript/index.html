@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Javascript</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Async Javascript</a>
+        <a href="#t2" class="link">The call stack</a>
+        <a href="#t3" class="link">Single threaded</a>
+        <a href="#t4" class="link">Callback hell</a>
+        <a href="#t5" class="link">Promises</a>
+        <a href="#t6" class="link">Async Funtions</a>
+        <div class="botbut">
+            <a href="../28_Ajax/index.html">Next Topic &rarr;</a>
+            <a href="../29_Prototypes_Classes_OOP/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div id="t1" class="content-box">
+        <h1>Async JavaScript</h1>
+        <div id="t2" class="wh">
+            <h2>The Call Stack</h2>
+            <p>
+                The mechanism the Javascript interpreter uses to keep track of its place in a script that calls multiple
+                functions.
+                <br>How JS "knows" what function is currently being run and what functions are called from within that
+                function, etc.
+                <br>(It is a mechanism that Javascript uses behind the scene and how Javascript manages function call.)
+            </p>
+            <p>Stack&rarr;a stack is basic data structure in computer science, it is known as LIFO(Last In First Out)
+                <br>e.g. - stack of book.
+            </p>
+            <div class="in">
+                <h3>How it works</h3>
+                <p>
+                    &zigrarr;When a script calls a function, the interpreter adds it to the call stack and then starts
+                    carrying out the function.
+                    <br>&zigrarr;Any functions that are called by that function are added to the call stack further up,
+                    and run where their calls are reached.
+                    <br>&zigrarr;When the current function is finished, the interpreter takes it off the stack and
+                    resumes execution where it left off in the last code listing.
+                    <br>&zigrarr;Website to visit &rarr; <a
+                        href="http://latentflip.com/loupe/?code=ZnVuY3Rpb24gbXVsdGlwbHkoeCx5KSB7CiAgICByZXR1cm4geCAqIHk7Cn0KCmZ1bmN0aW9uIHNxdWFyZSh4KSB7CiAgICByZXR1cm4gbXVsdGlwbHkoeCx4KTsKfQoKZnVuY3Rpb24gaXNSaWdodFRyaWFuZ2xlKGEsYixjKXsKICAgIHJldHVybiBzcXVhcmUoYSkgKyBzcXVhcmUoYikgPT09IHNxdWFyZShjKTsKfQoKaXNSaWdodFRyaWFuZ2xlKDMsNCw1KQ%3D%3D!!!">Loupe</a>
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const multiply = (x, y) => x * y;
+
+                            const square = (x) => mutliply(x, x);
+                            
+                            const isRightTriangle = (a, b, c) => {
+                              square(a) + square(b) === square(c);
+                            };
+                            
+                            isRightTriangle(3, 4, 5);
+                            //true
+                            
+                            // Multiple function are called so they will be added and removed from the call stack as return any value.
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>JS is single threaded</h2>
+            <div class="in">
+                <h3>What does that mean?</h3>
+                <p>
+                    At any given point in time, that single JS thread is running at most one line of JS code.
+                </p>
+            </div>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            console.log('1 I print first!');
+                            setTimeout(()=>{
+                               console.log('3 I print after 3 seconds'"This runs last")
+                            }, 3000);
+                            console.log('2 I print second');
+                            //If JS runs one line of code then JS should wait for 3 sec and then it should run the last code but this doesn't happen
+                        </code>
+                    </pre>
+                </div>
+                <h3>The browser does the work!</h3>
+                <p>
+                    As most of the browsers are written on C++ and it can do work that JS can't do. So, what really
+                    happen is JS hands out certain tasks to the browser to take care of.
+                </p>
+                <h3>Ok but how?</h3>
+                <p>
+                    &rarr; Browsers come with Web APIs that are able to handle certain tasks in the background (like
+                    making requests or setTimeout)
+                    <br>&rarr; The JS call stack recognises these Web API functions and passes them off to the
+                    browser to take care of
+                    <br>&rarr; Once the browser finishes those tasks, they return and are pushed onto the stack as a
+                    callback.
+                </p>
+                <p>
+                    that's why we use callbacks
+                    <br> in setTimeout function we have callback as a arguments which is taken by web APIs which put
+                    that function to callback queues (after the interval)
+                    <br> and then JS take it from there
+                </p>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Callback Hell</h2>
+            <div class="in">
+                <h3>Trying to change background after every one sec</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //level-1
+                            setTimeout(() => {
+                                document.body.style.backgroundColor = 'red';
+                              }, 1000)
+                              
+                              setTimeout(() => {
+                                document.body.style.backgroundColor = 'green';
+                              }, 2000)
+                              
+                              setTimeout(() => {
+                                document.body.style.backgroundColor = 'yellow';
+                              }, 3000) 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //level-2 nesting
+                            setTimeout(()=> {
+                              document.body.style.backgroundColor='red';
+                              setTimeout(()=> {
+                                 document.body.style.backgroundColor='red';
+                                 setTimeout(()=> {
+                                    document.body.style.backgroundColor='yellow';
+                                  },1000)
+                               },1000)
+                            },1000) 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //level-3 function
+                            const delayedColorChange = (newColor, delay) => {
+                              setTimeout(() => {
+                                document.body.style.backgroundColor = newColor;
+                              }, delay)
+                            }
+                            
+                            
+                            delayedColorChange('olive', 3000);
+                            delayedColorChange('teal', 6000); 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //level-4 function with callbacks
+                            const delayedColorChange = (newColor, delay, doNext) => {
+                              setTimeout(() => {
+                                document.body.style.backgroundColor = newColor;
+                                doNext && doNext();
+                              }, delay)
+                            }                            
+                            
+                            delayedColorChange('red', 1000, () => {
+                              delayedColorChange('orange', 1000, () => {
+                                delayedColorChange('yellow', 1000, () => {
+                                  delayedColorChange('green', 1000, () => {
+                                    delayedColorChange('blue', 1000, () => {
+                            
+                                    })
+                                  })
+                                })
+                              })
+                            }); 
+                        </code>
+                    </pre>
+                </div>
+                <p>Passing only one callback is bad so we should pass two callbacks, if one does not work then other
+                    should and this will result in callback hell
+                    <br>So, using callbacks gets very messy, fortunately there are newer addition to JS that makes
+                    little bit easier namely 'promises and async functions'
+                </p>
+            </div>
+
+        </div>
+        <div id="t5" class="wh">
+            <h2>Promises</h2>
+            <p>
+                A promise is an object representing the eventual completion or failure of an asynchronous(occurring at
+                the same time) operation.
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const fakeRequestCallback = (url, success, failure) => {
+                            const delay = Math.floor(Math.random() * 4500) + 500;
+                            setTimeout(() => {
+                              if (delay > 4000) {
+                                failure('Connection Timeout :')
+                              } else {
+                                success('Here is your fake data from ${url}')
+                              }
+                            }, delay)
+                          }
+                          
+                          fakeRequestCallback('book.com', function (response) {
+                            console.log('It worked!!!');
+                            console.log(response);
+                            fakeRequestCallback('book.com/page2', function (response) {
+                              console.log('It worked again!!!');
+                              console.log('response');
+                              fakeRequestCallback('book.com/page3', function (response) {
+                                console.log('It worked again (3rd req)!!!');
+                                console.log(response);
+                              }, function (err) {
+                                console.log('Error (3rd req)!!', err)
+                              })
+                            }, function (err) {
+                              console.log('Error (2nd req)!!!', err);
+                            })
+                          }, function (err) {
+                            console.log('Error!!', err)
+                          })
+                          // So, this is very frustrating, then promise came to rescue.
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <h3>Magic of Promises</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            // Still there is a lot of nesting, let's see again
+
+                            const fakeRequestPromise = (url) => {
+                                return new Promise((resolve, reject) => {
+                                    const rand = Math.random();
+                                    setTimeout(() => {
+                                        if(rand < 0.7){
+                                            resolve('Your Fake Data here');
+                                        }
+                                        reject('Request Error!')
+                                    }, 1000)
+                                })
+                            }
+
+                            fakeRequestPromise('yelp.com/api/coffee/page1')
+                                .then(() => {
+                                    console.log("It workded !!!!! (page 1")
+                                    fakeRequestPromise('yelp.com/api/coffee/page2')
+                                        .then(() => {
+                                            console.log("It worked !!!! (page 2")
+                                            fakeRequestPromise('yelp.com/api/coffee/page3')
+                                                .then(() => {
+                                                    console.log("It worked !!!! (page 3")
+                                                })
+                                                .catch(() => {
+                                                    console.log(Oh no, Error !!!1 (page 3))
+                                                })
+                                        })
+                                        .catch(() => {
+                                            console.log(Oh no, Error !!!1 (page 2))
+                                        })
+                                        
+                                })
+                                .catch(() => {
+                                    console.log(Oh no, Error !!!1 (page 1))
+                                })
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    So this is still messy
+                    <br> So what we do is instead of nesting inside, we can chain them
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const fakeRequestPromise = (url) => {
+                                return new Promise((resolve, reject) => {
+                                    const rand = Math.random();
+                                    setTimeout(() => {
+                                        if(rand < 0.7){
+                                            resolve(`Your Fake Data here from ${url}`);
+                                        }
+                                        reject('Request Error!')
+                                    }, 1000)
+                                })
+                            }
+
+                            // Still there is a lot of nesting, let's see again
+                            fakeRequestPromise('yelp.com/api/coffee/page1')
+                                .then((data) => {
+                                    console.log("It workded !!!!! (page 1")
+                                    console.log(data)
+                                    return fakeRequestPromise('yelp.com/api/coffee/page2')
+                                })
+                                .then((data) => {
+                                    console.log("It worked !!!! (page 2")
+                                    console.log(data)
+                                    return fakeRequestPromise('yelp.com/api/coffee/page3')
+                                })        
+                                .then((data) => {
+                                    console.log("It worked !!!! (page 3")
+                                    console.log(data)
+                                })                
+                                .catch(() => {
+                                    console.log("Oh no a request failed !")
+                                })
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Creating Promises</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            new Promise((resolve, reject)=>{ //resolve and reject are function
+                                // if resolve is called means the promise called will have status of resolved 
+                                // if called reject(); or whatever is name of second parameter, we get a rejected promise.
+                                // if not passed and called anything the promise will be pending.
+
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const fakeRequest = (url) => {
+                                    return new Promise((resolve, reject) => {
+                                        const rand = Math.random();
+                                        setTimeout(() => {
+                                            if(rand &lt; 0.7){
+                                                resolve('Your Fake Data here');
+                                            }
+                                            reject('Request Error!')
+                                        }, 1000)
+                                    })
+                                }
+
+                                fakeRequest('/dogs/1')
+                                .then(()=>{
+                                    console.log("Done with request")
+                                })
+                                .catch((err)=>{
+                                    console.log("Oh No!", err);
+                                })
+                            </code>
+                        </pre>
+
+                </div>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Async Functions</h2>
+            <p>
+                A newer and cleaner syntax for working with async code! <br> Syntax "makeup" for promises
+                <br>Two Pieces
+                <br>&rarr; ASYNC
+                <br>&rarr; AWAIT
+            </p>
+            <div class="in">
+                <h3>The Async Keyword</h3>
+                <p>&zigrarr; Functions declared as async always return a promise.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            async function hello() {}
+                            const sing = async () => {} 
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    &zigrarr; If the function returns a value, the promise will be resolved with that value
+                    <br>&zigrarr; If the function throws an exception, the promise will be rejected
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        async function hello() {
+                            return 'Hey guy!';
+                         }
+                         hello();
+                         // Promise {&lt;resolved>: "Hey guy!"}
+
+                         async function uhOh() {
+                            throw new Error('oh no!'); 
+                            //Promise is rejected and when we return a value promise is resolved
+                         }
+                         uhOh();
+                         //Promise {&lt;rejected>: Error: oh no!}
+                    </code>
+                </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const login = async (username, password) => {
+                                if(!username || !password) throw 'Missing Credentials'
+                                if(password === 'corgifeetarecute') return 'Welcome!'
+                                throw 'Invalid Password'
+                             }
+                             
+                             
+                             login ('Jack', 'corgifeetarecute')
+                               .then(msg => {
+                                  console.log('Logged In!');
+                                 console.log(msg);
+                             })
+                               .catch(err => {
+                                  console.log('Error!')
+                                  console.log(err)
+                             })
+                             // Logged In!
+                             // Welcome!
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>The Await keyword</h3>
+                <p>
+                    &zigrarr;We can only use the await keyword inside of function delcared with async.
+                    <br>&zigrarr;await will pause the execution of the function, <b>waiting for a promise to be
+                        resolved</b>
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                    <code>
+
+                        async function rainbow() {
+                            await delayedColorChange('red',1000)
+                            await delayedColorChange('orange',1000)
+                            await delayedColorChange('yellow',1000)
+                            await delayedColorChange('green',1000)
+                            await delayedColorChange('blue',1000)
+                            await delayedColorChange('indigo',1000)
+                            await delayedColorChange('violet',1000)
+                            return "All Done!"
+                         }
+                         
+                         rainbow().then(() => console.log('End of Rainbow!');) 
+                    </code>
+                </pre>
+                </div>
+                <h3>Handling Errors In Async Functions</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            async function makeTwoRequests() {
+                                try{
+                                  let data1= await fakeRequest('/page1');
+                                  console.log(data1);
+                                  let data2= await fakeRequest('/page2');
+                                  console.log(data2);
+                                } catch (e) {
+                                  console.log('Caught An Error')
+                                }
+                             } 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

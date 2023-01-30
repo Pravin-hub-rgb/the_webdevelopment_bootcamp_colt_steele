@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Decision Making</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        /* Logical */
+        .logical {
+            display: flex;
+            width: 20%;
+            border: 1px solid black;
+        }
+
+        .logical div {
+            border: 1px solid black;
+            width: 31%;
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 3px;
+        }
+        @media only screen and (max-width: 800px) {
+            .logical{
+                width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a class="link" href="#boolean">Boolean Logic</a>
+        <a class="link" href="#comparison">Comparison Operators</a>
+        <a class="link" href="#conditionals">Conditionals &darr;</a>
+        <a class="link sm" href="#if">If</a>
+        <a class="link sm" href="#elseif">Else if</a>
+        <a class="link sm" href="#else">Else</a>
+        <a class="link" href="#nesting">Nesting</a>
+        <a class="link" href="#tfvalues">Truthy & Falsy values</a>
+        <a class="link" href="#logicalop">Logical Operators &darr;</a>
+        <a class="link sm" href="#logicaland">AND</a>
+        <a class="link sm" href="#logicalor">OR</a>
+        <a class="link sm" href="#logicalnot">NOT</a>
+        <div class="botbut">
+            <a href="../16.2_console_alert_and_prompt/index.html">Next Topic &rarr;</a>
+            <a href="../14_javascript_basics/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box" id="boolean">
+        <h1>Boolean Logic</h1>
+        <h3>MAKING DECISIONS WITH JAVASCRIPT</h3>
+        <div id="comparison" class="wh">
+            <h1>Comparison Operators</h1>
+                <ul>
+                    <li>&gt; <span>greater than</span></li>
+                    <li>&lt; <span>less than</span></li>
+                    <li>&gt;= <span>greater than or equal to</span></li>
+                    <li>&lt;= <span>less than or equal to</span></li>
+                    <li>== <span>equality</span></li>
+                    <li>!= <span>not equal</span></li>
+                    <li>=== <span>strict equality</span></li>
+                    <li>!== <span>strict not-equality</span></li>
+                </ul>
+            <p>These all return boolean values (true or false)</p>
+            <div class='code'>
+               <pre>
+                   <code>
+                   
+                    1>2 // false
+                   </code>
+               </pre>
+            </div>
+            <div class="in">
+                <h3>equality (==) vs strict equaliy (===)</h3>
+                <div class="wh">
+                    <h4>Double Equals (==)</h4>
+                    <ul>
+                        <li>Checks for equality of value, but not equality of type.</li>
+                        <li>It coerces both values to the same type and then compares them.</li>
+                        <li>This can lead to some unexpected results!</li>
+                    </ul>
+                   <div class='code'>
+                      <pre>
+                          <code>
+
+                            1 == 1 //true
+
+                            1 == "1" //true
+
+                            // == WEIRDNESS
+                            
+                            'b' == 'c'; //false
+                            
+                            7 == '7'; //true
+                            
+                            0 == "" ; //true
+                            
+                            true == false; //false
+                            
+                            0 == false; //true
+                            
+                            null == undefined; //true
+                          </code>
+                      </pre>
+                   </div>
+                </div>
+                <div class="wh">
+                    <h4>Triple Equals</h4>
+                    <p>Checks for equality of value and also equality of type.</p>
+                    <div class='code'>
+                       <pre>
+                           <code>
+
+                            1 === '1'; //false
+
+                            null === undefined; //false                            
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>not equal (!=) vs strict not-equal (!==)</h3>
+                <div class="wh">
+                    <h4>not equal (!=)</h4>
+                    <p>This does not check equality of type</p>
+                    <div class='code'>
+                       <div class='dotc'></div>
+                       <pre>
+                           <code>
+        
+                            1 != 2; //true
+
+                            1 != '1'; //false                            
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <h4>strict not-equal (!==)</h4>
+                    <p>Checks equality</p>
+                    <div class='code'>
+                       <div class='dotc'></div>
+                       <pre>
+                           <code>
+                           
+                            1 !== '1'; //true
+                           </code>
+                       </pre>
+                    </div>
+                </div>
+                <p>Most of the time you should use '===' and '!=='</p>
+            </div>
+
+        </div>
+    </div>
+    <div id="conditionals" class="content-box">
+        <h1>Conditionals</h1>
+        <h3>MAKING DECISIONS WITH CODE</h3>
+        <div id="if" class="wh">
+            <h2>If Statement</h2>
+            <p>Only runs code if given condition is true</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        let rating = 3;
+                        if (rating === 3) {
+                            console.log("YOU ARE A SUPERSTAR!");
+                        }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="elseif" class="wh">
+            <h2>else if</h2>
+            <p>It is preceded by an <i>if</i></p>
+            <p>If not the first thing, maybe this other thing??</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        let raing = 2;
+                        if (rating === 3) {
+                            console.log("YOU ARE A SUPERSTAR!");
+                        }
+                        else if (rating === 2){
+                            console.log("MEETS EXPECTATIONS");
+                        } 
+                    </code>
+                </pre>
+            </div>
+            <p>and we can chain on <i>else if</i> Statements</p>
+        </div>
+        <div id="else" class="wh">
+            <h2>Else</h2>
+            <p>If nothing else was true, do this</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        let rating = -99;
+                        if (rating === 3) {
+                            console.log("YOU ARE A SUPERSTAR!");
+                        }
+                        else if (rating === 2){
+                            console.log("MEETS EXPECTATIONS");
+                        }
+                        else if (rating === 1) {
+                            console.log("NEEDS IMPROVEMENT");
+                        }
+                        else {
+                            console.log("INVALID RATING!");
+                        }
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="wh" id="nesting">
+            <h2>Nesting</h2>
+            <p>We can nest conditionals inside conditionals</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        let password = "cat dog";
+                        if (password.length>=6){
+                           if (password.indexOf(' ')!== -1){
+                              console.log("Password cannot include spaces");
+                           }
+                           else {
+                              console.log("Valid password!!")
+                           }
+                        }
+                        else {
+                            console.log("Password too short!");
+                        } 
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="wh" id="tfvalues">
+            <h2>TRUTHY AND FALSY VALUES</h2>
+            <ul>
+                <li>All JS values have an inheret truthyness or falsyness about them</li>
+                <li>Everything else is truthy!</li>
+            </ul>
+        </div>
+        <div class="wh" id="logicalop">
+            <h2>Logical Operators</h2>
+            <p>Combining Expressions</p>
+            <div class="logical in">
+                <div>&&</div>
+                <div>||</div>
+                <div>!</div>
+            </div>
+            <div class="in" id="logicaland">
+                <h2>AND (&&)</h2>
+                <p>Both sides must be true, for the entire thing to be true</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+    
+                            1 <= 4 && 'a' === 'a'; // true
+    
+                            9 > 10 && 9 >= 9; // false
+                            
+                            'abc'.length === 3 && 1+1 === 4; // false                        
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            if (password.length >= 6 && password.indexOf(' ')=== -1)
+                            {
+                                console.log("do this");
+                            } 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in" id="logicalor">
+                <h2>OR (||)</h2>
+                <p>If one side is true, the entire thing is true</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            let age = 76;
+
+                            if (age < 6 || age >= 65) {
+                                // run this
+                            }
+                            else {                            
+                                console.log('That will be $10 please');
+                            }
+                            
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            1 !== 1 || 10 === 10 // true
+
+                            10/2 === 5 || null // true
+                            
+                            0 || undefined // false                            
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>Logical AND runs before logical OR (&& &gt; ||)</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        (age >= 0 && age < 5 || age >= 65)
+                    </code>
+                </pre>
+            </div>
+            <div class="in" id="logicalnot">
+                <h2>NOT</h2>
+                <p>!expression return true if expression is false</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            null true
+
+                            ! (0 === 0) // false
+                            
+                            ! (3>=4) // true
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

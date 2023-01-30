@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express Errors</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Express built-in error handler</a>
+        <a href="#t2" class="link">custom error handler</a>
+        <a href="#t3" class="link">custom error class</a>
+        <a href="#t4" class="link">handling async errors</a>
+        <a href="#t5" class="link">async utility</a>
+        <a href="#t6" class="link">mongoose errors</a>
+        <div class="botbut">
+            <a href="../43_YelpCamp_ Errors & Validating Data/index.html">Next Topic &rarr;</a>
+            <a href="../41_adding_basic_style_to_YELPCAMP/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <div id="t1" class="wh">
+            <h2>Express' Built-in Error Handler</h2>
+            <ul>
+                <li>When I talk about errors and handling errors in Express, there are different types of errors.</li>
+                <li>There are errors that we can cause by just screwing things up as developers like syntax errors.
+                    Hopefully we will catch those before we deploy the website, but we should have a way to handle any
+                    type
+                    of error while our server is
+                    running.</li>
+                <li>But a lot of times the errors are going to be the result of either incomplete data, problems connecting to or interacting with our database, problems connecting to or interacting with APIs, or external services or libraries.li>
+                <li>When we create modern webapps, we often rely on other tools or services.</li>
+                <li>There will be problems that we don't want, but we will try to handle as much as we can.</li>
+                <li>Things like API being down, an incomplete form, or Mongoose having a validation are required. We want to be able to handle errors in Express and control what happens.</li>
+            </ul>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.get('/error',(req,res)=>{
+                                chicken.key();
+                                //chicken is not defined so it is going to give an error
+                            }); 
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    So, the default way of error handling in Express if there is an error in route is that it response
+                    with an HTML response.
+                    <br><a href="https://expressjs.com/en/guide/error-handling.html">Express Error Handling DOCS!</a>
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                            <code>
+
+                                ReferenceError: chicken is not defined
+                                at C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\index.js:16:5
+                                at Layer.handle [as handle_request] (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\layer.js:95:5)
+                                at next (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\route.js:137:13)
+                                at Route.dispatch (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\route.js:112:3)
+                                at Layer.handle [as handle_request] (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\layer.js:95:5)
+                                at C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\index.js:281:22
+                                at Function.process_params (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\index.js:335:12)
+                                at next (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\index.js:275:10)
+                                at expressInit (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\middleware\init.js:40:5)
+                                at Layer.handle [as handle_request] (C:\Users\xyzuser\Desktop\Web Development\Colt Steele\2022\42_Express_Errors\code\express error handler\node_modules\express\lib\router\layer.js:95:5)
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <p>
+                    We can throw error by ourself.
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const verifyPassword = (req,res,next)=>{
+                                const {password} = req.query;
+                                 if(password === 'chickennugget'){
+                                   next();
+                                } else{
+                                    throw new Error('Password Required!')
+                                    //here we are explicitly throwing an error
+                                }
+                             } 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Defining Custom Error Handlers</h2>
+            <p>
+                We have talked about built-in error handling now we gonna define our own error handlers using the
+                special Express syntax.
+                <br><a href="https://expressjs.com/en/guide/error-handling.html">Writing error handlers (scroll
+                    down)</a>
+            </p>
+            <div class="in">
+                <p> Define error-handling middleware functions in the same way as other middleware functions, except
+                    error-handling functions have four arguments instead of three: (err, req, res, next). For example:
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.use(function (err, req, res, next) {
+                                console.error(err.stack)
+                                res.status(500).send('Something broke!')
+                            })
+                        </code>
+                    </pre>
+                </div>
+                <p>You define error-handling middleware last, after other app.use() and routes calls; </p>
+                <p>If we want to handle the error by default error handler we pass err in next()</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.use((err,req,res,next)=>{
+                                console.log("********************************");
+                                console.log("**************ERROR*************");
+                                console.log("********************************");
+                                console.log(err);
+                                next(err);
+                                //if we don't pass anything in 'next()' then we are calling non error handling middleware
+                            });
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Our Custom Error Class</h2>
+            <p>
+                So, the main difficulty with errors in Express is that there is not one way to handle errors. As we know
+                Express is light weight, unopinionated framework it gives you tons of control over how you structure
+                your app, sometime it is good thing but other
+                time it's good to have direction given to you.
+                <br>So, one of pattern to handle error is to actually define your error class.
+                <br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank">Error Code</a>
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            // index.js
+                            const AppError = require('./AppError')
+                            
+                            const verifyPassword = (req,res,next)=>{
+                                const {password} =req.query;
+                                if(password === 'chickennugget'){
+                                    next();
+                                }
+                                throw new AppError('Password required!', 401); // 401 - unauthorized
+                            }
+                            
+                            app.get('/admin', (req,res)=>{
+                                throw new AppError('You are not an Admin!', 403);
+                                //so now this error is going to hit the error handler and that error handler is going to send error and status code.
+                            })
+                            
+                            app.use((err,req,res,next)=>{
+                                const { status = 500 , message = 'something went wrong!'} = err;
+                                //As the error in 'error' route was just an javascript error that's why there is not error status and it show undefined status code.
+                                //that's why we are giving an default value that is 500.
+                                res.status(status).send(message)
+                                next(err);
+                            });
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            // AppError.js (separate file)
+                            class AppError extends Error {
+                                constructor(message, status) {
+                                    super();
+                                    this.message = message;
+                                    this.status = status;
+                                }
+                            }
+                            //this is just a tool that allow us to throw an AppError
+                            module.exports = AppError; 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Handling Async Errors</h2>
+            <p>
+                Now we gonna talk about handling errors in Express when we are working with aysync functions.
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            app.get('/products/:id', async (req, res,next) => {
+                                const { id } = req.params;
+                                 const product = await Product.findById(id);
+                                if(!product){
+                                   // throw new AppError('Product Not Found', 404);
+                                    //so as this is inside async function it is not catching that error. So, to catch it we have to pass it inside 'next()'
+                                   return next(new AppError('Product Not Found', 404));
+                                   //using 'return' so that the next code doesn't run
+                                 }
+                                 res.render('products/show', { product })
+                                })
+                             
+                             // Update
+                             const categories = ['fruit', 'vegetable', 'dairy', 'fungi'];
+                             app.get('/products/:id/edit', async (req, res, next) => {
+                                const product = await Product.findById(req.params.id)
+                                 if(!product){
+                                   return next(new AppError('Product Not Found', 404));
+                                }
+                                res.render('products/edit', { product, categories })
+                             }) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Handling More Async Errors!</h2>
+            <p>
+                Now what about the errors which are thrown by mongoose like when we do not pass any value to required
+                schema values in form.
+                <br>So, we typically handle that stuff by using 'try and catch' method.
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //index.js
+                            //If we leave the name input empty, this try and catch method will handle it and it won't break our app.
+                            app.post('/products', async (req, res,next) => {
+                                try{const newProduct = new Product(req.body);
+                                   await newProduct.save();
+                                    res.redirect('/products')}
+                                catch(e){
+                                    next(e);
+                                    //error will be handled by the error handler as we are passing the 'error' in 'next()'
+                                }
+                            }) 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //brower window
+                            Product validation failed: name: Path `name` is required 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.get('/products/:id', async (req, res, next) => {
+                                try {
+                                    const { id } = req.params;
+                                    const product = await Product.findById(id);
+                                   if (!product) {
+                                       // throw new AppError('Product Not Found', 404);
+                                       //so as this is inside async function it is not catching that error. So, to catch it we have to pass it inside 'next()'
+                                       throw new AppError('Product Not Found', 404);
+                                   }
+                                   res.render('products/show', { product });
+                               } catch (e) {
+                                    next(e);
+                                }
+                            }); 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>
+                So, there could be many things that could go wrong inside async function that Express won't handle so we
+                would wrap our code inside 'try and catch' in our aysnc function.
+            </p>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Defining An Async Utility</h2>
+            <p>
+                So, it get little bit annoying to add 'try and catch' to every async callback route. So, what we can do
+                is basically define a function to which we pass the entire async callback to.
+                <br>In Express 5 we don't have to worry about this cuse it will hanlde it on its own.
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        function wrapAsync(fn){
+                            return function(req,res,next){
+                               fn(req,res,next).catch(e => next(e));
+                           }
+                            //As the function passed in is a Async function so it returns a promise so we can attach '.catch()' to it. And pass any error to 'next()'
+                        }
+                        //And now in our route we pass the async function callback inside it.
+                        app.get('/products/:id', wrapAsync( async (req, res, next) => {
+                           const { id } = req.params;
+                           const product = await Product.findById(id);
+                           if (!product) {
+                               //So now we are just throwing an error which should cause error as it is inside async but the 'wrapAsync' function will catch the error.
+                               throw new AppError('Product Not Found', 404);
+                            }
+                        res.render('products/show', { product });
+                        })); 
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t6" class="wh">
+            <h2>Differentiating Mongoose Errors</h2>
+            <p>
+                There are different types of errors that mongoose can throw like validation error, cast error so we can
+                response on the bases of the error types.
+            </p>
+            <div class="in">
+                <p>We can get name of that error</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            app.use((err, req, res, next) => {
+                                console.log(err.name);
+                                next(err)
+                            })
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <p>We can set error message in our schema</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            mongoose = require('mongoose')
+
+                            productSchema = new mongoose.Schema({
+                                name: {
+                                    type: String,
+                                    required: [true, 'name cannot be blank'] // ***** like this ******
+                                },
+                                price: {
+                                    type: Number,
+                                    required: true,
+                                    min: 0
+                                },
+                                category: {
+                                    type: String,
+                                    enum: ['fruit', 'vegetable', 'dairy']
+                                }
+                            })
+                            Product = mongoose.model('Product', productSchema)
+                            module.exports = Product
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const handleValidationErr = err => {
+                            console.dir(err);
+                            return new AppError(`Validation Failed...${err.message}`, 400)
+                        }
+                        
+                        app.use(err,req,res,next) => {
+                            console.log(err.name);
+                            if(err.name === 'ValidationError') err = handleValidationErr(err)
+                            next(err);
+                        }
+                        
+                        app.use(err,req,res,next) => {
+                            const { status = 500, message = 'something went wrong' } = err;
+                            res.status(status).send(message);
+                        } 
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

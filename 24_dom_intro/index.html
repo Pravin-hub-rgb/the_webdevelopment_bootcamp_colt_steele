@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Introduction</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        /* extra */
+        .script {
+            display: flex;
+            /* justify-content: space-between; */
+            background-color: rgb(91, 179, 238);
+            color: black;
+            border-radius: 10px;
+        }
+
+        .script div {
+            padding: 0 10px;
+        }
+
+        .first {
+            border-right: 2px solid rgb(16, 90, 6);
+        }
+        @media only screen and (max-width:800px){
+            .script{
+                flex-wrap: wrap;
+            }
+            .script p{
+                font-size: 0.8rem;
+            }
+            .first{
+                border-right: none;
+                border-bottom: 2px solid rgb(16, 90, 6);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">The document Object</a>
+        <a href="#t2" class="link">Selecting</a>
+        <a href="#t3" class="link">Manipulating</a>
+        <div class="botbut">
+            <a href="../25_DOM_events/index.html">Next Topic &rarr;</a>
+            <a href="../23_newer_js_features/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+
+
+
+    <div id="numbers" class="content-box">
+        <h1>DOM (Document Object Model)</h1>
+        <h2>What is it?</h2>
+        <ul>
+            <li>The DOM is a JavaScript representation of a webpage.</li>
+            <li>It's your JS "window" into the contents of a webpage</li>
+            <li>It's just a bunch of objects that you can interact with via JS.</li>
+        </ul>
+        <div id="t1" class="wh">
+            <h2>The Document Object</h2>
+            <p>HTML & CSS goes in.... JavaScript object comes out</p>
+            <p>document &gt; body &gt; ul &gt; li
+            <div class='code'>
+               <div class='dotc'></div>
+               <pre>
+                   <code>
+                   
+                    console.dir(document); 
+                   </code>
+               </pre>
+            </div>
+            <br> The document object is our entry point into the world of the DOM. It contains objects that
+            represents all the content on a page, plus tons of useful methods and properties.
+            </p>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Selecting</h2>
+            <p>Methods which help us select elements</p>
+            <ul>
+                <li>getElementById</li>
+                <li>getElementsByTagName</li>
+                <li>getElementsByClassName</li>
+            </ul>
+            <div class="in">
+                <h3>document.getElementById()</h3>
+                <p>This method returns an element object representing the element whose id property matches the
+                    specified string.</p>
+                <div class="script">
+                    <div class="first">
+                        <p>&lt;h1 id="heading"&gt;This is heading&lt;/h1&gt;</p>
+                    </div>
+                    <div class="second">
+                        <p class="ls">
+                            const heading = document.getElementById('heading');
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>document.getElementsByTagName()</h3>
+                <p>It returns an HTMLcollection of elements with the given tag name.</p>
+                <div class="script">
+                    <div class="first">
+                        <p>
+                            &lt;p&gt;this is 1 para&lt;/p&gt;
+                            <br> &lt;p&gt;this is 2 para&lt;/p&gt;
+                            <br>&lt;p&gt;this is 3 para&lt;/p&gt;
+                        </p>
+                    </div>
+                    <div class="second">
+                        <p class="ls">
+                            const allPara = document.getElementsByTagName('p')
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>document.getElementsByClassName()</h3>
+                <div class="script">
+                    <div class="first">
+                        <p>
+                            &lt;img src="" alt="" class="square"&gt;
+                            <br> &lt;img src="" alt="" class="square"&gt;
+                            <br> &lt;img src="" alt="" class="square"&gt;
+                        </p>
+                    </div>
+                    <div class="second">
+                        <p class="ls">
+                            const allImg = document.getElementsByClassName('square')
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <h3>querySelector</h3>
+                <p>&rarr; A newer, all-in-one method to select a single element.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //Finds first h1 element:
+                            document.querySelector('h1');
+                            
+                            //Finds first element with ID of red:
+                            document.querySelector('#red');
+                            
+                            //Finds first element with class of big:
+                            document.querySelector('.big');
+                            
+                            //Complex selection
+                            document.querySelector('img:nth-of-type(2)'); 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>querySelectorAll</h3>
+                <p>Same idea as querySelector, but returns a collection of matching elements</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            document.querySelectorAll('p a'); // gives all a tag and we can loop over them 
+                        </code>
+                    </pre>
+                </div>
+                <p>So, basically we can use only querySelector & querySelectorAll</p>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>Manipulating</h2>
+            <p>
+                We know how to select elements now we will know about manipulating them.
+            </p>
+            <div class="in">
+                <h3>Propertied & Methods</h3>
+                <p>( the important ones )</p>
+                <div class="script">
+                    <div class="first">
+                        <ul>
+                            <li>classList</li>
+                            <li>getAttribute()</li>
+                            <li>setAttribute()</li>
+                            <li>appendChild()</li>
+                            <li>append()</li>
+                            <li>prepend()</li>
+                            <li>removeChild()</li>
+                            <li>remove()</li>
+                            <li>createElement</li>
+                        </ul>
+                    </div>
+                    <div class="second">
+                        <ul>
+                            <li>innerText</li>
+                            <li>textContent</li>
+                            <li>innerHTML</li>
+                            <li>value</li>
+                            <li>parentElement</li>
+                            <li>children</li>
+                            <li>nextElementSibling</li>
+                            <li>previousElementSibling</li>
+                            <li>style</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="wh">
+                    <div class="in">
+                        <h4>innerText</h4>
+                        <div class="script">
+                            <div class="first">
+                                <p class="ls">
+                                    &lt;h1&gt;lololol&lt;/h1&gt;
+                                </p>
+                            </div>
+                            <div class="second">
+                                <p class="ls">
+                                    const h1 = document.querySelector('h1');
+                                    <br>h1.innerText = "lololol";
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <h4>textContent</h4>
+                        <p>it is also same as innerText but this shows all text no matter if it's display is set to
+                            none.</p>
+                        <div class="script">
+                            <div class="first">
+                                <p class="ls">
+                                    &lt;p&gt;&lt;span style="display: none;"&gt;hi&lt;/span&gt;..hello&lt;/p&gt;
+                                </p>
+                            </div>
+                            <div class="second">
+                                <p class="ls">
+                                    const para = document.querySelector('p');
+                                    <br> para.textContent; //hi..hello
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <h4>innerHTML</h4>
+                        <p>Gets or sets the HTML markup contained within the element.</p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                <code>
+
+                                    document.querySelector('p').innerHTML = '<i> this will be added </i>';
+                                    //this will overwrite every thing (use += to not overwrite) 
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="wh">
+                    <div class="in">
+                        <h4>getAttribute()</h4>
+                        <p>Gives attribute of selected element.</p>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                <code>
+
+                                    document.querySelector('img').getAttribute('id'); 
+                                    //we can also do this document.querySelector('img').src
+                                    //we can also do this document.querySelector('img').alt
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <h4>setAttribute()</h4>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                <code>
+
+                                    document.querySelector('a').setAttribute('href','http://www.google.com') 
+                                    // also this works - document.querySelector('a').href='http://www.google.com'
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="in">
+                        <h4>removeAttribute()</h4>
+                        <div class="code">
+                            <div class="dotc"></div>
+                            <pre>
+                                <code>
+
+                                    document.querySelector('button').removeAttribute('disabled') 
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <div class="wh">
+                    <h3>style</h3>
+                    <p>Changes style of elements (all property name are camel case)</p>
+                    <p>This style object doesn't contain style from our style sheet, instead it contains inline
+                        style.</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                document.querySelector('h1').style.color = 'green'
+                                 document.querySelector('h1').style.fontSize = '3rem'
+
+                                // we can get computed CSS style using window object
+                                window.getComputedStyle(h1).fontSize; //32px"
+                                
+                                //we can also do it using setAttribute
+                                document.querySelector('h2').setAttribute('class','purple'); 
+                                // all the style of the class get added to h2. 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <p>So, the better way to change the style is using classList</p>
+                <div class="wh">
+                    <h3>classList</h3>
+                    <p>It is an object by which we can control class and retrive and manipulate them.</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                // classList.add
+                                const h2 = document.querySelector('h2');
+                                h2.classList.add('purple');
+                                h2.classList.add('border');
+                                
+                                // we can remove class too
+                                h2.classList.remove('border');
+                                //checking if elements contains a class or not
+                                h2.classList.contains('border'); //true
+                                
+                                // we can toggle the class also
+                                h2.classList.toggle('border'); 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <ul>
+                    <li>parentElement</li>
+                    <li>children</li>
+                    <li>nextElementSibling</li>
+                    <li>previousElementSibling</li>
+                </ul>
+                <p>These all have to do with accessing parent, sibling, child elements</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //parentElement
+                            document.querySelector('b').parentElemet //&lt;p>...&lt;/p>
+
+                            //children
+                            const paragraph = document.querySelector('p');
+                            paragraph.children // gives the list of elements inside paragraph
+                            
+                            // to get adjacent sibling we use 
+                            document.querySelector('.square').nextElementSibling;
+                            document.querySelector('.square').PreviousElementSibling; 
+                        </code>
+                    </pre>
+                </div>
+                <div class="wh">
+                    <p>Creating a new element from scratch and append or prepending to the page</p>
+                    <h3>document.createElement()</h3>
+                    <p>This method creates the HTML element specified by tagName.</p>
+                    <h3>appendChild()</h3>
+                    <p>Put element after last child of parent </p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                const img = document.createElement('img'); 
+                                // this just create and now we have to add attributes like source.
+                                img.setAttribute('src','https://blablalbl...') 
+                                //this will still show on the page.
+                                // now we have to append it to the page.
+                                document.body.appendChild(img); 
+                            </code>
+                        </pre>
+                    </div>
+                    <h3>append()</h3>
+                    <p>This methods inserts a set of Node object or DOMString objects after the last child of
+                        parentNode.</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                // we can also use it to insert text inside parent innerText
+                                const p = document.querySelector('p');
+                                p.append("i am new text yaaaaay!!"); 
+                            </code>
+                        </pre>
+                    </div>
+                    <h3>prepend()</h3>
+                    <p>inserts as first child.</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                const newPara = document.createElement('p');
+                                newPara.append('text inside para');
+                                document.body.prepend(newPara); 
+                            </code>
+                        </pre>
+                    </div>
+                    <h3>insertAdjacentElement()</h3>
+                    <p>Inserting adjacent to element.</p>
+                    <span>Syntax - targetElement.insertAdjacentElement(position, element);</span>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                const h2 = document.createElement('h2');
+                                h2.append('Are adorable chickens');
+                                const h1 = document.createElement('h1');
+                                h1.insertAdjacentElement('afterend',h2);
+                                //same we can do with targetElement.after()
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="in">
+                <ul>
+                    <li>removeChild()</li>
+                    <li>remove()</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const newImg = document.querySelector('img');
+                                // we have to select parent element and than pass the child that w remove
+                                document.body.removeChild(newImg); // this is an old method
+
+                                // new method is remove()
+                                newImg.remove(); 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototypes, Classes, & OOP</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">Prototypes</a>
+        <a href="#t2" class="link">Factory functions</a>
+        <a href="#t3" class="link">Class</a>
+        <div class="botbut">
+            <a href="../30_Exploring_the_terminal/index.html">Next Topic &rarr;</a>
+            <a href="../28_Ajax/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+        <div id="numbers" class="content-box">
+            <p>
+                Now we will focus on OOP
+            </p>
+            <div id="t1" class="wh">
+
+                <h2>Prototypes</h2>
+                <p>
+                    Prototypes are the mechanism by which JS objects inherit features from one another.
+                </p>
+                <div class="in">
+                    <h3>A prototype-based language?</h3>
+                    <p>
+                        JS is often described as a prototype-based language &rarr; to provide inheritance, objects can have a prototype object, which acts as a template object that it inherits methods and properties from. An Object's prototype object may also have a prototype
+                        object, which it inherits methods and properties from, and so on. This is often referred to as a prototype chain, and explains why different objects have properties and methods defined on other objects available to them.
+                    </p>
+                </div>
+                <div class="in">
+                    <h3>Array prototype</h3>
+                    <p>
+                        Arrays are defined as object in JS. <br> All methods (push, pop, etc) are not attached to arrays unless we define them they all are inside property called <b>__proto__</b>
+                        <br>So, <b>__proto__</b> is a property that references array prototype. (template object for arrays)
+                        <br>And through the magic of JS I can simply access all the methods like this &rarr; arr.includes(2);
+                    </p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                Array.prototype //Shows all methods
+                                //We can defined our own methods
+                                String.prototype.grumpus = () => {
+                                   console.log('Go Away!!');
+                                }
+                                const cat ="blue";
+                                cat.grumpus()
+                                //Go Away!!
+                                
+                                // creating own method and using 'this' keyword
+                                String.prototype.yell = function () {
+                                    console.log(this.toUpperCase())
+                                }
+
+                                "hey".yell()
+                                // "HEY"
+                                // so 'this' refers to whatever string that we are calling the method to
+
+
+                                //We can also redefine methods
+                                Array.prototype.pop = () => {
+                                   return 'Sorry I want that element, I will never pop it off';
+                                }
+                                [1,2,3].pop()
+                                //"Sorry I want that element, I will never pop it off"
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="in">
+                    <h3>__proto__ vs Array.prototype</h3>
+                    <p>
+                        They both are similar.
+                        <br>Array.prototype is actual object where we add the methods to or properties (template object)
+                        <br>__proto__ is a property name on array. And it is used to referece to actual prototype
+                    </p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                const dog = 'Timothy';
+                                dog.__proto__ //reference to String.prototype
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div id="t2" class="wh">
+                <h2>Factory Functions</h2>
+                <p>
+                    This functions make and returns an object every time it is called.
+                    <br>The resulting objects all follow the same "recipe"
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //function that convert rgb color to hexa decimal color value
+                            function hex(r, g, b) {
+                               return '#' + ((1 &lt;&lt; 24) + (r &lt;&lt; 16) + (g &lt;&lt; 8).toString(16).slice(1));
+                            }
+                            //function that return rbg value that we can use in css.
+                            function rgb(r,g,b) {
+                               return `rgb(${r}, ${g}, ${b})`;
+                            } 
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    Now these function are perfectly fine on there own as is. But if I want to make an object that convert hex to rgb back and forth without having to pass in numbers each time.
+                    <br>We can use a <b>factory function</b> which would make an object that automatically had a rgb and hex method and it store the (r,g,b) value as value of properties on the object.
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            function makeColor(r,g,b){
+                                const color = {};
+                                color.r = r;
+                                color.g = g;
+                                color.b = b;
+                                color.rgb = function () {
+                                  const {r,g,b} = this;
+                                  return `rgb(${r}, ${g}, ${b})`;
+                                }
+                                color.hex = function () {
+                                  const {r,g,b} = this;
+                                  return '#' + ((1 &lt;&lt; 24) + (r &lt;&lt; 16) + (g &lt;&lt; 8).toString(16).slice(1));
+                                }
+                                return color;
+                             }
+                             
+                             const firstColor = makeColor(35, 255, 150);
+                             firstColor.hex(); 
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    So, the factory function is not ideal instead we use the constructor function.
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            black = makeColor(0,0,0);
+                            // firstColor
+                            // black
+                            // firstColor & black both have copy of hex and rgb method
+                            firstColor.hex === black.hex
+                            // false
+                            // Because they are not referring to the same function.
+                            "hi".slice === "bye".slice
+                            // true
+                            // The slice method is not defined in every single string instead they are defined in prototype
+                        </code>
+                    </pre>
+                </div>
+                <div class="in">
+                    <h3>The "new" keyword</h3>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //This is not a regular function as its first letter is capital which states that it is a constructor function
+                                function Color(r,g,b){
+                                   this.r = r;
+                                   this.g = g;
+                                   this.b = b;
+                                }
+                                Color(255,0,0);
+                                //undefined - doesn't work
+                                //Because 'this' refers to window object
+                                
+                                //But when we call this function with 'new' it behaves differently
+                                new Color(255, 40, 100);
+                                // Color {r: 255, g: 0, b: 0}
+                                //returns an object
+                                //This is how it works
+                                //Creates a blank, plain JS object;
+                                // Links (sets the constructor of) this object to another object;
+                                // Passes the newly created object from step 1 as the 'this' context;
+                                // Returns this if the function doesn't return its own objects.
+                                
+                            </code>
+                        </pre>
+                    </div>
+                    <p>Now to define method in prototype we have to do this</p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                function Color(r,g,b){
+                                    this.r=r;
+                                    this.g=g;
+                                    this.b=b;
+                                 }
+                                    Color.prototype.rgb = function () {
+                                      const {r,g,b} = this;
+                                      return `rgb(${r}, ${g}, ${b})`;
+                                    }
+                                    Color.prototype.hex = function () {
+                                      const {r,g,b} = this;
+                                      return '#' + ((1 &lt;&lt; 24) + (r &lt;&lt; 16) + (g &lt;&lt; 8).toString(16).slice(1));
+                                    }
+                                 //Now the rgb and hex method will be listed inside __proto__
+                                 
+                                 const color1 = new Color(40, 50, 60);
+                                 color1
+                                 Color {r: 40, g: 50, b: 60}
+                                 //and rgb and hex method inside prototype
+                                 
+                                 //Also we can call those methods
+                                 color1.rgb()
+                                 //"rgb(40, 50, 60)"
+                            </code>
+                        </pre>
+                    </div>
+                   <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const color1 = new Color(40, 50, 60); const color2 = new Color(100, 90, 60);
+
+                            color1.hex === color2.hex
+                            true
+                            //They are pointing to the samething
+                        </code>
+                    </pre>
+                   </div>
+                </div>
+                <p>
+                    So, right now the syntax is kind of annoying as the things aren't grouped together. Function definition is separate and all its methods are defined separately, this is why the 'class' keyword and the new class syntax is introduced to achieve same outcome
+                    but with better syntax.
+                </p>
+            </div>
+            <div id="t3" class="wh">
+                <h2>Class</h2>
+
+               <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // Capitalization of first letter is important for class
+                        class Color {
+                            constructor(r,g,b, name){
+                            //constructor is function which will automatically run immediately when a new Color is created
+                               this.r = r;
+                               this.g = g;
+                               this.b = b;
+                               this.name = name;
+                               //this.nameColor = name;
+                            }
+                           // Now to define method that will be listed inside prototype we can use short syntax
+                           greet(){
+                               return `Hello from ${this.name}`
+                            }
+                            innerRGB(){
+                                const {r,g,b} = this
+                                return `${r}, ${g}, ${b}`
+                            }
+                           rgb(){}
+                               //const {r,g,b} = this;
+                                return `rgb(&{this.innerRGB})`;
+                            }
+                            rgba(a = 1.0){
+                                return `rgba(&{this.rgb}, &{a})`
+                            }
+                            hex(){
+                                const {r,g,b} = this;
+                                return '#' + ((1 &lt;&lt; 24) + (r &lt;&lt; 16) + (g &lt;&lt; 8).toString(16).slice(1));
+                            }
+                        }
+
+                        const c1 = new Color(255, 67, 89, "tomato");
+                        c1.greet();
+                        //"Hello from tomato"                        
+                    </code>
+                </pre>
+               </div>
+                <div class="in">
+                    <h3>Extends & Super Keywords</h3>
+                    <p>
+                        They both have to do with sub classing, essentially inheritance. This is the way of sharing functionality between classes.
+                    </p>
+                   <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            class Cat {
+                                constructor(name, age){
+                                    this.name = name;
+                                    this.age = age;
+                                }
+                                eat() {
+                                    return `${this.name} is eating`;
+                                }
+                                meow(){
+                                    return 'meow';
+                                }
+                            }                            
+                            
+                            class Dog {
+                                constructor(name, age){
+                                    this.name = name;
+                                    this.age = age;
+                                }
+                                eat() {
+                                    return `${this.name} is eating`;
+                                }
+                                bark(){
+                                    return 'wooof!'
+                                }
+                            } 
+                        </code>
+                    </pre>
+                   </div>
+                    <p>
+                        So there is so much duplicated functionality in above classes.
+                        <br>So, one of the option that we have with JS is to move the duplicated code to its own separete class.
+                        <br>So it is kind of parent-child relationship
+                    </p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                class Pet {
+                                    constructor(name, age){
+                                        this.name = name;
+                                        this.age = age;
+                                    }
+                                    eat() {
+                                       return `${this.name} is eating`;
+                                    }
+                                }
+                                
+                                class Cat extends Pet {
+                                    // this does not have a constructor and it doesnot matter
+                                    // So it looked for constructor in a Pet class
+                                    meow(){
+                                        return 'meow';
+                                    }
+                                }
+                                
+                                class Dog extends Pet{
+                                    bark(){
+                                        return 'wooof!'
+                                    }
+                                } 
+                            </code>
+                        </pre>
+                    </div>
+                    <p>
+                        'super' keyword
+                        <br>Cat and Dog class do not have constructor, but if we want to have additional information for subclass
+                    </p>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                class Cat {
+                                    constructor(name, age, livesLeft = 9){
+                                        super(name, age);
+                                        //super is going to call Pet constructor
+                                        this.livesLeft =livesLeft;
+                                    }
+                                } 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="../main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploring Modules & The NPM Universe</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">module.exports</a>
+        <a href="#t2" class="link">requiring directory</a>
+        <a href="#t3" class="link">NPM</a>
+        <a href="#t4" class="link">global packages</a>
+        <a href="#t5" class="link">Package.json</a>
+        <div class="botbut">
+            <a href="../33_Express/index.html">Next Topic &rarr;</a>
+            <a href="../31_intro_to_Node/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Exploring Modules & The NPM Universe</h1>
+        <div id="t1" class="wh">
+            <h2>module.exports</h2>
+            <p>
+                Sharing JS code between different file
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //app.js
+                            const math = require('./math');
+                            //When we are referencing a file rather than an existing module like 'fs', we need to do './'
+                            console.log(math.PI);
+                            console.log(math.square(9)); 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //math.js
+                            const add = (x,y) => x + y;
+                            
+                            const PI = 3.14159;
+                            
+                            const square = x => x * x;
+                            
+                            //So this content is not directly available
+                            //unless we exports using special property "module.exports"
+                            module.exports.add = add;
+                            module.exports.PI = PI;
+                            module.exports.square = square;
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //Terminal
+                            node app.js
+                            3.14159
+                            81                            
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>We can also destructure and use one object</p>
+            <div class="in">
+
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //app.js
+                            const {PI, square} = require('./math');
+                            console.log(PI);
+                            console.log(square(9)); 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //math.js
+                            const add = (x,y) => x + y;
+                            
+                            const PI = 3.14159;
+                            
+                            const square = x => x * x;
+                            
+                            const math = {
+                              add: add,
+                              PI: PI,
+                              square: square
+                            }
+                            module.exports.math = math; 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //Terminal
+                            node app.js
+                            3.14159
+                            81                            
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>Adding "module.exports" directly</p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //math.js
+                            module.exports.add = (x,y) => x + y;
+                            
+                            module.exports.PI = 3.14159;
+                            
+                            module.exports.square = x => x * x; 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>Now there is shorter syntax, its just 'exports'</p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //math.js
+                            const add = (x,y) => x + y;
+                            
+                            const PI = 3.14159;
+                            
+                            const square = x => x * x;
+                            
+                            exports.square = square;
+                            exports.PI = PI; 
+
+                            //but dont use 'exports' as variable like → exports = "aljs";. this gives error
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Requiring A Directory</h2>
+            <p>
+                Often we may have multiple files that are working together to form some application or related files.
+                <br><br>The directory should have a file named in very particular way called 'index.js'
+                <br>So, when we require that directory node is going to look for 'index.js' and there can be number of
+                file but only one 'index.js'
+                <br>And whatever that 'index.js' will export the entire directory will also export that.
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //blue.js inside 'shelter' directory
+                            module.exports = {
+                               name: 'blue',
+                               color: 'grey'
+                            } 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //janet.js inside 'shelter' directory
+                            module.exports = {
+                               name: 'janet',
+                               color: 'orange'
+                            } 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //sadie.js inside 'shelter' directory
+                            module.exports = {
+                              name: 'sadie',
+                               color: 'black'
+                            } 
+                        </code>
+                    </pre>
+                </div>
+
+            </div>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //app.js outside the 'shelter' directory
+                            const cats = require('./shelter') //using only directory name
+                            console.log(cats); 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //index.js inside 'shelter' directory
+                            const blue = require('./blue')
+                            const sadie = require('./sadie')
+                            const janet = require('./janet') 
+
+                            const allCats = [blue, sadie, janet];
+                            module.exports = allCats; 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //terminal
+                            node app.js
+                            [
+                              { name: 'blue', color: 'grey' },
+                              { name: 'sadie', color: 'black' },
+                              { name: 'janet', color: 'orange' }
+                            ]                            
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="t3" class="wh">
+            <h2>NPM [Node Package Manager]</h2>
+            <p>
+                NPM is really two things:
+                <br>&rarr; A library of thousands of packages published by other developers that we can use for free!
+                <br>&rarr; A command line tool to easily install and manage those packages in our Node projects
+            </p>
+            <div class="in">
+                <h3>Installing Packages</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            npm i give-me-a-joke
+                            //This command create a directory called 'node_modules' and a file called 'package-lock.json'
+                            npm WARN saveError ENOENT: no such file or directory, open 'C:\Users\blahblahblahblah\jokerster\package.json'
+                        </code>
+                    </pre>
+                </div>
+                <p>
+                    All of packages that we are installing are stored inside 'node_modules'
+                    <br>'package-lock.json' keeps the record of the context of 'node_modules'
+                </p>
+            </div>
+            <div class="in">
+                <h3>Requiring installed packages</h3>
+                <div class="wh">
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //Terminal
+                                {
+                                   getRandomCNJoke: [Function],
+                                   getCustomJoke: [Function],
+                                   getRandomDadJoke: [Function],
+                                   getRandomJokeOfTheDay: [Function]
+                                } 
+                            </code>
+                        </pre>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //index.js
+                                const jokes = require('give-me-a-joke');
+                                console.dir(jokes); 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <div class="wh">
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //Terminal
+                                What is worse then finding a worm in your Apple? Finding half a worm in your Apple.
+                                
+                            </code>
+                        </pre>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //index.js
+                                const jokes = require('give-me-a-joke');
+                                jokes.getRandomDadJoke(function (joke) {
+                                   console.log(joke);
+                                }) 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <h3>Installing another package</h3>
+                <div class="wh">
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //Terminal
+                                npm i colors
+                                node index.js
+                                Why does Norway have barcodes on their
+                                battleships? So when they get back to port, they can Scandinavian.                                
+                            </code>
+                        </pre>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                //index.js
+                                const jokes = require('give-me-a-joke');
+                                const colors = require('colors');
+                                jokes.getRandomDadJoke(function (joke) {
+                                   console.log(joke.blue);
+                                }) 
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="t4" class="wh">
+            <h2>Adding Global Packages</h2>
+            <p>
+                When we install package like this 'npm i colors', they are accessed only in that directory in which they
+                are installed.
+                <br>So, installing packages globally we use '-g' flag
+            </p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        npm i -g cowsay
+                        // linking to directory
+                        npm link cowsay
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t5" class="wh">
+            <h2>Package.json</h2>
+            <p>
+                It contains meta-data or information about particular project, package or application.
+                <br>We ourself don't create 'package.json' instead we use command called 'npm init' which is sort of
+                creation utility for 'package.json'.
+            </p>
+            <div class="in">
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //Terminal
+                            npm init
+                            npm i figlet 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            //package.json file
+                            {
+                               "name": "artster",
+                               "version": "1.0.0",
+                               "description": "",
+                               "main": "index.js",
+                               "scripts": {
+                                 "test": "echo \"Error: no test specified\" && exit 1"
+                               },
+                               "author": "vin",
+                               "license": "ISC",
+                               "dependencies": {
+                                 "figlet": "^1.5.0"
+                               }
+                            }
+                            //figlet is documented in this file
+                            
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <p>
+                So, 'package.json' file is important because it keeps all record of what dependencies we are using and
+                when we share this file to other, they can download all dependencies in one shot.
+            </p>
+            <div class="in">
+                <h3>Installing All Dependiencies For A Project</h3>
+                <p>
+                    We don't share 'node_modules' directory because it contains so many file and also it may take alot
+                    of storage.
+                </p>
+                <p>
+                    So when we download a project and there is 'package.json' file, all we have to do is
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            npm i //This will create 'node_modules' directory
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

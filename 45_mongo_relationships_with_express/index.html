@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mongo realtionships with express</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">deletion mongoose middleware</a>
+        <div class="botbut">
+            <a href="../46_yelpcamp_adding_the_review_model/index.html">Next Topic &rarr;</a>
+            <a href="../44_Data_ relationships_with_mongo/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h1>Mongo realtionships with express</h1>
+        <ul>
+            <li>We are upgrading the data model of 'farmapp' by applying what we have learnt about data relationships
+            </li>
+        </ul>
+        <div class="wh">
+            <h2>Defining our farm and product model</h2>
+            <ul>
+                <li>We are embedding data on both product and farm models</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">product.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const mongoose = require('mongoose')
+                            const { Schema } = mongoose
+                            productSchema = Schema({
+                                name: {
+                                    type: String,
+                                    required: true
+                                },
+                                price: {
+                                    type: Number,
+                                    required: true,
+                                    min: 0
+                                },
+                                category: {
+                                    type: String,
+                                    enum: ['fruit', 'vegetable', 'dairy']
+                                },
+                                farm: {
+                                    type: Schema.Types.ObjectId,
+                                    ref: 'Farm'
+                                }
+                            })
+                            Product = mongoose.model('Product', productSchema)
+                            module.exports = Product
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">farm.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const mongoose = require('mongoose')
+                            const { Schema } = mongoose;
+                            
+                            const farmSchema = new Schema({
+                                name: {
+                                    type: String,
+                                    required: [true, 'Farm must have a name!']
+                                },
+                                city: String,
+                                email: {
+                                    type: String,
+                                    required: [true, 'Email required!']
+                                },
+                                products: [{
+                                    type: Schema.Types.ObjectId,
+                                    ref: 'Product'
+                                }]
+                            })
+
+                            const Farm = mongoose.model('Farm',farmSchema)
+
+                            module.exports = Farm
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Creating New Farms</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const Farm = require('./models/farm')
+
+                            // **************** FARM ROUTES *****************
+                            app.get('/farms', async (req, res) => {
+                                const farms = await Farm.find({})
+                                res.render('farms/index', { farms })
+                            })
+                            // CREATE
+                            app.get('/farms/new', async (req, res) => {
+                                res.render('farms/new')
+                            })
+                            app.post('/farms', async (req, res) => {
+                                const farm = new Farm(req.body)
+                                await farm.save()
+                                res.redirect('/farms')
+                            })
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">new.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>New Farm&lt;/title>
+                            &lt;/head>
+                            
+                            &lt;body>
+                                &lt;h1>Add a Farm&lt;/h1>
+                                &lt;form action="/farms" method="post">
+                                    &lt;label for="name"> Farm Name : 
+                                        &lt;input type="text" name="name" id="name" placeholder="Farm Name">
+                                    &lt;/label>
+                                    &lt;br>
+                                    &lt;br>
+                                    &lt;label for="cname"> City : 
+                                        &lt;input type="text" name="city" id="cname" placeholder="City Name">
+                                    &lt;/label>
+                                    &lt;br>
+                                    &lt;br>
+                                    &lt;label for="ename"> Email : 
+                                        &lt;input type="email" name="email" id="name" placeholder="Email">
+                                    &lt;/label>
+                                    &lt;br>&lt;br>
+                                    &lt;button>Submit&lt;/button>
+                                &lt;/form>
+                            &lt;/body>
+                            
+                            &lt;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Farms show page</h2>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">index.js</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            app.get('/farms/:id', async (req, res) => {
+                                const farm = await Farm.findById(req.params.id)
+                                res.render('farms/show', { farm })
+                            })
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">show.ejs</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>
+                                    <%=farm.name%>
+                                &lt;/title>
+                            &lt;/head>
+                            
+                            &lt;body>
+                                &lt;h2>
+                                    <%=farm.name%>
+                                &lt;/h2>
+                                &lt;ul>
+                                    &lt;li>city = <%=farm.city%>&lt;/li>
+                                    &lt;li>Email = <%=farm.email%>&lt;/li>
+                                &lt;/ul>
+                                &lt;div>
+                                    &lt;a href="/farms">&larr; All farms&lt;/a>
+                                &lt;/div>
+                        &ltlarr;/body>
+                            
+                        &ltlarr;/html>
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <ul>
+                <li>Now For more interesting part is that how we might structure our routes if we want to make a new product for one farm</li>
+                <li>How we are going to create a new farm associated with a product.</li>
+            </ul>
+        </div>
+        <div class="wh">
+            <h2>Creating a product for a farm</h2>
+            <ul>
+                <li>In each show page of a farm we are going to make a link which says 'add a new product'.</li>
+                <li>Another important part is our route which are going to have farm id </li>
+            </ul>
+            <div class="code">
+                <pre>
+                    <code>
+
+                        /farms/:farm_id/products/new // this is for creating new product associated with a product 
+                        /farms/:farm_id/products // this route is for submission
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <h2>Finishing Touches</h2>
+            <ul>
+                <li>Populating all products of a particular farm to display them in show page of farm</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // Show page
+                        app.get('/farms/:id', async (req, res) => {
+                            const farm = await Farm.findById(req.params.id).populate('products')
+                            const products = farm.products
+                            res.render('farms/show', { farm ,products})
+                        })
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="t2" class="wh">
+            <h2>Deletion Mongoose Middleware</h2>
+            <ul>
+                <li>One last thing to consider when we have related models is what happens when you delete something like a farm.</li>
+                <li>If we delete a farm what happen to the product that are associated with that farm.</li>
+
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        // Delete farm
+                        app.delete('/farms/:id', async (req, res) => {
+                            const farm = await Farm.findByIdAndDelete(req.params.id)
+                            // when we are deleting a farm we want all product associated with it should also be deleted
+                            // there are two ways of doing this 
+                            // 1 - the manual way where we write our code in this route and delete all product
+                            // 2 - using a mongoose middleware
+                            res.redirect('/farms')
+                        })
+                    </code>
+                </pre>
+            </div>
+            <ul>
+                <li><a href="https://mongoosejs.com/docs/middleware.html" target="_blank">mongoose middleware docs.</a></li>
+                <li>findByIdAndDelete() triggers the findOneAndDelete() middleware.
+                    <ul>
+                        <li>So if we will setup a middleware for findByOneAndDelete() it will run even for findByIdAndDelete() </li>
+                    </ul>
+                </li>
+                <li>We have to set our middleware in model file before making a model</li>
+            </ul>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const mongoose = require('mongoose')
+                        const Product = require('./product')
+                        const { Schema } = mongoose;
+                        
+                        const farmSchema = new Schema({
+                            name: {
+                                type: String,
+                                required: [true, 'Farm must have a name!']
+                            },
+                            city: String,
+                            email: {
+                                type: String,
+                                required: [true, 'Email required!']
+                            },
+                            products: [{
+                                type: Schema.Types.ObjectId,
+                                ref: 'Product'
+                            }]
+                        })
+                        
+                        farmSchema.post('findOneAndDelete', async function (farm) {
+                            if (farm.products.length) {
+                                const res = await Product.deleteMany({ _id: { $in: farm.products } })
+                                console.log(res);
+                            }
+                        })
+                        
+                        const Farm = mongoose.model('Farm', farmSchema)
+                        
+                        module.exports = Farm
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

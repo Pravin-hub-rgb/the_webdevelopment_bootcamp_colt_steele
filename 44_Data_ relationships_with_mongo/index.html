@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Relationships with Mongo</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#t1" class="link">mongo relationships</a>
+        <a href="#t2" class="link">one to few</a>
+        <a href="#t3" class="link">one to many</a>
+        <a href="#t4" class="link">mongoose populate</a>
+        <a href="#t5" class="link">one to bajillions</a>
+        <a href="#t6" class="link">mongo schema design</a>
+        <div class="botbut">
+            <a href="../45_mongo_relationships_with_express/index.html">Next Topic &rarr;</a>
+            <a href="../43_YelpCamp_ Errors & Validating Data/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div id="t1" class="content-box">
+        <h1>Data Relationships with Mongo</h1>
+        <div class="wh">
+            <h2>Mongo Relationships</h2>
+            <p>In this section we are gonna talk about how we structure or strategy to structure database.</p>
+            <div id="t2" class="in">
+                <h2>ONE TO FEW</h2>
+                <ul>
+                    <li>Example &rarr; Associating a user to something they made like post, comment, etc.</li>
+                    <li>In mongo we have alot of option to how we structure information.</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            {
+                                name: 'Tommy Cash',
+                                savedAddresses : [
+                                    { street: 'Rahukohtu 3', city: 'Tallinm', country: 'Estonia' },
+                                    { street: 'Ravala 5', city: 'Tallinm', country: 'Estonia' }
+                                ]
+                            } 
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <button class="accordion">code</button>
+                    <div class="panel">
+                        <pre>
+                            <code>
+
+                                const mongoose = require('mongoose');
+
+                                mongoose.connect('mongodb://localhost:27017/relationshipDB', { useNewUrlParser: true, useUnifiedTopology: true })
+                                    .then(() => {
+                                        console.log('Mongo Connection open!');
+                                    })
+                                    .catch(err => {
+                                        console.log('Oh no mongo connection Error!');
+                                        console.log(err)
+                                    })
+                                
+                                const userSchema = new mongoose.Schema({
+                                    first: String,
+                                    last: String,
+                                    addresses: [
+                                        {
+                                            _id: { id: false }, // this will stop mongoose to create an ID
+                                            street: String,
+                                            city: String,
+                                            state: String,
+                                            country: {
+                                                type: String,
+                                                required: true
+                                            }
+                                        } // this address will have a separate ID's
+                                        // mongo is going to treat this as it own embeded schema 
+                                        // we can turn this off
+                                    ]
+                                    // In SQL we would have to make two tables (user and address) to mimic this type of structure
+                                })
+                                
+                                const User = mongoose.model('User', userSchema)
+                                
+                                const makeUser = async () => {
+                                    const u = new User({
+                                        first: 'Harry',
+                                        last: 'Potter'
+                                    })
+                                    u.addresses.push({
+                                        street: '123 Sesame St.',
+                                        city: 'New York',
+                                        state: 'NY',
+                                        country: 'USA'
+                                    })
+                                    const res = await u.save()
+                                    console.log(res);
+                                }
+                                
+                                // makeUser()
+                                
+                                // adding more address 
+                                
+                                const addAddress = async (id) => {
+                                    const user = await User.findById(id)
+                                    user.addresses.push({
+                                        street: '99 Dork St.',
+                                        city: 'New York',
+                                        state: 'NY',
+                                        country: 'USA'
+                                    })
+                                    user.save()
+                                }
+                                
+                                addAddress('639b3a2e9e4d78ccd44c7d49')
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div id="t3" class="in">
+                <h2>ONE TO MANY</h2>
+                <p>One option is to store your data separately, but then store references to document ID's somewhere
+                    inside the parent:</p>
+                <ul>
+                    <li>We don't embed the information in some parent document instead we are going to store reference
+                        of the data which is stored somewhere else.</li>
+                    <li>Usually we do this by using object ID's.</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            {
+                                farmName: 'Full Belly Farms',
+                                location: 'Guinda, CA',
+                                produce: [
+                                   ObjectID('28103849818347')
+                                   ObjectID('28103867876847')
+                                   ObjectID('28103849818678')
+                                ]
+                            } 
+                        </code>
+                    </pre>
+                </div>
+                <div class="wh">
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <button class="accordion">code</button>
+                        <div class="panel">
+                            <pre>
+                                <code>
+
+                                    const mongoose = require('mongoose');
+                                    const { Schema } = mongoose;
+                                    
+                                    mongoose.connect('mongodb://localhost:27017/relationshipDB', { useNewUrlParser: true, useUnifiedTopology: true })
+                                        .then(() => {
+                                            console.log('Mongo Connection open!');
+                                        })
+                                        .catch(err => {
+                                            console.log('Oh no mongo connection Error!');
+                                            console.log(err)
+                                        })
+                                    
+                                    mongoose.set('strictQuery', true)
+                                    
+                                    const productSchema = new mongoose.Schema({
+                                        name: String,
+                                        price: Number,
+                                        season: {
+                                            type: String,
+                                            enum: ['Spring', 'Summer', 'Fall', 'Winer']
+                                        }
+                                    })
+                                    
+                                    const Product = mongoose.model('Product', productSchema)
+                                    
+                                    // Product.insertMany([
+                                    //     { name: 'Goddess Melon', price: 4.99, season: 'Summer' },
+                                    //     { name: 'Sugar Watermelon', price: 4.88, season: 'Summer' },
+                                    //     { name: 'Asparagus', price: 2.99, season: 'Spring' }
+                                    // ])
+                                    
+                                    const farmSchema = new mongoose.Schema({
+                                        name: String,
+                                        city: String,
+                                        products: [{ type: Schema.Types.ObjectId, ref: 'Product' }] // telling mongoose that each one of these entities are of 'object id' type
+                                        // 'ref' option is what tells Mongoose which model to use during population.
+                                    })
+                                    
+                                    const Farm = mongoose.model('Farm', farmSchema)
+                                    
+                                    // const makeFarm = async () => {
+                                    //     const farm = new Farm({ name: 'Full Belly Farms', city: 'Guinda, CA' })
+                                    //     const melon = await Product.findOne({ name: 'Goddess Melon' })
+                                    //     farm.products.push(melon) // it seems like we are pushing an entire product.
+                                    //     await farm.save()
+                                    //     console.log(farm)
+                                    // }
+                                    // makeFarm()
+                                    
+                                    const addProduct = async () => {
+                                        const farm = await Farm.findOne({ name: 'Full Belly Farms' })
+                                        const watermelon = await Product.findOne({ name: 'Sugar Watermelon' })
+                                        farm.products.push(watermelon)
+                                        await farm.save()
+                                    }
+                                    addProduct()
+                                    
+                                    // we are only storing 'object ID' in products array of farm model 
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <button class="accordion">mongosh</button>
+                        <div class="panel">
+                            <pre>
+                                <code>
+
+                                    relationshipDB> db.farms.find()
+                                    [
+                                      {
+                                        _id: ObjectId("639ea6f191ab9b92ab2b6fdd"),
+                                        name: 'Full Belly Farms',
+                                        city: 'Guinda, CA',
+                                        products: [
+                                          ObjectId("639ea2ce8e5c5a67ece37b60"),
+                                          ObjectId("639ea2ce8e5c5a67ece37b61")
+                                        ],
+                                        __v: 2
+                                      }
+                                    ]
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="t4" class="in">
+                <h2>Mongose Populate</h2>
+                <ul>
+                    <li><a href="https://mongoosejs.com/docs/populate.html">Mongoose documents</a></li>
+                    <li>Here we are going to learn how to retrive data from product and farm model at the same time.
+                    </li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            Farm.findOne({name:'Full Belly Farms'})
+                            .populate('products') // populating the products fields
+                            .then(farm => console.log(farm))
+                            
+                        </code>
+                    </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            // this is populated data
+                            {
+                                _id: new ObjectId("639ea6f191ab9b92ab2b6fdd"),
+                                name: 'Full Belly Farms',
+                                city: 'Guinda, CA',
+                                products: [
+                                  {
+                                    _id: new ObjectId("639ea2ce8e5c5a67ece37b60"),
+                                    name: 'Goddess Melon',
+                                    price: 4.99,
+                                    season: 'Summer',
+                                    __v: 0
+                                  },
+                                  {
+                                    _id: new ObjectId("639ea2ce8e5c5a67ece37b61"),
+                                    name: 'Sugar Watermelon',
+                                    price: 4.88,
+                                    season: 'Summer',
+                                    __v: 0
+                                  }
+                                ],
+                                __v: 2
+                              }
+                              
+                        </code>
+                    </pre>
+                </div>
+                <ul>
+                    <li>We can use populate when we needs more data from the reference data stored.</li>
+                    <li>Struturing of relationship is stricky so we should use some guidelines for that.</li>
+                </ul>
+            </div>
+            <div id="t5" class="in">
+                <h2>One to Bajillions</h2>
+                <ul>
+                    <li>with thousands or more documents, it's more efficient to store a reference to the parent on the
+                        child document.</li>
+                    <li>Example &rarr; Some people have 10,000 of tweets.</li>
+                    <li>With thousands or more documents, it's more efficient to store a reference to the parent on the
+                        child document.</li>
+                </ul>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            {
+                                tweetText : 'lol I just crashed my car because I was tweeting',
+                                tags : ['stupid','moron','yolo'],
+                                user : ObjectId('2133243243') 
+                            }
+                        </code>
+                    </pre>
+                </div>
+                <div class="wh">
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <button class="accordion">code</button>
+                        <div class="panel">
+                            <pre>
+                                <code>
+
+                                    const mongoose = require('mongoose');
+                                    const { Schema } = mongoose;
+                                    
+                                    mongoose.connect('mongodb://localhost:27017/relationshipDB', { useNewUrlParser: true, useUnifiedTopology: true })
+                                        .then(() => {
+                                            console.log('Mongo Connection open!');
+                                        })
+                                        .catch(err => {
+                                            console.log('Oh no mongo connection Error!');
+                                            console.log(err)
+                                        })
+                                    
+                                    const userSchema = new Schema({
+                                        username: String,
+                                        age: Number,
+                                    })
+                                    
+                                    const tweetSchema = new Schema({
+                                        text: String,
+                                        likes: Number,
+                                        user: { type: Schema.Types.ObjectId, ref: 'userSchema' }
+                                    })
+                                    
+                                    const User = mongoose.model('User', userSchema)
+                                    const Tweet = mongoose.model('Tweet', tweetSchema)
+                                    
+                                    const makeTweets = async () => {
+                                        // const user = new User({ username: 'chickenfan99', age: 61 })
+                                        const user = await User.findOne({ username: 'chickenfan99' })
+                                    
+                                        // const tweet1 = new Tweet({ text: 'omg I love my chicken family!', likes: 0 })
+                                        // tweet1.user = user;
+                                        const tweet2 = new Tweet({ text: 'bock bock bock my chickens make noises', likes: 5 })
+                                        tweet2.user = user;
+                                    
+                                        // user.save()
+                                        // tweet1.save()
+                                        tweet2.save()
+                                    }
+                                    makeTweets()
+                                </code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="code">
+                        <div class="dotc"></div>
+                        <pre>
+                            <code>
+
+                                // populating the user
+                                const findTweet = async () => {
+                                    const t = await Tweet.find({}).populate('user', 'username') // finding all  and populating only specific part
+                                    console.log(t);
+                                }
+                                findTweet()
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div id="t6" class="in">
+                <h2>Mongo Schema Design</h2>
+                <ul>
+                    <li>Now we are going to incorporate what we have just learned in isolation.</li>
+                    <li>Making to models and connecting them in an express app.</li>
+                    <li>Before that we are going to wrap up what we have covered by a <a href="https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design" target="_blank">5 rules of thumb for mongodb shcema design blog post</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>

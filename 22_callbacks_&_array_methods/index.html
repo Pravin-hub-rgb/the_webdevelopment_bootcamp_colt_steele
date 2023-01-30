@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callbacks & Array Methods</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        /* TABLE */
+        .table-reduce {
+            background-color: rgb(240, 240, 240);
+            width: 50%;
+        }
+
+        .table-reduce th {
+            background-color: rgb(199, 199, 199);
+            font-weight: bolder;
+        }
+
+        .table-reduce td {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a href="#arrmethod">Array Methods(advanced)</a>
+        <a class="sm" href="#foreach">forEach</a>
+        <a class="sm" href="#map">map</a>
+        <a class="sm" href="#filter">filter</a>
+        <a class="sm" href="#somevery">some & every</a>
+        <a class="sm" href="#reduce">reduce</a>
+        <a href="#arrowfunc">Arrow Function</a>
+        <a href="#implicitreturn">Implicit Return</a>
+        <a href="#thisarrow">Arrow Func. & 'this'</a>
+        <a href="#settimeout">setTimeout</a>
+        <a href="#setinterval">setInterval</a>
+        <div class="botbut">
+            <a href="../23_newer_js_features/index.html">Next Topic &rarr;</a>
+            <a href="../20_new_introducing_functions/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div id="arrmethod" class="content-box">
+        <h2>Array Methods(advanced)</h2>
+        <p>Applying function to collection of data</p>
+        <div id="foreach" class="wh">
+            <h2>FOREACH</h2>
+            <p>Accepts a callback function. <br> Calls the function once per element in the array.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const nums = [9, 8, 7, 6, 5, 4, 3, 2, 1];
+
+                        nums.forEach(function (n) {
+                          console.log(n * n);
+                          //prints: 81, 64, 49, 36, 25, 16, 9, 4, 1
+                        });
+                        
+                        nums.forEach(function (el) {
+                          if (el % 2 === 0) {
+                            console.log(el)
+                            //prints: 8, 6, 4, 2
+                          }
+                        }) 
+                    </code>
+                </pre>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const movies = [
+                            {
+                              title: 'Amadeus',
+                              score: 99
+                            },
+                            {
+                              title: 'Stand By Me',
+                              score: 85
+                            },
+                            {
+                              title: 'Parasite',
+                              score: 67
+                            },
+                            {
+                              title: 'Heaven',
+                              score: 89
+                            }
+                          ]
+                          
+                          movies.forEach(function (oneMovie) {
+                            console.log(`${oneMovie.title}: ${oneMovie.score}`)
+                          });
+                          
+                          // Amadeus: 99
+                          // Stand By Me: 85
+                          // Parasite: 67
+                          // Heaven: 89 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="map" class="wh">
+            <h2>MAP</h2>
+            <p>Creates a new array with the results of calling a callback on every element in the array.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const texts = ['rofl','lol','omg','ttyl'];
+                        const caps = texts.map(function (t){
+                          return t.toUpperCase();
+                        });
+                        texts; //['rofl','lol','omg','ttyl']
+                        caps; //['ROFL','LOL','OMG','TTYL']
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="filter" class="wh">
+            <h2>FILTER</h2>
+            <p>Creates a new array with all elements that pass the test implemented by the provided function.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const nums = [9,8,7,6,5,4,3,2,1];
+                        const odds = nums.filter(n => {
+                          return n % 2 === 1; // our callback returns ture or false
+                          //if it returns true, n if added to the filtered array
+                        })
+                        //[9, 7, 5, 3, 1]
+                        
+                        const smallNums = nums.filter( n => n < 5);
+                        //[4, 3, 2, 1]
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <p>Combining <i>map</i> and <i>filter</i></p>
+               <div class="code">
+                <div class="dotc"></div>
+                <button class="accordion">code</button>
+                <div class="panel">
+                    <pre>
+                        <code>
+
+                            const movies = [
+                            {
+                              title: 'Amadeus',
+                              score: 99
+                            },
+                            {
+                              title: 'Stand By Me',
+                              score: 85
+                            },
+                            {
+                              title: 'Parasite',
+                              score: 67
+                            },
+                            {
+                              title: 'Heaven',
+                              score: 89
+                            }
+                          ]
+                          const goodMovies = movies.filter((movie) => movie.score >= 86).map(movie => movie.title)
+                          // goodMovies["Amadeus", "Heaven"]
+                        </code>
+                    </pre>
+                </div>
+               </div>
+                <p>We just chain them together</p>
+            </div>
+        </div>
+        <div id="somevery" class="wh">
+            <h2>Some & Every</h2>
+            <p>They are both boolean methods</p>
+            <div class="in">
+                <h3>SOME</h3>
+                <p>Similiar to every, but returns true if ANY of the array elements pass the test function</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const words = ['dog', 'jello', 'log', 'cupcake', 'bag', 'wag'];
+                            //Are there any words longer than 4 characters?
+                            words.some(word => {
+                              return word.length > 4;
+                            }) //true
+                            
+                            //Do any words start with 'Z'?
+                            words.some(word => word[0] === 'Z'); //false
+                            
+                            //Do any words contain 'cake'?
+                            words.some(w => w.includes('cake')); //true
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>EVERY</h3>
+                <p>Tests wheather all elements in the array pass the provided function. It returns a Boolean value.
+                </p>
+               <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const words = ['dog', 'dig', 'bag', 'wag'];
+
+                        words.every(word => {
+                          return word.length === 3
+                        }); //true
+                        words.every(word => word[0] === 'd'); //false
+                        
+                        words.every(w => {
+                          let last_letter = w[w.length - 1];
+                          return last_letter === 'g';
+                        }); //true
+                        
+                    </code>
+                </pre>
+               </div>
+            </div>
+
+        </div>
+        <div id="reduce" class="wh">
+            <h2>REDUCE</h2>
+            <p>Executes a reducer function on each element of the array, reuslting in a single value.</p>
+            <div class="in">
+                <h3>SUMMING AN ARRAY</h3>
+                <div class="wh">
+                   <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            [3,5,7,9,11].reduce((accumulator, currentValue) => {
+                                return accumulator + currentValue;
+                            }); 
+                        </code>
+                    </pre>
+                   </div>
+                    <table class="table-reduce wh">
+                        <thead>
+                            <tr>
+                                <th>Callback</th>
+                                <th>accumulator</th>
+                                <th>currentValue</th>
+                                <th>return value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>first call</td>
+                                <td>3</td>
+                                <td>5</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>second call</td>
+                                <td>8</td>
+                                <td>7</td>
+                                <td>15</td>
+                            </tr>
+                            <tr>
+                                <td>third call</td>
+                                <td>15</td>
+                                <td>9</td>
+                                <td>24</td>
+                            </tr>
+                            <tr>
+                                <td>fourth call</td>
+                                <td>24</td>
+                                <td>11</td>
+                                <td>35</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const exams = [80, 98, 92,70,90,89,84,81,77];
+                            const sum = exams.reduce((acc,curVal)=>{
+                              return acc + curVal;
+                            });
+                            console.log(sum) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="in">
+                <h3>Finding the minimun value</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const arr = [80, 98, 92,70,90,89,84,81,77];
+                            const minimunVal = arr.reduce((min, curVal) => {
+                              if(curVal &lt; min) return curVal;
+                              return min;
+                            });
+                            minimunVal; //70
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const movies= [
+                        {
+                          title: 'Amadeus',
+                          score: 99
+                        },
+                        {
+                          title: 'Stand By Me',
+                          score: 85
+                        },
+                        {
+                          title: 'Parasite',
+                          score: 67
+                        },
+                        {
+                          title: 'Heaven',
+                          score: 89
+                       }
+                       ]
+                       const highestMovie = movies.reduce((high,cur)=>{
+                          if(cur.score>high.score) return cur
+                          return high
+                       })
+                       console.log(highestMovie)
+                      //{title: "Amadeus", score: 99}
+                    </code>
+                </pre>
+            </div>
+            <div class="in">
+                <p>We can specify intital starting point for accumulator parameter</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const evens = [2, 4, 6, 8];
+                            evens.reduce((sum, num) => sum + num) //20
+                            evens.reduce((sum, num) => sum + num, 100) //120
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="arrowfunc" class="content-box">
+        <h2>Arrow Functions!</h2>
+        <p>"syntactically compact alternative" <br> to a regular function expression</p>
+        <div class="wh">
+            <h3>Example</h3>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const square = (x) => {
+                            return x * x;
+                        }
+                        
+                        const sum = (x, y) => {
+                            return x + y;
+                        } 
+                    </code>
+                </pre>
+            </div>
+            <h3>When we have only one parameter then we don't need parantheses</h3>
+            <div class="in">
+                <p class="ls">
+                    const square = x =&gt;{ return x * x; }
+                </p>
+            </div>
+            <div id="implicitreturn" class="in">
+                <h3>IMPLICIT RETURN</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const isEven = (num) => { //arrow function with parens around param
+                                return num % 2 === 0;
+                              }
+                              const isEven = num => { //no parens around param
+                                return num % 2 === 0;
+                              }
+                              const isEven = x => ( //implicit return
+                                x % 2 === 0
+                              );
+                              const isEven = num => x % 2 === 0 //one liner implicit return
+                        </code>
+                    </pre>
+                </div>
+                <p>These only works if there is only one expression in the body of a function.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const add = () => ( //ERROR
+                            let msg = hi;
+                            Math.floor(Math.random()*6)+1;
+                            ) 
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+        <div id="thisarrow" class="wh">
+            <h2>Arrow Function & 'this'</h2>
+            <p>Arrow functions behave very differently in terms of value of the keyword 'this' v/s a non arrow
+                function.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const person = {
+                            firstName: 'Viggo',
+                            lastName: 'Mortensen',
+                            fullName: function (){
+                              return `${this.firstName} ${this.lastName}`
+                            }
+                          }
+                          person.fullName() //"Viggo Mortensen"
+                          // it refers to the object
+                          
+                          // now replacing it with an arrow function
+                          const person = {
+                          firstName: 'Viggo',
+                          lastName: 'Mortensen',
+                          fullName: () => {
+                          
+                              return `${this.firstName} ${this.lastName}`
+                          }
+                          }
+                          person.fullName() //"undefined undefined"
+                          //here 'this' is going to refer to the scope that it created in, and that is 'Window object'
+                    </code>
+                </pre>
+            </div>
+            <p>But if we nest arrow function inside a method in object, then 'this' refers to that object</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        const person = {
+                            firstName: 'Viggo',
+                            lastName: 'Mortensen',
+                            fullName: function() {
+                              return `${this.firstName} ${this.lastName}`
+                            },
+                            shoutName: function () {
+                            setTimeout(() => {
+                              console.log(this.fullName())
+                            },3000);
+                           }
+                        }
+                        person.shoutName; //"Viggo Mortenson"
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <div class="content-box">
+        <p>Functions that accepts callback Functions</p>
+        <p>These have nothing to do with arrays. They have to do with delaying, waiting, pausing execution for later
+            time.</p>
+        <div id="settimeout" class="wh">
+            <h2>setTimeout</h2>
+            <p>We pass two thing, 1- a callback and 2- number of milliseconds to delay execution</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        setTimeout(()=>{
+                            console.log("hellow")
+                        },3000) //after 3 sec it will execute the callback function.
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div id="setinterval" class="wh">
+            <h2>setInterval</h2>
+            <p>Calls the callback function every <i>x</i> millisecond intervals</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                    <code>
+
+                        setInterval(()=>{
+                            console.log(Math.random())
+                          },2000) 
+                    </code>
+                </pre>
+            </div>
+            <p>After every 2 second the callback function runs and this process never stops.</p>
+            <p>So, each setInterval function have an <i>id</i> and we can pass that id to <b>clearInterval</b>
+                method </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                        <code>
+
+                            const id = setInterval(()=>{
+                                console.log("say hi");
+                              },3000);
+                              
+                              clearInterval(id); 
+                        </code>
+                    </pre>
+                </div>
+        </div>
+    </div>
+
+    <script src="../main.js"></script>
+</body>
+
+</html>

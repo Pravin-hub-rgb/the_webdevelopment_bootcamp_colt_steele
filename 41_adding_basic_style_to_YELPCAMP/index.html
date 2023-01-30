@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yelpcamp: Adding Basic Style</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <div class="botbut">
+            <a href="../42_Express_Errors/index.html">Next Topic &rarr;</a>
+            <a href="../40_Middleware The Key To Express/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box">
+        <h2>A New EJS Tool For Layouts</h2>
+        <p>
+            Before we used to take help of Partials but now we will use a package 'ejs-mate'. It allow us to use fun
+            usefull functionality that is something called Layout.
+            ejs-mate <a href="https://www.npmjs.com/package/ejs-mate">NPM docs!</a>
+            ejs-mate <a href="https://github.com/JacksonTian/ejs-mate">Github repo!</a>
+        </p>
+        <div class="code">
+            <div class="dotc"></div>
+            <button class="accordion">views/layouts/boilerplate.ejs</button>
+            <div class="panel dark">
+                <pre>
+                        <code>
+
+                            //layouts/boilerplate.ejs
+                            &lt;!DOCTYPE html>
+                            &lt;html lang="en">
+                            
+                            &lt;head>
+                                &lt;meta charset="UTF-8">
+                                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                &lt;title>Boiler palte!!!&lt;/title>
+                            &lt;/head>
+                            
+                            &lt;body>
+                                &lt;h1>Before&lt;/h1>
+                                &lt;%- body %>
+                                &lt;!- When called anywhere inside a template, requests that the output
+                                    of the current template be passed to the given view as the body local. Use this to specify
+                                    layouts from within your template, which is recommended with Express 3.0, since the
+                                    app-level layout functionality has been removed. -->
+                                &lt;h1>After&lt;/h1>
+                            &lt;/body>
+                            &lt;/html>
+                    </code>
+                    </pre>
+            </div>
+        </div>
+        <div class="code">
+            <div class="dotc"></div>
+            <button class="accordion">app.js</button>
+            <div class="panel dark">
+                <pre>
+                        <code>
+
+                        //So this is one of many engines that are used to run or parse and basically make sense for ejs 
+                        const ejsMate = require('ejs-mate');
+                        //here we are telling Express to ejsMate engine instead of relying on the default one.
+                        app.engine('ejs', ejsMate);
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div class="code">
+            <div class="dotc"></div>
+            <button class="accordion">campgrounds/index.ejs</button>
+            <div class="panel dark">
+                <pre>
+                        <code>
+
+                         &lt;% layout('layouts/boilerplate') %>
+                         &lt;h1>All campgrounds&lt;/h1>
+                         &lt;div>
+                            &lt;a href="/campgrounds/new">Add Campgrounds&lt;/a>
+                         &lt;/div>
+                         &lt;ul>
+                            &lt;% for (let campground of campgrounds) {%>
+                            &lt;li>
+                                 &lt;a href="/campgrounds/ &lt;%=campground._id%>"> &lt;%=campground.title%> &lt;/a>
+                            &lt;/li>
+                            &lt;% } %>
+                         &lt;/ul>
+                        //now we are successfully injecting our content in this layout.
+                        //now update all other template to use this
+                    </code>
+                    </pre>
+            </div>
+        </div>
+        <div class="wh">
+            <ul>
+                <li><a href="https://getbootstrap.com/docs/5.0/components/navbar/" target="_blank">bootstrap navbar &neArr;</a></li>
+                <li><a href="./code/" target="_blank">source files &neArr;</a></li>
+            </ul>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Arrays</title>
+    <link rel="stylesheet" href="../styleLesson.css">
+    <style>
+        .chicken {
+            display: flex;
+            border: 2px solid black;
+            text-align: center;
+        }
+
+        .chicken>div {
+            border: 1px solid grey;
+            width: 20%;
+        }
+
+        .chicken p {
+            border: 1px solid white;
+        }
+        @media only screen and (max-width: 800px) {
+            .chicken p{
+                font-size: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mySidepanel" class="sidepanel">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="../index.html" class="home">Home</a>
+        <a clas="link" href="#array">Arrays &darr;</a>
+        <a class="sm link" href="#indexed">Arrays are Indexed</a>
+        <a class="sm link" href="#access">Accessing array elements</a>
+        <a class="sm link" href="#modify">Modifying Arrays</a>
+        <a clas="link" href="#methods">Array Methods &darr;</a>
+        <a class="sm link" href="#push">push</a>
+        <a class="sm link" href="#pop">pop</a>
+        <a class="sm link" href="#shift">shift</a>
+        <a class="sm link" href="#unshift">unshift</a>
+        <a class="sm link" href="#concat">concat</a>
+        <a class="sm link" href="#includes">includes</a>
+        <a class="sm link" href="#indexof">indexOf</a>
+        <a class="sm link" href="#reverse">reverse</a>
+        <a class="sm link" href="#slice">slice</a>
+        <a class="sm link" href="#splice">splice</a>
+        <a class="sm link" href="#sort">sort</a>
+        <div class="botbut">
+            <a href="../18_javascript_object_literal/index.html">Next Topic &rarr;</a>
+            <a href="../16.2_console_alert_and_prompt/index.html">&larr; Previous Topic</a>
+        </div>
+    </div>
+    <div id="navbar" class="grad">
+        <div>
+            <div class="openbtn" onclick="openNav()">
+                <div id="nav-icon1" for="nav-menu1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2>Web Development 2022</h2>
+        </div>
+    </div>
+    <div class="content-box" id="array">
+        <h1>Arrays</h1>
+        <h3>Out First Data structure (<a
+                href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"
+                target="_blank">Reference from MDN. &neArr;</a>)</h3>
+        <p>Ordered collections of values.</p>
+        <ul>
+            <li>list of comments of IG post</li>
+            <li>Collection of levels in a game</li>
+            <li>Songs in a playlist</li>
+        </ul>
+        <div class="wh">
+            <h2>Creating Arrays</h2>
+            <div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                //To make an empty array
+                                let students = [ ];
+
+
+                                //An array of strings
+                                let colors = ['red', 'orange', 'yellow'];
+                                                            
+                                //An array of numbers
+                                let lottoNums = [19,22,56,12,51];
+                                                             
+                                //A mixed array
+                                let stuff = [true, 68, 'cat', null];                                                   
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+        <div class="wh" id="indexed">
+            <h2>Arrays are indexed</h2>
+            <div class="chicken in">
+                <div>
+                    <p class="c-para">Doc</p>
+                    <p>0</p>
+                </div>
+                <div>
+                    <p class="c-para">Dopey</p>
+                    <p>1</p>
+                </div>
+                <div>
+                    <p class="c-para">Dashful</p>
+                    <p>2</p>
+                </div>
+                <div>
+                    <p class="c-para">Grumpy</p>
+                    <p>3</p>
+                </div>
+                <div>
+                    <p class="c-para">Sneezy</p>
+                    <p>4</p>
+                </div>
+                <div>
+                    <p class="c-para">Sleepy</p>
+                    <p>5</p>
+                </div>
+                <div>
+                    <p class="c-para">Happy</p>
+                    <p>6</p>
+                </div>
+            </div>
+            <p>Each element has a corresponding index (counting starts at 0)</p>
+        </div>
+        <div id="access" class="wh">
+            <h3>Accesing array elements</h3>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            let days = ['monday','tuesday',wednesday'];
+
+                            days[0] //"monday"
+                            
+                            days[1][0] //"t"                            
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="modify" class="wh">
+            <h3>Modifying Arrays</h3>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            let colors = ['rad','orange','green','yellow'];
+
+                            colors[0] = 'red';
+                            
+                            colors //["red","orange","green","yellow"]                            
+                        </code>
+                    </pre>
+            </div>
+            <p>This is not possible with strings.</p>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            let vehicles = ['car','bike'];
+
+                            vehicles[10] = "truck";
+                            
+                            vehicles //["car","bike",empty x 8, "truck"]
+                            
+                            vehicles.length //11
+                            
+                            vehicles[5] //undefined                            
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="methods" class="wh">
+            <h2>Array Methods</h2>
+            <ul>
+                <li>Push - add to end</li>
+                <li>Pop - remove from end</li>
+                <li>Shift - remove from start</li>
+                <li>Unshift - add to start</li>
+            </ul>
+            <div class="in">
+                <h3>More Methods</h3>
+                <ul>
+                    <li>concat - merge arrays</li>
+                    <li>includes - look for value</li>
+                    <li>indexOf - just like string.indexOf</li>
+                    <li>join - creates a string from an array</li>
+                    <li>reverse - reverses an array</li>
+                    <li>slice - copies a portion on an array</li>
+                    <li>splice - removes/replaces elements</li>
+                    <li>sort - sorts an array</li>
+                </ul>
+            </div>
+            <div class="in" id="push">
+                <h2>Push</h2>
+                <p>add to end</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let members = ['harry','hermione'];
+                                members.push('malfoy');
+                                members //["harry","hermione","malfoy"]
+                            </code>
+                        </pre>
+                </div>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                // Pushing multiple elements
+
+                                colors.push('red','blue');                                
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in" id="pop">
+                <h2>Pop</h2>
+                <p>remove from end</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let members = ['harry','hermione'];
+                                let popPerson = members.pop();
+                                members //["harry"]
+                                popPerson //"hermione"
+                            </code>
+                        </pre>
+                </div>
+
+            </div>
+            <div class="in" id="shift">
+                <h2>Shift</h2>
+                <p>remove from beginning</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let members = ['harry','hermione'];
+                                let shiftPerson = members.shift();
+                                members //["hermoine"]
+                                shiftPerson //"harry"
+                            </code>
+                        </pre>
+                </div>
+
+            </div>
+            <div class="in" id="unshift">
+                <h2>Unshift</h2>
+                <p>add to beginning</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let members = ['harry','hermione'];
+                                members.unshift('malfoy');
+                                members //[ "malfoy","harry","hermoine"]
+                            </code>
+                        </pre>
+                </div>
+
+            </div>
+            <div class="in" id="concat">
+                <h2>Concat</h2>
+                <p>merge two or more arrays</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const array1 = ['a', 'b', 'c'];
+                                const array2 = ['d', 'e', 'f'];
+                                const array3 = array1.concat(array2);
+                                array3 //["a", "b", "c", "d", "e", "f"]
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in" id="includes">
+                <h2>Includes</h2>
+                <p>Boolean method which determine whether an array includes a certain value among its entries</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const pets = ['cat', 'dog', 'bat'];
+                                pets.includes('cat'); //true
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in" id="indexof">
+                <h2>indexOf</h2>
+                <p>returns the first index at which a given element can be found in the array, or -1 if it is not
+                    present</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const beasts = ['ant', 'bison', 'camel', 'duck', 'bison'];
+                                beasts.indexOf('bison'); //1
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in" id="reverse">
+                <h2>Reverse</h2>
+                <p> reverses an array in place. The first array element becomes the last, and the last array element
+                    becomes the first.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const array1 = ['one', 'two', 'three'];
+                                array1.reverse();
+                                array1 //["three", "two", "one"]
+                            </code>
+                        </pre>
+                </div>
+                <p>Careful: reverse is destructive -- it changes the original array.</p>
+            </div>
+            <div class="in" id="slice">
+                <h2>Slice</h2>
+                <p>It is way to get a copy of a portion of an array.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+                                animals.slice(2); // expected output: Array ["camel", "duck", "elephant"]
+                                
+                                animals.slice(2, 4); // expected output: Array ["camel", "duck"] 
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in" id="splice">
+                <h2>Splice</h2>
+                <p>Changes the contents of an array by removing or replacing existing elements and/or adding new
+                    elements in place.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const months = ['Jan','March','April','June'];
+                                months.splice(1,0,'Feb');
+                                months //['Jan','Feb','March','April','June']
+                            </code>
+                        </pre>
+                </div>
+            </div>
+            <div class="in" id="sort">
+                <h2>Sort</h2>
+                <p>sorts the elements of an array in place and returns the sorted array.</p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let scores = [1,70,100,2500,9,-12,0,34]
+                                scores.sort() //[-12,0,1,100,2500,34,70,9]
+                            </code>
+                        </pre>
+                </div>
+                <p>We can pass function to make it work</p>
+            </div>
+        </div>
+        <div id="reference" class="wh">
+            <h1>Reference Types & Equality Testing</h1>
+            <div class="in">
+                <h3>Example:</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                'hi' === 'hi' //true
+                                ['hi'] === ['hi'] //false
+                                [1] === [1] //false
+                            </code>
+                        </pre>
+                </div>
+                <p>So, in case of arrays we are not comparing content, instead it is comparing the <b>references in
+                        memory </b></p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let luckyNum = 87;
+
+                                let luckyNums = ['2','234']; 
+                            </code>
+                        </pre>
+                </div>
+                <p>While storing array, it is actually storing the reference number not the actual content like in
+                    <i>luckyNum</i> case
+                </p>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                let nums = [1,2];
+                                let numsCopy = nums; //it is storing the address as nums
+                                nums.push(3); //changed in nums
+                                numsCopy; //[1,2,3]
+                                nums === numsCopy //true
+                            </code>
+                        </pre>
+                </div>
+                <p>numsCopy is also changed, that's because they both are referencing to the same address.</p>
+            </div>
+        </div>
+        <div id="arrayconst" class="wh">
+            <h1>Arrays + Const</h1>
+            <p>As the variable is storing the address of an array instead of the actual content of an array.</p>
+            <h3>SO, THE VALUES CAN CHANGE</h3>
+            <h4>AS LONG AS THE REFERENCE REMAINS THE SAME</h4>
+            <div class="code">
+                <div class="dotc"></div>
+                <pre>
+                        <code>
+
+                            const myEggs = ['brown','brown'];
+                            myEggs.push('purple');
+                            myEggs[0] = 'green';
+                            
+                            myEggs = ['blue','pink']; //No! here we are changing the address as we are redeclaring variable with new array.
+                        </code>
+                    </pre>
+            </div>
+        </div>
+        <div id="nested" class="wh">
+            <h1>Nested Arrays</h1>
+            <p>We can store arrays inside other arrays!</p>
+            <div class="in">
+                <h3>Example</h3>
+                <div class="code">
+                    <div class="dotc"></div>
+                    <pre>
+                            <code>
+
+                                const colors = [
+                                    ['red','crimson'],
+                                    ['orange','dark orange'],
+                                    ['yellow','golden rod'],
+                                    ['green','olive'],
+                                    ['purple','orchid']
+                                ]
+                            </code>
+                        </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+</body>
+
+</html>
