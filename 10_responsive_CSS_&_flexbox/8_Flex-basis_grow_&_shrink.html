@@ -8,7 +8,7 @@
     <title>Flex-basis_grow_&_shrink</title>
     <style>
         body{
-            padding: 30px;
+            padding: 10px;
             background-color: rgb(112, 180, 240);
         }
         section {
@@ -25,6 +25,11 @@
             height: 200px;
             font-size: 3em;
         }
+        @media only screen and (max-width:800px){
+            section div{
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -33,6 +38,7 @@
     <hr>
     <h2>Flex-basis</h2>
     <p>Defines the initial size of an element before additional space is distributed, acc. to the main axis direction.</p>
+    <p>flex-basis: 300px;</p>
     <style>
         #container1 div {
             flex-basis: 300px;
@@ -49,6 +55,7 @@
     <h2>Flex-grow</h2>
     <p>Controls the amount of available space an element should take up. Accepts a unit-less number value.</p>
     <p>This accepts unit less number which act as proportion</p>
+    <p>flex-grow: 1;</p>
     <style>
         #container2 div:nth-of-type(1) {
             flex-grow: 1;
@@ -62,6 +69,9 @@
         <div style="background-color: rgb(53, 129, 243);">5</div>
     </section>
     <p>by using max-width and min-width we can control the max and min width so that we don't go beyond that.</p>
+    <p>flex-grow: 1; <br>
+        min-width: 200px; <br>
+        max-width: 400px;</p>
     <style>
         #container3 {
             flex-wrap: wrap;

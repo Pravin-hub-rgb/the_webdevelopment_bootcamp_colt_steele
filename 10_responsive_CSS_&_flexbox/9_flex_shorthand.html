@@ -8,7 +8,7 @@
     <title>Flex Shorthand</title>
     <style>
         body{
-            padding: 30px;
+            padding: 10px;
             background-color: rgb(112, 180, 240);
         }
         main {
@@ -19,6 +19,7 @@
         section {
             border: 3px solid black;
             height: 400px;
+            text-align: center;
         }
     </style>
 </head>
@@ -27,6 +28,15 @@
     <h1>Flex</h1>
     <p>The <b>flex</b> CSS property set how a flex item will grow or shrink to fit the space available in its flex container. It is a shorthand for <b>flex-grow, flex-shrink and flex-basis.</b></p>
     <h2>Three values order. flex: flex-grow | flex-shrink | flex-basis</h2>
+    <p>
+        .sidebar {
+        <br>     flex: 1 7 300px;
+        <br> }
+        <br> 
+        <br> .maincontent {
+        <br>     flex: 7 1 500px
+        <br> }
+    </p>
 </body>
 <style>
     .sidebar {
@@ -38,9 +48,9 @@
     }
 </style>
 <main>
-    <section class="sidebar"></section>
-    <section class="maincontent"></section>
-    <section class="sidebar"></section>
+    <section class="sidebar">.sidebar</section>
+    <section class="maincontent">.maincontent</section>
+    <section class="sidebar">.sidebar</section>
 </main>
 
 </html>
