@@ -45,10 +45,17 @@
             <h2>Mongo Injection</h2>
             <ul>
                 <li>Now we are going to talk about common security issues.</li>
-                <li><a href="https://en.wikipedia.org/wiki/SQL_injection" target="_blank">About SQL injection</a> &rarr; the way they work that they take advantage of the sql syntax. The user can put a query which can easily delete whole server data. So the concept is that someone can inject there own queries into some original query.</li>
+                <li><a href="https://en.wikipedia.org/wiki/SQL_injection" target="_blank">About SQL injection</a> &rarr;
+                    the way they work that they take advantage of the sql syntax. The user can put a query which can
+                    easily delete whole server data. So the concept is that someone can inject there own queries into
+                    some original query.</li>
                 <li>In mongo injection, users can manipulate the original query.</li>
-                <li>To address this basic level of attacks we can not allow users to have any symbols related to query strings (like $, ', ", ., etc). So we want to block any dynamic query comming from the user as input.</li>
-                <li>So there is a package that help us do that called <a href="https://www.npmjs.com/package/express-mongo-sanitize">'express-mongo-sanitize'</a>. So have to install it.</li>
+                <li>To address this basic level of attacks we can not allow users to have any symbols related to query
+                    strings (like $, ', ", ., etc). So we want to block any dynamic query comming from the user as
+                    input.</li>
+                <li>So there is a package that help us do that called <a
+                        href="https://www.npmjs.com/package/express-mongo-sanitize">'express-mongo-sanitize'</a>. So
+                    have to install it.</li>
             </ul>
             <div class="code">
                 <div class="dotc"></div>
@@ -75,9 +82,13 @@
         <div id="t2" class="wh">
             <h2>Cross Site Scripting (<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>)</h2>
             <ul>
-                <li>Next type of vulnerability we are going to talk about is XSS which is very powerfull vulnerability the idea is to inject some client side script into somebody else's web page. Spo they way this works is that some attacker going to inject their own client side code that will run in the browser on somebody else's application</li>
-                <li><a href="https://xss-game.appspot.com/" target="_blank">XSS game &neArr; &rarr;</a>  </li>
-                <li>If we can get our code to run in some websites then we can easily access information and do something with. </li>
+                <li>Next type of vulnerability we are going to talk about is XSS which is very powerfull vulnerability
+                    the idea is to inject some client side script into somebody else's web page. Spo they way this works
+                    is that some attacker going to inject their own client side code that will run in the browser on
+                    somebody else's application</li>
+                <li><a href="https://xss-game.appspot.com/" target="_blank">XSS game &neArr; &rarr;</a> </li>
+                <li>If we can get our code to run in some websites then we can easily access information and do
+                    something with. </li>
                 <li>We can also access cookies through javascript</li>
                 <li>Script can also we included in image url.</li>
             </ul>
@@ -85,15 +96,23 @@
         <div id="t3" class="wh">
             <h2>Sanitizing HTML w/ JOI</h2>
             <ul>
-                <li>If we embed html tag in title of campground while creating new campground it escapes because of ejs syntax but the popup in map can show the html.</li>
-                <li>We have to sanitize our input to make sure that if somebody creates a campground or edit, they cannot include any sort of html element and specially they cannot include scripts as that will break things.</li>
+                <li>If we embed html tag in title of campground while creating new campground it escapes because of ejs
+                    syntax but the popup in map can show the html.</li>
+                <li>We have to sanitize our input to make sure that if somebody creates a campground or edit, they
+                    cannot include any sort of html element and specially they cannot include scripts as that will break
+                    things.</li>
                 <li>We are using JOI and it does not comes with its own validation for escaping HTML or scripts.</li>
-                <li>We are going to write our own version of validation on top of JOI. JOI allow us to create extensions and these extensions allow us define things like 'Joi.string().required().htmlSafe()' which is our own method and we will use it for validations.</li>
+                <li>We are going to write our own version of validation on top of JOI. JOI allow us to create extensions
+                    and these extensions allow us define things like 'Joi.string().required().htmlSafe()' which is our
+                    own method and we will use it for validations.</li>
                 <li><a href="https://www.npmjs.com/package/sanitize-html">Sanitize Html docs</a>, install it.</li>
             </ul>
+
             <div class="code">
                 <div class="dotc"></div>
-                <pre>
+                <button class="accordion">code</button>
+                <div class="panel">
+                    <pre>
                     <code>
 
                         const BaseJoi = require('joi')
@@ -142,6 +161,7 @@
                         })                        
                     </code>
                 </pre>
+                </div>
             </div>
             <ul>
                 <li>Now we can prevent basic attacks.</li>
@@ -150,10 +170,14 @@
         <div id="t4" class="wh">
             <h2>Minor changes to session/cookies</h2>
             <ul>
-                <li>In our sessionConfig we have set httpOnly to true which means that our cookies are only accessible over http, they are not acessible through javascript. So if someone is trying to access our cookies through javascript they can't.</li>
+                <li>In our sessionConfig we have set httpOnly to true which means that our cookies are only accessible
+                    over http, they are not acessible through javascript. So if someone is trying to access our cookies
+                    through javascript they can't.</li>
                 <li>Adding secure: true &rarr; this means our cookies should only work over https.</li>
-                <li>locahost:3000 is not https but when we deploy we want secure option so that cookies can only be configured on secure connections.</li>
-                <li>One other thing that is recommended is to change the default name of our session so that people don't easily find sessions.</li>
+                <li>locahost:3000 is not https but when we deploy we want secure option so that cookies can only be
+                    configured on secure connections.</li>
+                <li>One other thing that is recommended is to change the default name of our session so that people
+                    don't easily find sessions.</li>
             </ul>
             <div class="code">
                 <div class="dotc"></div>
@@ -180,7 +204,9 @@
         <div id="t5" class="wh">
             <h2>Hiding Errors</h2>
             <ul>
-                <li>Another thing to worry about when we are deploying is that you are not giving your users development errors because it tells our users that  how our files are setuped and what line is causing error and it is also a bad experience.</li>
+                <li>Another thing to worry about when we are deploying is that you are not giving your users development
+                    errors because it tells our users that how our files are setuped and what line is causing error and
+                    it is also a bad experience.</li>
                 <li>So we don't want to show error in production mode.</li>
             </ul>
             <div class="code">
@@ -198,8 +224,10 @@
         <div id="t6" class="wh">
             <h2>Using Helmet</h2>
             <ul>
-                <li>So the final security related topic that we will cover for now is a package called <a href="https://helmetjs.github.io/" target="_blank">helment &neArr;</a>.</li>
-                <li>Helment comes with set of 11 middleware that all have to do with http headers, changing the behavior and manipulating headers all in the name of security.</li>
+                <li>So the final security related topic that we will cover for now is a package called <a
+                        href="https://helmetjs.github.io/" target="_blank">helment &neArr;</a>.</li>
+                <li>Helment comes with set of 11 middleware that all have to do with http headers, changing the behavior
+                    and manipulating headers all in the name of security.</li>
                 <li>Read docs for detailed explaination.</li>
                 <li>Install helmet.</li>
             </ul>
@@ -216,7 +244,8 @@
                 </pre>
             </div>
             <ul>
-                <li>conentSecurityPolicy() middleware does not all any script to run in our app because helment automatically enables it and it screws things up.</li>
+                <li>conentSecurityPolicy() middleware does not all any script to run in our app because helment
+                    automatically enables it and it screws things up.</li>
                 <li>So for now we will disable it.</li>
                 <li>Using helmet there are many new headers that are added like xss filter</li>
             </ul>
@@ -224,11 +253,15 @@
         <div id="t7" class="wh">
             <h2>Content security policy</h2>
             <ul>
-                <li>CSP is extra layer of security that allow us to specify which website are allowed to run scripts from a particular specified website, so we specify list of sources which are allowed to display the content or run scripts on our website</li>
+                <li>CSP is extra layer of security that allow us to specify which website are allowed to run scripts
+                    from a particular specified website, so we specify list of sources which are allowed to display the
+                    content or run scripts on our website</li>
                 <li>We can specify our own CSP. <a href="https://github.com/helmetjs/helmet">Example</a></li>
             </ul>
             <div class="code">
                 <div class="dotc"></div>
+                <button class="accordion">code</button>
+                <div class="panel">
                 <pre>
                     <code>
                     
@@ -280,6 +313,7 @@
                     );
                     </code>
                 </pre>
+            </div>
             </div>
             <ul>
                 <li>So basically we are restricting the locations that we can fetch resources from.</li>
